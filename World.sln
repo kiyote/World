@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActorUpdater", "src\ActorUpdater\ActorUpdater.csproj", "{C8FCCD6E-A79F-4DC5-AAD7-DDF0BFFBD70C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "World.Updater.Actors", "src\World.Updater.Actors\World.Updater.Actors.csproj", "{C8FCCD6E-A79F-4DC5-AAD7-DDF0BFFBD70C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActorUpdater.Tests", "test\ActorUpdater.Tests\ActorUpdater.Tests.csproj", "{D6FABB49-EFDE-464D-85E8-96AF99E3B07C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "World.Updater.Actors.Tests", "test\World.Updater.Actors.Tests\World.Updater.Actors.Tests.csproj", "{D6FABB49-EFDE-464D-85E8-96AF99E3B07C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28E4E30D-CBD7-47A2-8140-A9E3F7F95973}"
 EndProject

@@ -1,4 +1,4 @@
-namespace ActorUpdater;
+namespace World.Updater.Actors;
 
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;

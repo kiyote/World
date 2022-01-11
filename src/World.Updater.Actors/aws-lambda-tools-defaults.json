@@ -12,5 +12,5 @@
   "function-runtime": "net6.0",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "ActorUpdater::ActorUpdater.LambdaFunction::FunctionHandler"
+  "function-handler": "World.ActorUpdater::World.ActorUpdater.LambdaFunction::FunctionHandler"
 }

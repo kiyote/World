@@ -1,13 +1,13 @@
-namespace ActorUpdater.Tests;
+namespace World.Updater.Actors.Tests;
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ActorUpdater;
 using Amazon.Lambda.SQSEvents;
 using Amazon.Lambda.TestUtilities;
-using Xunit;
+using NUnit.Framework;
 
 public class FunctionTest {
-	[Fact]
+	[Test]
 	public async Task TestSQSEventLambdaFunction() {
 		var sqsEvent = new SQSEvent {
 			Records = new List<SQSEvent.SQSMessage>
@@ -27,6 +27,6 @@ public class FunctionTest {
 		var function = new LambdaFunction();
 		await function.FunctionHandler( sqsEvent, context ).ConfigureAwait( false );
 
-		Assert.Contains( "Processed message foobar", logger.Buffer.ToString(), StringComparison.OrdinalIgnoreCase );
+		Assert.AreEqual( "Processed message foobar", logger.Buffer.ToString() );
 	}
 }

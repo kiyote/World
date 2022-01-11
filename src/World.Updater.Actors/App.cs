@@ -1,8 +1,11 @@
-﻿namespace ActorUpdater;
+﻿namespace World.Updater.Actors;
 
 using Amazon.Lambda.Core;
 
+#pragma warning disable CA1812
 internal class App {
+#pragma warning restore CA1812
+
 	private readonly string _message;
 
 	public App() {
@@ -16,4 +19,3 @@ internal class App {
 		return Task.CompletedTask;
 	}
 }
-
