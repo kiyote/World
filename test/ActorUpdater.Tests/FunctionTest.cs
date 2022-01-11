@@ -1,42 +1,32 @@
-using System;
+namespace ActorUpdater.Tests;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using Xunit;
-using Amazon.Lambda.TestUtilities;
-using Amazon.Lambda.SQSEvents;
-
 using ActorUpdater;
+using Amazon.Lambda.SQSEvents;
+using Amazon.Lambda.TestUtilities;
+using Xunit;
 
-namespace ActorUpdater.Tests
-{
-    public class FunctionTest
-    {
-        [Fact]
-        public async Task TestSQSEventLambdaFunction()
-        {
-            var sqsEvent = new SQSEvent
-            {
-                Records = new List<SQSEvent.SQSMessage>
-                {
-                    new SQSEvent.SQSMessage
-                    {
-                        Body = "foobar"
-                    }
-                }
-            };
+public class FunctionTest {
+	[Fact]
+	public async Task TestSQSEventLambdaFunction() {
+		var sqsEvent = new SQSEvent {
+			Records = new List<SQSEvent.SQSMessage>
+			{
+				new SQSEvent.SQSMessage
+				{
+					Body = "foobar"
+				}
+			}
+		};
 
-            var logger = new TestLambdaLogger();
-            var context = new TestLambdaContext
-            {
-                Logger = logger
-            };
+		var logger = new TestLambdaLogger();
+		var context = new TestLambdaContext {
+			Logger = logger
+		};
 
-            var function = new Function();
-            await function.FunctionHandler(sqsEvent, context);
+		var function = new LambdaFunction();
+		await function.FunctionHandler( sqsEvent, context ).ConfigureAwait( false );
 
-            Assert.Contains("Processed message foobar", logger.Buffer.ToString());
-        }
-    }
+		Assert.Contains( "Processed message foobar", logger.Buffer.ToString(), StringComparison.OrdinalIgnoreCase );
+	}
 }

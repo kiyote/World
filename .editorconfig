@@ -106,3 +106,7 @@ csharp_preserve_single_line_blocks                                       = true 
 
 dotnet_diagnostic.CA2300.severity   = error     # Do not use insecure deserializer BinaryFormatter
 dotnet_diagnostic.IDE0090.severity  = none      # Use new(...)
+
+dotnet_diagnostic.CA1054.severity	= none		# URI-like parameters should not be strings (yes, 1056 is the same thing)
+dotnet_diagnostic.CA1056.severity	= none		# URI-like parameters should not be strings (yep, it's really two rules for the same thing)
+dotnet_diagnostic.CA1014.severity	= none		# Mark assemblies with CLSCompliant
