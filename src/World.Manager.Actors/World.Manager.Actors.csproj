@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="InjectableAWS" Version="2.4.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\World.Model.Actors\World.Model.Actors.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\World.Repository.Actors\World.Repository.Actors.csproj" />
+	</ItemGroup>
+</Project>
