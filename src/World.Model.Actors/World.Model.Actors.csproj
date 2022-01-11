@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\World.Core\World.Core.csproj" />
-	</ItemGroup>
-
-</Project>

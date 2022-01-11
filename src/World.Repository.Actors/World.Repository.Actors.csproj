@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\World.Core\World.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\World.Model.Actors\World.Model.Actors.csproj" />
-	</ItemGroup>
-</Project>

@@ -1,4 +1,4 @@
-namespace World.Updater.Actors.Tests;
+namespace Updater.Actors.Tests;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
