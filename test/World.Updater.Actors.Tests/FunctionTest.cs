@@ -27,6 +27,6 @@ public class FunctionTest {
 		var function = new LambdaFunction();
 		await function.FunctionHandler( sqsEvent, context ).ConfigureAwait( false );
 
-		Assert.AreEqual( "Processed message foobar", logger.Buffer.ToString() );
+		Assert.AreEqual( "Test\r\n", logger.Buffer.ToString() );
 	}
 }
