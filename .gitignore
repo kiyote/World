@@ -1,0 +1,98 @@
+# Please don't try to dodge these rules. If you think you need to, ask around
+# (e.g. in #code-r-us). We don't want to check external dependencies into this
+# git repo. Even 100kb files add up pretty quickly and it's not easy to fix
+# (deleting a file in Git doesn't shrink the size of the repo, because of
+# history). On June 3rd 2019 we dropped the size of our repo in half by
+# removing files like this and we'd like to keep it at a usable size.
+
+# Binaries
+*.exe
+*.msi
+*.jar
+*.dll
+*.nupkg
+*.pdb
+*.zip
+*.tar
+*.class
+*.7z
+*.rar
+*.iso
+*.sqlite
+*.bin
+
+# Media
+*.mp3
+*.mp4
+*.mpg
+*.mpeg
+*.wmv
+*.webm
+*.mov
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.xls
+
+# Package managers
+node_modules/
+bower_components/
+packages/
+.gems
+npm-debug.log
+
+# IDE/editor stuff
+.vs
+.vsp
+.suo
+launchSettings.json
+*.csproj.user
+*.DotSettings
+*.DotSettings.user
+.vscode
+_[Rr]e[Ss]harper*
+UpgradeLog*.XML
+UpgradeLog*.htm
+.idea
+
+# Vim
+*.swp
+*.swo
+.netrwhist
+
+# Build output
+bin/
+obj/
+.generated/
+TestResult.xml
+*.binlog
+Lms.sln
+Packages.g.props
+
+# Misc
+.orig
+.settings
+.svn
+*.bak
+Thumbs.db
+__pycache__/
+.DS_Store
+/debug.log
+
+# Bazel (temporary?)
+BUILD.bazel
+WORKSPACE
+.bazelrc
+bazel-*/
+
+# Project specific exclusions
+lp/framework/web/Sprites/BUILD
+lp-devappregistry-config
+
+# customization has their own scripts to generate a solution filter
+src/lib/custom/custom.slnf
+
+# Legacy projects mixed with the Roslyn analyzers have a bug causing these files to be written to the wrong location
+# https://github.com/dotnet/roslyn/pull/48781
+*.GeneratedMSBuildEditorConfig.editorconfig
