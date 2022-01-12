@@ -8,6 +8,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\World.Updater.Actors\Updater.Actors.csproj" />
+    <ProjectReference Include="$(SolutionDir)src\Updater.Actors\Updater.Actors.csproj" />
   </ItemGroup>
 </Project>

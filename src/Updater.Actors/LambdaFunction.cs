@@ -4,7 +4,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using InjectableAWS;
 using Microsoft.Extensions.DependencyInjection;
-using Repository.Actors.DynamoDb;
+using Manager.Actors.Repositories.DynamoDb;
 
 public class LambdaFunction {
 	private readonly IServiceProvider _services;

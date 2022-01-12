@@ -1,4 +1,4 @@
-﻿namespace Repository.Actors.DynamoDb;
+﻿namespace Manager.Actors.Repositories.DynamoDb;
 
 using InjectableAWS;
 using Microsoft.Extensions.DependencyInjection;

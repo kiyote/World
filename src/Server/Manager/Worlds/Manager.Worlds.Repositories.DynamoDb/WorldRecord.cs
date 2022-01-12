@@ -1,11 +1,10 @@
-﻿namespace Repository.Worlds.DynamoDb;
+﻿namespace Manager.Worlds.Repositories.DynamoDb;
 
 using Repository.DynamoDb;
 using Amazon.DynamoDBv2.DataModel;
 
-#pragma warning disable CA1812
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "TEMPORARY" )]
 internal class WorldRecord {
-#pragma warning restore CA1812
 
 	public WorldRecord() {
 		WorldId = "";

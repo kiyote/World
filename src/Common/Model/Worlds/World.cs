@@ -1,4 +1,4 @@
-﻿namespace Model.Worlds;
+﻿namespace Common.Model.Worlds;
 
 public record World(
 	Id<World> Id,

@@ -1,10 +1,10 @@
 ﻿namespace Manager.Actors;
 
-using Repository.Actors;
+using Manager.Actors.Repositories;
 
-#pragma warning disable CA1812
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+
 internal class ActorManager : IActorManager {
-#pragma warning restore CA1812
 
 	private readonly IActorRepository _actorRepository;
 

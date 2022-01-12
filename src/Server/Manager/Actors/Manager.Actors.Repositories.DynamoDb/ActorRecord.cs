@@ -1,8 +1,8 @@
-﻿namespace Repository.Actors.DynamoDb;
+﻿namespace Manager.Actors.Repositories.DynamoDb;
 
 using Amazon.DynamoDBv2.DataModel;
 
-internal class ActorRecord {
+internal sealed class ActorRecord {
 
 	public ActorRecord() {
 		WorldId = "";

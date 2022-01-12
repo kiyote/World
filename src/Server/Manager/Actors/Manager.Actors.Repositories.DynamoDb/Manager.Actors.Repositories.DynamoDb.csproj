@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<PackageReference Include="InjectableAWS" Version="2.5.2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Actors\Manager.Actors.Repositories\Manager.Actors.Repositories.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Repository.DynamoDb\Repository.DynamoDb.csproj" />
 	</ItemGroup>
 </Project>

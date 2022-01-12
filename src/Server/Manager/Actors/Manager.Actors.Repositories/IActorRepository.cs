@@ -1,4 +1,4 @@
-﻿namespace Repository.Actors;
+﻿namespace Manager.Actors.Repositories;
 
 public interface IActorRepository
 {

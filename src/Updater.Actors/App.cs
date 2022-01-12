@@ -2,9 +2,8 @@
 
 using Amazon.Lambda.Core;
 
-#pragma warning disable CA1812
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal class App {
-#pragma warning restore CA1812
 
 	private readonly string _message;
 

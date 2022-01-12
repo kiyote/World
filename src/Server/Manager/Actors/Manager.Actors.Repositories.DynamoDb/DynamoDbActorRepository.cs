@@ -1,10 +1,9 @@
-﻿namespace Repository.Actors.DynamoDb;
+﻿namespace Manager.Actors.Repositories.DynamoDb;
 
 using Repository.DynamoDb;
 
-#pragma warning disable CA1812
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class DynamoDbActorRepository : IActorRepository {
-#pragma warning restore CA1812
 
 	private readonly WorldDynamoDbRepository _db;
 
