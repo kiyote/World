@@ -29,4 +29,18 @@ internal class ActorManager : IActorManager {
 			)
 			.ConfigureAwait( false );
 	}
+
+	async Task<Actor> IActorManager.GetByIdAsync(
+		Id<World> worldId,
+		Id<Actor> actorId,
+		CancellationToken cancellationToken
+	) {
+		return await _actorRepository
+			.GetByIdAsync(
+				worldId,
+				actorId,
+				cancellationToken
+			)
+			.ConfigureAwait( false );
+	}
 }

@@ -4,6 +4,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using InjectableAWS;
 using Microsoft.Extensions.DependencyInjection;
+using Manager.Actors;
 using Manager.Actors.Repositories.DynamoDb;
 
 public class LambdaFunction {
@@ -51,6 +52,7 @@ public class LambdaFunction {
 		services.AddSingleton<App>();
 
 		services.AddCredentials();
+		services.AddActorManager();
 		services.AddDynamoDbActors();
 
 		return services.BuildServiceProvider();

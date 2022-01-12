@@ -34,13 +34,14 @@ internal sealed class DynamoDbActorRepository : IActorRepository {
 	}
 
 	async Task<Actor> IActorRepository.GetByIdAsync(
-		Id<Actor> id,
+		Id<World> worldId,
+		Id<Actor> actorId,
 		CancellationToken cancellationToken
 	) {
 		ActorRecord record = await _db
 			.LoadAsync<ActorRecord>(
-				id.ToString(),
-				id.ToString(),
+				worldId.ToString(),
+				actorId.ToString(),
 				cancellationToken
 			).ConfigureAwait( false );
 

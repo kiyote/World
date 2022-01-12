@@ -10,7 +10,8 @@ public interface IActorRepository
 	);
 
 	Task<Actor> GetByIdAsync(
-		Id<Actor> id,
+		Id<World> worldId,
+		Id<Actor> actorId,
 		CancellationToken cancellationToken
 	);
 }
