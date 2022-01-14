@@ -27,7 +27,10 @@ public class LambdaFunction {
 		}
 	}
 
-	private static Task ProcessRecordAsync( SNSEvent.SNSRecord record, ILambdaContext context ) {
+	private static Task ProcessRecordAsync(
+		SNSEvent.SNSRecord record,
+		ILambdaContext context
+	) {
 		context.Logger.LogLine( $"Processed record {record.Sns.Message}" );
 
 		// TODO: Do interesting work based on the new message
