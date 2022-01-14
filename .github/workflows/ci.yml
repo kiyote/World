@@ -7,15 +7,17 @@ on:
       - '**.cs'
       - '**.csproj'
       - '**.sln'
-      - '**.editorconfig'
-      - '**.Build.props'
+      - '.editorconfig'
+      - '.Build.props'
+      - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - '**.cs'
       - '**.csproj'
       - '**.sln'
-      - '**.editorconfig'
-      - '**.Build.props'
+      - '.editorconfig'
+      - '.Build.props'
+      - '.github/workflows/ci.yml'
 
 jobs:
   build:
