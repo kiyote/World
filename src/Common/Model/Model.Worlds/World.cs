@@ -2,5 +2,6 @@
 
 public record World(
 	Id<World> Id,
-	string Name
+	string Name,
+	DateTime CreatedOn
 );

@@ -17,18 +17,21 @@ internal class DynamoDbWorldRepository : IWorldRepository {
 	async Task<World> IWorldRepository.Create(
 		Id<World> worldId,
 		string name,
+		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
 		WorldRecord record = new WorldRecord(
 			worldId,
-			name
+			name,
+			createdOn.ToUniversalTime()
 		);
 
 		await _db.CreateAsync( record, cancellationToken ).ConfigureAwait( false );
 
 		return new World(
 			worldId,
-			name
+			name,
+			createdOn
 		);
 	}
 }
