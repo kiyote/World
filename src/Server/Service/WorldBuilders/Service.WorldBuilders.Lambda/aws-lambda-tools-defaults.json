@@ -12,5 +12,5 @@
   "function-runtime": "net6.0",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "Service.WorldBuilder.Lambda::Service.WorldBuilder.Lambda.LambdaFunction::FunctionHandler"
+  "function-handler": "Service.WorldBuilders.Lambda::Service.WorldBuilders.Lambda.LambdaFunction::FunctionHandler"
 }
