@@ -95,7 +95,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{CC1F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{5E22B6AD-5E96-4D2E-BB11-0BF174B8FD4F}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\CIValidation.yml = .github\workflows\CIValidation.yml
+		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Global
