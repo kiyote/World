@@ -6,6 +6,7 @@ public interface IActorRepository
 		Id<World> worldId,
 		Id<Actor> actorId,
 		string name,
+		DateTime createdOn,
 		CancellationToken cancellationToken
 	);
 

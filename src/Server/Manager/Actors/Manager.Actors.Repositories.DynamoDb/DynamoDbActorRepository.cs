@@ -17,13 +17,15 @@ internal sealed class DynamoDbActorRepository : IActorRepository {
 		Id<World> worldId,
 		Id<Actor> actorId,
 		string name,
+		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
-		ActorRecord record = new ActorRecord() {
-			WorldId = worldId.ToString(),
-			ActorId = actorId.ToString(),
-			Name = name
-		};
+		ActorRecord record = new ActorRecord(
+			worldId,
+			actorId,
+			name,
+			createdOn.ToUniversalTime()
+		);
 		await _db
 			.CreateAsync(
 				record,
@@ -53,7 +55,8 @@ internal sealed class DynamoDbActorRepository : IActorRepository {
 	) {
 		return new Actor(
 			new Id<Actor>( record.ActorId ),
-			record.Name
+			record.Name,
+			record.CreatedOn
 		);
 	}
 }

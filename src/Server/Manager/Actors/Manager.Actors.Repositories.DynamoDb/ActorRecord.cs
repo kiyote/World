@@ -8,6 +8,19 @@ internal sealed class ActorRecord {
 		WorldId = "";
 		ActorId = "";
 		Name = "";
+		CreatedOn = DateTime.UtcNow;
+	}
+
+	public ActorRecord(
+		Id<World> worldId,
+		Id<Actor> actorId,
+		string name,
+		DateTime createdOn
+	) {
+		WorldId = worldId.Value;
+		ActorId = actorId.Value;
+		Name = name;
+		CreatedOn = createdOn.ToUniversalTime();
 	}
 
 	[DynamoDBHashKey("PK")]
@@ -18,5 +31,8 @@ internal sealed class ActorRecord {
 
 	[DynamoDBProperty]
 	public string Name { get; set; }
+
+	[DynamoDBProperty]
+	public DateTime CreatedOn { get; set; }
 
 }

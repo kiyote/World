@@ -5,6 +5,7 @@ public interface IActorManager {
 		Id<World> worldId,
 		Id<Actor> actorId,
 		string name,
+		DateTime createdOn,
 		CancellationToken cancellationToken
 	);
 

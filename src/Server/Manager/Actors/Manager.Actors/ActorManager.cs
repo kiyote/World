@@ -18,6 +18,7 @@ internal class ActorManager : IActorManager {
 		Id<World> worldId,
 		Id<Actor> actorId,
 		string name,
+		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
 		return await _actorRepository
@@ -25,6 +26,7 @@ internal class ActorManager : IActorManager {
 				worldId,
 				actorId,
 				name,
+				createdOn,
 				cancellationToken
 			)
 			.ConfigureAwait( false );
