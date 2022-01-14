@@ -4,7 +4,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Common\Common.DynamoDb\Common.DynamoDb.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Actors\Manager.Actors.Repositories\Manager.Actors.Repositories.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Repository.DynamoDb\Repository.DynamoDb.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
-﻿namespace Manager.Actors.Repositories.DynamoDb;
+﻿using Amazon.DynamoDBv2.DataModel;
 
-using Amazon.DynamoDBv2.DataModel;
+namespace Manager.Actors.Repositories.DynamoDb;
 
 internal sealed class ActorRecord {
 

@@ -1,6 +1,6 @@
-﻿namespace Manager.Actors.Repositories.DynamoDb;
+﻿using Common.DynamoDb;
 
-using Repository.DynamoDb;
+namespace Manager.Actors.Repositories.DynamoDb;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class DynamoDbActorRepository : IActorRepository {

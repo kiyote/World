@@ -1,8 +1,8 @@
-namespace Service.WorldBuilder.Lambda;
-
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SNSEvents;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Service.WorldBuilder.Lambda;
 
 public class LambdaFunction {
 	private readonly IServiceProvider _services;
@@ -39,6 +39,8 @@ public class LambdaFunction {
 
 	private static IServiceProvider ConfigureServices() {
 		var services = new ServiceCollection();
+
+		services.AddWorldBuilder();
 
 		return services.BuildServiceProvider();
 	}

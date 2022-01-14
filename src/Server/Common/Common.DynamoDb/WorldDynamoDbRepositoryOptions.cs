@@ -1,5 +1,5 @@
-﻿namespace Repository.DynamoDb;
+﻿using InjectableAWS.Repository;
 
-using InjectableAWS.Repository;
+namespace Common.DynamoDb;
 
 public record WorldDynamoDbRepositoryOptions(string TableName): DynamoDbRepositoryOptions(TableName);

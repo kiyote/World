@@ -1,10 +1,8 @@
-namespace Updater.Actors.Tests;
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Amazon.Lambda.SQSEvents;
 using Amazon.Lambda.TestUtilities;
 using NUnit.Framework;
+
+namespace Updater.Actors.Tests;
 
 public class FunctionTest {
 	[Test]

@@ -1,7 +1,6 @@
-﻿namespace Manager.Worlds.Repositories.DynamoDb;
+﻿using Amazon.DynamoDBv2.DataModel;
 
-using Repository.DynamoDb;
-using Amazon.DynamoDBv2.DataModel;
+namespace Manager.Worlds.Repositories.DynamoDb;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "TEMPORARY" )]
 internal class WorldRecord {

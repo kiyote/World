@@ -6,7 +6,6 @@
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Actors\Common.Model.Actors.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Worlds\Common.Model.Worlds.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Repository.DynamoDb\Repository.DynamoDb.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Actors\Manager.Actors.Repositories\Manager.Actors.Repositories.csproj" />
 	</ItemGroup>
 </Project>

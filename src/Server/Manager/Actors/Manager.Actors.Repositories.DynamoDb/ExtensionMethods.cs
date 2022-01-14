@@ -1,8 +1,8 @@
-﻿namespace Manager.Actors.Repositories.DynamoDb;
-
-using InjectableAWS;
+﻿using InjectableAWS;
 using Microsoft.Extensions.DependencyInjection;
-using Repository.DynamoDb;
+using Common.DynamoDb;
+
+namespace Manager.Actors.Repositories.DynamoDb;
 
 public static class ExtensionMethods {
 	public static IServiceCollection AddDynamoDbActors(

@@ -1,11 +1,11 @@
-namespace Updater.Actors;
-
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using InjectableAWS;
 using Microsoft.Extensions.DependencyInjection;
 using Manager.Actors;
 using Manager.Actors.Repositories.DynamoDb;
+
+namespace Updater.Actors;
 
 public class LambdaFunction {
 	private readonly IServiceProvider _services;

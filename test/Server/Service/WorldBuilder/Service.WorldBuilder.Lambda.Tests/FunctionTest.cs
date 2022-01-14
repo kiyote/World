@@ -1,10 +1,8 @@
-namespace Service.WorldBuilder.Lambda.Tests;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Amazon.Lambda.SNSEvents;
 using Amazon.Lambda.TestUtilities;
 using NUnit.Framework;
-using Service.WorldBuilder.Lambda;
+
+namespace Service.WorldBuilder.Lambda.Tests;
 
 [TestFixture]
 public class FunctionTest {
