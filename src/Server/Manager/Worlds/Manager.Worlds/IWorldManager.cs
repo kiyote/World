@@ -2,5 +2,7 @@
 
 
 public interface IWorldManager {
-
+	Task<World> InitializeAsync(
+		CancellationToken cancellationToken
+	);
 }

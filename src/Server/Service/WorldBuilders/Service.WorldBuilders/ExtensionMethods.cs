@@ -7,7 +7,7 @@ public static class ExtensionMethods {
 	public static IServiceCollection AddWorldBuilder(
 		this IServiceCollection services
 	) {
-		services.AddSingleton<IWorldBuilder, DefaultWorldBuilder>();
+		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 
 		return services;
 	}

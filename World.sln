@@ -51,11 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors", "src\Serve
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{48AA8E8D-09AE-4EC3-9715-FEB500F7BB56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Model.Actors", "src\Common\Model\Actors\Common.Model.Actors.csproj", "{E2950C62-2240-4C35-9383-67CF6299AFBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Actors", "src\Common\Model\Model.Actors\Model.Actors.csproj", "{E2950C62-2240-4C35-9383-67CF6299AFBD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{50A64600-6B25-46C8-BE3E-A80FE4A06AA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Model.Worlds", "src\Common\Model\Worlds\Common.Model.Worlds.csproj", "{BACCC677-CD80-46CE-9696-CB6778A5628B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Worlds", "src\Common\Model\Model.Worlds\Model.Worlds.csproj", "{BACCC677-CD80-46CE-9696-CB6778A5628B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{CBF32B02-5D9E-4B6D-B379-C41BC8CADE55}"
 EndProject

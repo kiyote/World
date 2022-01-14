@@ -2,7 +2,7 @@ using Amazon.Lambda.SNSEvents;
 using Amazon.Lambda.TestUtilities;
 using NUnit.Framework;
 
-namespace Service.WorldBuilder.Lambda.Tests;
+namespace Service.WorldBuilders.Lambda.Tests;
 
 [TestFixture]
 public class FunctionTest {
