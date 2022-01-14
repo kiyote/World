@@ -6,6 +6,8 @@ on:
       - '**.cs'
       - '**.csproj'
       - '**.sln'
+      - '.editorconfig'
+      - 'Directory.Build.props'
 
 jobs:
   build:
