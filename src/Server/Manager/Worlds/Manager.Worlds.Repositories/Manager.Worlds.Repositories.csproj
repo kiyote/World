@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Core\Core.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Model.Worlds\Model.Worlds.csproj" />
 	</ItemGroup>
 </Project>

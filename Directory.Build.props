@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
-		<Using Include="Common.Core" />
+		<Using Include="Core" />
 	</ItemGroup>
 
 	<PropertyGroup>

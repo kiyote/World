@@ -1,4 +1,4 @@
-﻿namespace Common.Core;
+﻿namespace Core;
 
 public sealed class Id<T> : IEquatable<Id<T>> {
 
