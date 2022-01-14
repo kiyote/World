@@ -8,16 +8,16 @@ on:
       - '**.sln'
 
 jobs:
-    build:
-        steps:
-        - uses: actions/checkout@v2
-        - name: Setup dotnet
-            uses: actions/setup-dotnet@v1
-            with:
-                dotnet-version: '6.0'
-        - name: Install dependencies
-            run: dotnet restore
-        - name: Build
-            run: dotnet build
-        - name: Test with the dotnet CLI
-            run: dotnet test
+  build:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0'
+      - name: Install dependencies
+          run: dotnet restore
+      - name: Build
+          run: dotnet build
+      - name: Test with the dotnet CLI
+          run: dotnet test
