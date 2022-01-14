@@ -4,5 +4,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Worlds\Manager.Worlds\Manager.Worlds.csproj" />
 	</ItemGroup>
 </Project>

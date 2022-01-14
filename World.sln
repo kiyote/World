@@ -69,11 +69,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{C6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D99165A0-2EC6-4B2C-8D82-7393241E6A11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilder", "WorldBuilder", "{8623CF88-EB73-4796-9468-5B86CFB87E0B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilders", "WorldBuilders", "{8623CF88-EB73-4796-9468-5B86CFB87E0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda", "src\Server\Service\WorldBuilder\Service.WorldBuilder.Lambda\Service.WorldBuilder.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders.Lambda", "src\Server\Service\WorldBuilders\Service.WorldBuilders.Lambda\Service.WorldBuilders.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda.Tests", "test\Server\Service\WorldBuilder\Service.WorldBuilder.Lambda.Tests\Service.WorldBuilder.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders.Lambda.Tests", "test\Server\Service\WorldBuilders\Service.WorldBuilders.Lambda.Tests\Service.WorldBuilders.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{78EA7CDB-298B-46BB-828C-4ADD54FD7138}"
 EndProject
@@ -81,7 +81,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{0181
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilder", "WorldBuilder", "{64AB9DEC-C9E1-4EC2-8BA2-0E9C97159365}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder", "src\Server\Service\WorldBuilder\Service.WorldBuilder\Service.WorldBuilder.csproj", "{7DB84771-8083-4F2D-B4D2-78757538044A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders", "src\Server\Service\WorldBuilders\Service.WorldBuilders\Service.WorldBuilders.csproj", "{7DB84771-8083-4F2D-B4D2-78757538044A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambda", "Lambda", "{FEF5122F-E708-4C8A-9BB6-09090D00D2E4}"
 EndProject
@@ -92,6 +92,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.DynamoDb", "src\Server\Common\Common.DynamoDb\Common.DynamoDb.csproj", "{B5852561-96C4-4047-8F3D-E8B6A19679BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{85B3992E-AE58-4C88-BCE0-1B6270798C8F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds", "src\Server\Manager\Worlds\Manager.Worlds\Manager.Worlds.csproj", "{364168BE-9DA8-4282-9070-66DAA3F9C427}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories", "src\Server\Manager\Worlds\Manager.Worlds.Repositories\Manager.Worlds.Repositories.csproj", "{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,14 @@ Global
 		{B5852561-96C4-4047-8F3D-E8B6A19679BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5852561-96C4-4047-8F3D-E8B6A19679BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5852561-96C4-4047-8F3D-E8B6A19679BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{364168BE-9DA8-4282-9070-66DAA3F9C427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{364168BE-9DA8-4282-9070-66DAA3F9C427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{364168BE-9DA8-4282-9070-66DAA3F9C427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{364168BE-9DA8-4282-9070-66DAA3F9C427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +206,8 @@ Global
 		{8F190989-C697-49DC-92A6-2CD10ED0405F} = {D6E29321-97D5-47E3-B1F2-AE5FF8B010DB}
 		{B5852561-96C4-4047-8F3D-E8B6A19679BE} = {85B3992E-AE58-4C88-BCE0-1B6270798C8F}
 		{85B3992E-AE58-4C88-BCE0-1B6270798C8F} = {8F190989-C697-49DC-92A6-2CD10ED0405F}
+		{364168BE-9DA8-4282-9070-66DAA3F9C427} = {B7577FE5-86B4-4D29-AE41-C293AC307933}
+		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2} = {97DECDA4-1A87-4E81-BB62-4FD11D9B0B31}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}

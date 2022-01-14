@@ -13,6 +13,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilder\Service.WorldBuilder\Service.WorldBuilder.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilders\Service.WorldBuilders\Service.WorldBuilders.csproj" />
 	</ItemGroup>
 </Project>

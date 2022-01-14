@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Model\Actors\Common.Model.Actors.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Model\Worlds\Common.Model.Worlds.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Worlds\Manager.Worlds.Repositories\Manager.Worlds.Repositories.csproj" />
+	</ItemGroup>
+</Project>

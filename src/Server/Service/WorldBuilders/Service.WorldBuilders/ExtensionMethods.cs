@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Service.WorldBuilder;
+namespace Service.WorldBuilders;
 
 public static class ExtensionMethods {
 

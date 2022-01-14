@@ -1,4 +1,4 @@
-﻿namespace Service.WorldBuilder;
+﻿namespace Service.WorldBuilders;
 
 internal interface IWorldBuilder {
 }
