@@ -3,6 +3,12 @@ name: CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - '**.cs'
+      - '**.csproj'
+      - '**.sln'
+      - '**.editorconfig'
+      - '**.Build.props'
   pull_request:
     paths:
       - '**.cs'
