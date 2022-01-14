@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Manager.Worlds;
 
@@ -7,7 +8,7 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 
-		services.AddSingleton<IWorldManager, WorldManager>();
+		services.TryAddSingleton<IWorldManager, WorldManager>();
 
 		return services;
 	}

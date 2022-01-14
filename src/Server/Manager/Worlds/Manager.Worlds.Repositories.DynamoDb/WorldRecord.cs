@@ -10,6 +10,14 @@ internal class WorldRecord {
 		Name = "";
 	}
 
+	public WorldRecord(
+		Id<World> worldId,
+		string name
+	) {
+		WorldId = worldId.Value;
+		Name = name;
+	}
+
 	[DynamoDBHashKey( "PK" )]
 	[DynamoDBRangeKey( "SK" )]
 	public string WorldId { get; set; }

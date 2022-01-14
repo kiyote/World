@@ -1,7 +1,6 @@
 ﻿namespace Manager.Worlds;
 
 
-public interface IWorldManager
-{
+public interface IWorldManager {
 
 }
