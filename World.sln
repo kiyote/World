@@ -77,9 +77,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D991
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilder", "WorldBuilder", "{8623CF88-EB73-4796-9468-5B86CFB87E0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda", "src\Server\Service\WorldBuilder\Lambda\Service.WorldBuilder.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda", "src\Server\Service\WorldBuilder\Service.WorldBuilder.Lambda\Service.WorldBuilder.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda.Tests", "test\Server\Service\WorldBuilder\Lambda\Service.WorldBuilder.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilder.Lambda.Tests", "test\Server\Service\WorldBuilder\Service.WorldBuilder.Lambda.Tests\Service.WorldBuilder.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{78EA7CDB-298B-46BB-828C-4ADD54FD7138}"
 EndProject

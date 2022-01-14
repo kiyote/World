@@ -8,6 +8,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilder\Lambda\Service.WorldBuilder.Lambda.csproj" />
+    <ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilder\Service.WorldBuilder.Lambda\Service.WorldBuilder.Lambda.csproj" />
   </ItemGroup>
 </Project>
