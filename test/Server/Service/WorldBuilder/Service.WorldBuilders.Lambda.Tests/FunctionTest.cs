@@ -29,6 +29,6 @@ public class FunctionTest {
 		var function = new LambdaFunction();
 		await function.FunctionHandler( snsEvent, context ).ConfigureAwait( false );
 
-		Assert.AreEqual( "Processed record foobar\r\n", logger.Buffer.ToString() );
+		Assert.AreEqual( $"Processed record foobar{Environment.NewLine}", logger.Buffer.ToString() );
 	}
 }
