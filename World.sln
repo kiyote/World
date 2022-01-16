@@ -105,10 +105,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform", "terraform", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{DB909C79-55A2-4099-936B-7EBBBEA1AF89}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world", "world", "{7FCF2DC6-94C5-4601-AABE-21F657F317A4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world-manager", "world-manager", "{7FCF2DC6-94C5-4601-AABE-21F657F317A4}"
 	ProjectSection(SolutionItems) = preProject
-		terraform\modules\world\_inputs.tf = terraform\modules\world\_inputs.tf
-		terraform\modules\world\_outputs.tf = terraform\modules\world\_outputs.tf
+		terraform\modules\world-manager\_inputs.tf = terraform\modules\world-manager\_inputs.tf
+		terraform\modules\world-manager\_outputs.tf = terraform\modules\world-manager\_outputs.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
@@ -125,6 +125,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F
 		terraform\environments\prod\backend.tf = terraform\environments\prod\backend.tf
 		terraform\environments\prod\infrastructure.tf = terraform\environments\prod\infrastructure.tf
 		terraform\environments\prod\versions.hcl = terraform\environments\prod\versions.hcl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\common\world.tf = terraform\common\world.tf
 	EndProjectSection
 EndProject
 Global
@@ -233,6 +238,7 @@ Global
 		{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
 		{D6044069-B5EC-4661-8278-8D557EB90670} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
 		{9A3371BE-F461-4CD1-B6D8-584677BB0EDE} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
+		{4954E5CF-4144-4AF8-BEF4-5800886C62A7} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}
