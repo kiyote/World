@@ -37,11 +37,9 @@ jobs:
            terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Terraform Format (dev)
-        id: fmt
         run: terraform fmt -check terraform/environments/dev/
 
       - name: Terraform Format (prod)
-        id: fmt
         run: terraform fmt -check terraform/environments/prod/
 
   deploy:
@@ -52,5 +50,4 @@ jobs:
 
     steps:
       - name: Terraform Format (prod)
-        id: fmt
         run: terraform fmt -check terraform/environments/prod/
