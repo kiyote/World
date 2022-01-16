@@ -115,16 +115,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environment
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{D6044069-B5EC-4661-8278-8D557EB90670}"
 	ProjectSection(SolutionItems) = preProject
+		terraform\environments\dev\.terraform.lock.hcl = terraform\environments\dev\.terraform.lock.hcl
 		terraform\environments\dev\backend.tf = terraform\environments\dev\backend.tf
 		terraform\environments\dev\infrastructure.tf = terraform\environments\dev\infrastructure.tf
-		terraform\environments\dev\versions.hcl = terraform\environments\dev\versions.hcl
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F461-4CD1-B6D8-584677BB0EDE}"
 	ProjectSection(SolutionItems) = preProject
+		terraform\environments\prod\.terraform.lock.hcl = terraform\environments\prod\.terraform.lock.hcl
 		terraform\environments\prod\backend.tf = terraform\environments\prod\backend.tf
 		terraform\environments\prod\infrastructure.tf = terraform\environments\prod\infrastructure.tf
-		terraform\environments\prod\versions.hcl = terraform\environments\prod\versions.hcl
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
