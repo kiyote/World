@@ -2,6 +2,11 @@
 name: Deploy
 
 on:
+  push:
+    branches: [main]  
+    paths:
+    - '**.tf'
+    - '.github/workflows/deploy.yml'
   pull_request:
     paths:
     - '**.tf'
