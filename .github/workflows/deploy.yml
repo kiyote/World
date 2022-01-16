@@ -55,13 +55,13 @@ jobs:
         run: terraform plan -no-color
         working-directory: terraform/environments/${{ matrix.environment }}
 
-#  deploy:
-#    runs-on: ubuntu-latest
-#    environment: prod
-#    timeout-minutes: 5
-#    if: ${{ contains(github.ref, 'refs/heads/release/') }}
-#
-#    steps:
-#      - name: Terraform Format (prod)
-#        run: terraform fmt -check
-#        working-directory: terraform/environments/prod
+ deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 5
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Deploy (dev)
+        run: terraform apply -auto-approve
+        working-directory: terraform/environments/dev
