@@ -1,0 +1,36 @@
+
+name: Deploy
+
+on:
+  pull_request:
+    paths:
+    - '**.tf'
+    - '.github/workflows/deploy.tf'
+  push:
+    paths:
+    - '**.tf'
+    - '.github/workflows/deploy.tf'
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  TERRAFORM_VERSION: 1.1.3
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ github_event_name != 'pull_request' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        uses: hashicorp/setup-terraform@v1
+        with:
+           terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check 

@@ -90,12 +90,36 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{CC1F174E-84FC-44C0-BD5B-15012DCCB094}"
 	ProjectSection(SolutionItems) = preProject
+		.github\CODEOWNERS = .github\CODEOWNERS
 		.github\dependabot.yml = .github\dependabot.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{5E22B6AD-5E96-4D2E-BB11-0BF174B8FD4F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform", "terraform", "{CFA4F2F0-0437-46BF-931C-B09ECB947603}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{DB909C79-55A2-4099-936B-7EBBBEA1AF89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world", "world", "{7FCF2DC6-94C5-4601-AABE-21F657F317A4}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\modules\world\_inputs.tf = terraform\modules\world\_inputs.tf
+		terraform\modules\world\_outputs.tf = terraform\modules\world\_outputs.tf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{D6044069-B5EC-4661-8278-8D557EB90670}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ca-central-1", "ca-central-1", "{9B11413F-C050-4FB1-8EB1-CE3E71444819}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\environments\dev\ca-central-1\backend.tf = terraform\environments\dev\ca-central-1\backend.tf
+		terraform\environments\dev\ca-central-1\infrastructure.tf = terraform\environments\dev\ca-central-1\infrastructure.tf
+		terraform\environments\dev\ca-central-1\versions.hcl = terraform\environments\dev\ca-central-1\versions.hcl
 	EndProjectSection
 EndProject
 Global
@@ -198,6 +222,12 @@ Global
 		{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2} = {97DECDA4-1A87-4E81-BB62-4FD11D9B0B31}
 		{CC1F174E-84FC-44C0-BD5B-15012DCCB094} = {16CEE4C8-C03E-44E1-B6C8-F33DE81DBE25}
 		{5E22B6AD-5E96-4D2E-BB11-0BF174B8FD4F} = {CC1F174E-84FC-44C0-BD5B-15012DCCB094}
+		{CFA4F2F0-0437-46BF-931C-B09ECB947603} = {16CEE4C8-C03E-44E1-B6C8-F33DE81DBE25}
+		{DB909C79-55A2-4099-936B-7EBBBEA1AF89} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
+		{7FCF2DC6-94C5-4601-AABE-21F657F317A4} = {DB909C79-55A2-4099-936B-7EBBBEA1AF89}
+		{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
+		{D6044069-B5EC-4661-8278-8D557EB90670} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
+		{9B11413F-C050-4FB1-8EB1-CE3E71444819} = {D6044069-B5EC-4661-8278-8D557EB90670}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}
