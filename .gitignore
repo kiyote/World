@@ -35,6 +35,9 @@
 *.ppt
 *.xls
 
+# Local Terraform
+.terraform
+
 # Package managers
 node_modules/
 bower_components/
