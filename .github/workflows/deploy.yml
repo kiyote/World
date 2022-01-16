@@ -5,11 +5,11 @@ on:
   pull_request:
     paths:
     - '**.tf'
-    - '.github/workflows/deploy.tf'
+    - '.github/workflows/deploy.yml'
   push:
     paths:
     - '**.tf'
-    - '.github/workflows/deploy.tf'
+    - '.github/workflows/deploy.yml'
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
