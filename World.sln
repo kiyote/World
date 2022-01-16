@@ -114,12 +114,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{D6044069-B5EC-4661-8278-8D557EB90670}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ca-central-1", "ca-central-1", "{9B11413F-C050-4FB1-8EB1-CE3E71444819}"
 	ProjectSection(SolutionItems) = preProject
-		terraform\environments\dev\ca-central-1\backend.tf = terraform\environments\dev\ca-central-1\backend.tf
-		terraform\environments\dev\ca-central-1\infrastructure.tf = terraform\environments\dev\ca-central-1\infrastructure.tf
-		terraform\environments\dev\ca-central-1\versions.hcl = terraform\environments\dev\ca-central-1\versions.hcl
+		terraform\environments\dev\backend.tf = terraform\environments\dev\backend.tf
+		terraform\environments\dev\infrastructure.tf = terraform\environments\dev\infrastructure.tf
+		terraform\environments\dev\versions.hcl = terraform\environments\dev\versions.hcl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F461-4CD1-B6D8-584677BB0EDE}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\environments\prod\backend.tf = terraform\environments\prod\backend.tf
+		terraform\environments\prod\infrastructure.tf = terraform\environments\prod\infrastructure.tf
+		terraform\environments\prod\versions.hcl = terraform\environments\prod\versions.hcl
 	EndProjectSection
 EndProject
 Global
@@ -227,7 +232,7 @@ Global
 		{7FCF2DC6-94C5-4601-AABE-21F657F317A4} = {DB909C79-55A2-4099-936B-7EBBBEA1AF89}
 		{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
 		{D6044069-B5EC-4661-8278-8D557EB90670} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
-		{9B11413F-C050-4FB1-8EB1-CE3E71444819} = {D6044069-B5EC-4661-8278-8D557EB90670}
+		{9A3371BE-F461-4CD1-B6D8-584677BB0EDE} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}

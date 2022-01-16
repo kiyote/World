@@ -6,10 +6,9 @@ on:
     paths:
     - '**.tf'
     - '.github/workflows/deploy.yml'
-  push:
-    paths:
-    - '**.tf'
-    - '.github/workflows/deploy.yml'
+  create:
+    branches: 
+      - release/**
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -19,6 +18,7 @@ env:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    environment: dev
     timeout-minutes: 5
     if: ${{ github.event_name != 'pull_request' }}
 
@@ -31,6 +31,21 @@ jobs:
         with:
            terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-      - name: Terraform Format
+      - name: Terraform Format (dev)
         id: fmt
-        run: terraform fmt -check terraform/
+        run: terraform fmt -check terraform/environments/dev/
+
+      - name: Terraform Format (prod)
+        id: fmt
+        run: terraform fmt -check terraform/environments/prod/
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    timeout-minutes: 5
+    if: ${{ contains(github.ref, 'refs/heads/release/') }}
+
+    steps:
+      - name: Terraform Format (prod)
+        id: fmt
+        run: terraform fmt -check terraform/environments/prod/
