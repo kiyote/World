@@ -25,8 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     timeout-minutes: 5
-    if: ${{ github.event_name != 'pull_request' }}
-
+    strategy:
+        matrix:
+            environment: [dev, prod]
+        fail-fast: true
+        
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -37,17 +40,24 @@ jobs:
            terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Terraform Format (dev)
-        run: terraform fmt -check terraform/environments/dev/
+        run: terraform fmt -check
+        working-directory: terraform/environments/${{ matrix.environment }}
 
-      - name: Terraform Format (prod)
-        run: terraform fmt -check terraform/environments/prod/
+      - name: Terraform Init
+        run: terraform init
+        working-directory: terraform/environments/${{ matrix.environment }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: prod
-    timeout-minutes: 5
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
+      - name: Terraform Validate
+        run: terraform validate -no-color
+        working-directory: terraform/environments/${{ matrix.environment }}
 
-    steps:
-      - name: Terraform Format (prod)
-        run: terraform fmt -check terraform/environments/prod/
+#  deploy:
+#    runs-on: ubuntu-latest
+#    environment: prod
+#    timeout-minutes: 5
+#    if: ${{ contains(github.ref, 'refs/heads/release/') }}
+#
+#    steps:
+#      - name: Terraform Format (prod)
+#        run: terraform fmt -check
+#        working-directory: terraform/environments/prod
