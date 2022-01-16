@@ -51,6 +51,10 @@ jobs:
         run: terraform validate -no-color
         working-directory: terraform/environments/${{ matrix.environment }}
 
+      - name: Terraform Plan
+        run: terraform plan -no-color
+        working-directory: terraform/environments/${{ matrix.environment }}
+
 #  deploy:
 #    runs-on: ubuntu-latest
 #    environment: prod
