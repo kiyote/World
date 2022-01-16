@@ -54,14 +54,14 @@ jobs:
         run: terraform plan -no-color
         working-directory: terraform/environments/${{ matrix.environment }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: dev
-    timeout-minutes: 5
-    needs: [plan]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
-    steps:
-    - name: Deploy (dev)
-      run: terraform apply -auto-approve
-      working-directory: terraform/environments/dev
+#  deploy:
+#    runs-on: ubuntu-latest
+#    environment: dev
+#    timeout-minutes: 5
+#    needs: [plan]
+#    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#    
+#    steps:
+#    - name: Deploy (dev)
+#      run: terraform apply -auto-approve
+#      working-directory: terraform/environments/dev
