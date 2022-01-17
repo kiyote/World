@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<PackageReference Include="InjectableAWS" Version="2.5.3" />
+		<PackageReference Include="InjectableAWS" Version="2.5.4" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Core.csproj" />
