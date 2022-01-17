@@ -50,13 +50,24 @@ jobs:
         run: terraform plan -no-color
         working-directory: terraform/environments/${{ matrix.environment }}
 
-  deploy:
+  deploy_dev:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: plan
-    if: (github.ref == 'refs/heads/main' && matrix.environment == 'dev') || (startsWith(github.ref, 'ref/heads/release') && matrix.environment == 'prod')
+    if: (github.ref == 'refs/heads/main')
     
     steps:
     - name: Deploy
       run: terraform apply
-      working-directory: terraform/environments/${{ matrix.environment }}
+      working-directory: terraform/environments/dev
+
+  deploy_prod:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: plan
+    if: (startsWith(github.ref, 'ref/heads/release'))
+    
+    steps:
+    - name: Deploy
+      run: terraform apply
+      working-directory: terraform/environments/prod
