@@ -1,6 +1,7 @@
 name: Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches: main
     paths:
@@ -20,7 +21,7 @@ env:
   TERRAFORM_VERSION: 1.1.3
 
 jobs:
-  plan:
+  deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -50,24 +51,12 @@ jobs:
         run: terraform plan -no-color
         working-directory: terraform/environments/${{ matrix.environment }}
 
-  deploy_dev:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: plan
-    if: (github.ref == 'refs/heads/main')
-    
-    steps:
-    - name: Deploy
-      run: terraform apply
-      working-directory: terraform/environments/dev
+      - name: Terraform Apply (Dev)
+        if: (github.ref == 'refs/heads/main')
+        run: terraform apply
+        working-directory: terraform/environments/dev
 
-  deploy_prod:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: plan
-    if: (startsWith(github.ref, 'ref/heads/release'))
-    
-    steps:
-    - name: Deploy
-      run: terraform apply
-      working-directory: terraform/environments/prod
+      - name: Terraform Apply (Prod)
+        if: (startsWith(github.ref, 'ref/heads/release'))
+        run: terraform apply
+        working-directory: terraform/environments/prod
