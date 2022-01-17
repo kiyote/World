@@ -18,11 +18,6 @@ env:
   TERRAFORM_VERSION: 1.1.3
 
 jobs:
-  configure:
-    name: Configure
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-
   # Checks if the terraform will work
   plan:
     name: Plan
