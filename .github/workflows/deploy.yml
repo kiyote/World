@@ -41,7 +41,7 @@ jobs:
            terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Terraform Init
-        run: terraform init"
+        run: terraform init
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
@@ -70,7 +70,7 @@ jobs:
            terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Terraform Init
-        run: terraform init"
+        run: terraform init
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
