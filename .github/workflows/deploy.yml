@@ -26,11 +26,11 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    environment: review
     strategy:
       matrix:
         environment: [dev, prod]
       fail-fast: false
-    environment: ${{ matrix.environment }}
         
     steps:
       - name: Checkout
@@ -55,11 +55,11 @@ jobs:
     if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    environment: review
     strategy:
+      fail-fast: false
       matrix:
         environment: [dev, prod]
-      fail-fast: false
-    environment: ${{ matrix.environment }}
         
     steps:
       - name: Checkout
