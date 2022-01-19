@@ -1,4 +1,5 @@
 
+# For deploying AWS resources
 provider "aws" {
   region = "ca-central-1"
 
@@ -7,10 +8,11 @@ provider "aws" {
   }
 }
 
+# For managing the terraform state
 terraform {
   backend "s3" {
-    bucket = "terraformstate6709d8b42a0c40a6be48b840ec9b12ff"
-    dynamodb_table = "terraformstate6709d8b42a0c40a6be48b840ec9b12ff"
+    bucket = "kiyote.terraformstate"
+    dynamodb_table = "kiyote.terraformstate"
     key    = "prod/world"
     region = "ca-central-1"
     role_arn = "arn:aws:iam::860568434255:role/terraform_state_prod"
