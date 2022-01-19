@@ -35,6 +35,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - run: mkdir -p "plan"
+
       - name: Setup
         uses: hashicorp/setup-terraform@v1
         with:
@@ -49,14 +51,14 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Show
-        run: terraform show "./terraform.plan"
+        run: terraform show "plan/terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Store Plan
         uses: actions/upload-artifact@v2
         with:
           name: plan
-          path: "./terraform.plan"
+          path: "plan/terraform.plan"
           retention-days: 1
 
 
@@ -78,6 +80,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - run: mkdir -p "plan"
+
       - name: Setup
         uses: hashicorp/setup-terraform@v1
         with:
@@ -93,9 +97,9 @@ jobs:
           name: plan
 
       - name: Terraform Show
-        run: terraform show "./terraform.plan"
+        run: terraform show "plan/terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Apply
-        run: terraform apply -input=false "./terraform.plan"
+        run: terraform apply -input=false "plan/terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
