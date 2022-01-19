@@ -2,6 +2,15 @@ name: Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        description: Select the environment
+        default: dev
+        options:
+        - dev
+        - prod
   push:
     branches: 
       - main
@@ -52,14 +61,10 @@ jobs:
   # Generates a plan in preparation for application
   plan:
     name: Plan
-    if: ${{ github.event_name != 'pull_request' }}
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: review
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [dev, prod]
         
     steps:
       - name: Checkout
@@ -72,17 +77,17 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform/environments/${{ matrix.environment }}
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Terraform Plan
-        run: terraform plan -input=false -lock=false -out="${{ env.PLAN_DIR }}/${{ matrix.environment }}.plan"
-        working-directory: terraform/environments/${{ matrix.environment }}
+        run: terraform plan -input=false -lock=false -out="${{ env.PLAN_DIR }}/terraform.plan"
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Store Plan
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.environment }}_plan
-          path: "${{ env.PLAN_DIR }}/${{ matrix.environment }}.plan"
+          name: plan
+          path: "${{ env.PLAN_DIR }}/terraform.plan"
           retention-days: 1
           if-no-files-found: error
 
@@ -92,11 +97,7 @@ jobs:
     name: Apply
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    strategy:
-      matrix:
-        environment: [dev, prod]
-      fail-fast: false
-    environment: ${{ matrix.environment }}
+    environment: ${{ github.event.inputs.environment }}
     needs:
       - plan
         
@@ -111,13 +112,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform/environments/${{ matrix.environment }}
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Restore Plan
         uses: actions/download-artifact@v2
         with:
-          name: ${{ matrix.environment }}_plan
+          name: plan
 
       - name: Terraform Apply
-        run: terraform apply -input=false "${{ env.PLAN_DIR }}/${{ matrix.environment }}.plan"
-        working-directory: terraform/environments/${{ matrix.environment }}
+        run: terraform apply -input=false "${{ env.PLAN_DIR }}/terraform.plan"
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
