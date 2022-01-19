@@ -36,8 +36,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - run: mkdir -p ${{ env.PLAN_DIR }}
-
       - name: Setup
         uses: hashicorp/setup-terraform@v1
         with:
@@ -48,7 +46,7 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
-        run: terraform plan -input=false -lock=false -out "${{ env.PLAN_DIR }}/terraform.plan"
+        run: terraform plan -input=false -lock=false -out="${{ env.PLAN_DIR }}/terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Show
@@ -80,8 +78,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - run: mkdir -p "${{ env.PLAN_DIR }}"
 
       - name: Setup
         uses: hashicorp/setup-terraform@v1
