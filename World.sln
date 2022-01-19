@@ -109,6 +109,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world-manager", "world-mana
 	ProjectSection(SolutionItems) = preProject
 		terraform\modules\world-manager\_inputs.tf = terraform\modules\world-manager\_inputs.tf
 		terraform\modules\world-manager\_outputs.tf = terraform\modules\world-manager\_outputs.tf
+		terraform\modules\world-manager\dynamodb_table.tf = terraform\modules\world-manager\dynamodb_table.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
@@ -131,7 +132,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
 	ProjectSection(SolutionItems) = preProject
-		terraform\common\world.tf = terraform\common\world.tf
+		terraform\common\world-manager.tf = terraform\common\world-manager.tf
 	EndProjectSection
 EndProject
 Global
