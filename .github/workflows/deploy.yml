@@ -45,18 +45,18 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
-        run: terraform plan -input=false -lock=false -out "terraform.plan"
+        run: terraform plan -input=false -lock=false -out "./terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Show
-        run: terraform show -json "terraform.plan"
+        run: terraform show "./terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Store Plan
         uses: actions/upload-artifact@v2
         with:
           name: plan
-          path: "terraform.plan"
+          path: "./terraform.plan"
           retention-days: 1
 
 
@@ -93,9 +93,9 @@ jobs:
           name: plan
 
       - name: Terraform Show
-        run: terraform show -json "terraform.plan"
+        run: terraform show "./terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Apply
-        run: terraform apply -input=false "terraform.plan"
+        run: terraform apply -input=false "./terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
