@@ -47,7 +47,7 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
-        run: terraform plan -input=false -lock=false -out "./terraform.plan"
+        run: terraform plan -input=false -lock=false -out "plan/terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Show
