@@ -45,8 +45,20 @@ jobs:
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Plan
-        run: terraform plan -input=false -lock=false
+        run: terraform plan -input=false -lock=false -detailed-exitcode -out "terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
+
+      - name: Terraform Show
+        run: terraform show -json "terraform.plan"
+        working-directory: terraform/environments/${{ matrix.environment }}
+
+      - name: Store Plan
+        uses: actions/upload-artifact@v2
+        with:
+          name: plan
+          path: "terraform.plan"
+          retention-days: 1
+
 
   # Applies the terraform
   apply:
@@ -59,6 +71,8 @@ jobs:
         environment: [dev, prod]
       fail-fast: false
     environment: ${{ matrix.environment }}
+    needs:
+      - plan
         
     steps:
       - name: Checkout
@@ -73,10 +87,15 @@ jobs:
         run: terraform init
         working-directory: terraform/environments/${{ matrix.environment }}
 
-      - name: Terraform Plan
-        run: terraform plan -input=false -lock=false
+      - name: Restore Plan
+        uses: actions/download-artifact@v2
+        with:
+          name: plan
+
+      - name: Terraform Show
+        run: terraform show -json "terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}
 
       - name: Terraform Apply
-        run: terraform apply -input=false
+        run: terraform apply -input=false "terraform.plan"
         working-directory: terraform/environments/${{ matrix.environment }}

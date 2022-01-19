@@ -1,4 +1,5 @@
 
+# For deploying AWS resources
 provider "aws" {
   region = "ca-central-1"
 
@@ -7,6 +8,7 @@ provider "aws" {
   }
 }
 
+# For managing the terraform state
 terraform {
   backend "s3" {
     bucket = "terraformstate6709d8b42a0c40a6be48b840ec9b12ff"
