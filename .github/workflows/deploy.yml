@@ -20,10 +20,39 @@ env:
   PLAN_DIR: "${{ github.workspace }}"
 
 jobs:
-  # Checks if the terraform will work
+  # Generates a plan for review on a PR
+  review:
+    name: Review
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        environment: [dev, prod]
+      fail-fast: false
+    environment: ${{ matrix.environment }}
+        
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        uses: hashicorp/setup-terraform@v1
+        with:
+           terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: terraform/environments/${{ matrix.environment }}
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -lock=false
+        working-directory: terraform/environments/${{ matrix.environment }}
+
+  # Generates a plan in preparation for application
   plan:
     name: Plan
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -61,7 +90,6 @@ jobs:
   # Applies the terraform
   apply:
     name: Apply
-    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
