@@ -1,10 +1,6 @@
 
 provider "aws" {
   region = "ca-central-1"
-
-  assume_role {
-    role_arn = "arn:aws:iam::860568434255:role/terraform_world_dev"
-  }
 }
 
 terraform {
