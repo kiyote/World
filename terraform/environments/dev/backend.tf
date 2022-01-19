@@ -8,7 +8,7 @@ provider "aws" {
   }
 }
 
-# For managing terraform state
+# For managing the terraform state
 terraform {
   backend "s3" {
     bucket = "kiyote.terraformstate"
