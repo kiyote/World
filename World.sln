@@ -132,6 +132,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
 	ProjectSection(SolutionItems) = preProject
+		terraform\common\_inputs.tf = terraform\common\_inputs.tf
 		terraform\common\world-manager.tf = terraform\common\world-manager.tf
 	EndProjectSection
 EndProject
