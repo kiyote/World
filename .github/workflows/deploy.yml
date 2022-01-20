@@ -81,7 +81,7 @@ jobs:
 
       - name: Terraform Plan
         continue-on-error: true
-        run: terraform plan -input=false -lock=false -detailed-exitcode -out="${{ env.PLAN_DIR }}/terraform.plan && "::set-output name=no_changes::true"
+        run: terraform plan -input=false -lock=false -detailed-exitcode -out="${{ env.PLAN_DIR }}/terraform.plan" && "::set-output name=no_changes::true"
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Store Plan
