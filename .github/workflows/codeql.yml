@@ -3,6 +3,14 @@ name: CodeQL
 on:
   schedule:
     - cron: '38 7 * * *'
+  push:
+    branches: 
+      - main
+    paths:
+      - '.github/workflows/codeql.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/codeql.yml'
 
 jobs:
   check_date:
@@ -19,7 +27,7 @@ jobs:
         continue-on-error: true
         name: check latest commit is less than a day
         if: ${{ github.event_name == 'schedule' }}
-        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "::set-output name=should_run::false"
+        run: test -z $(git log -1 main --after="24 hours ago") && echo "::set-output name=should_run::false"
 
   analyze:
     needs: check_date
