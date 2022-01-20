@@ -85,7 +85,7 @@ jobs:
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Store Plan
-        if: ${{ plan.outputs.no_changes != 'true' }}
+        if: ${{ outputs.no_changes != 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: plan
