@@ -27,7 +27,7 @@ jobs:
         continue-on-error: true
         name: check latest commit is less than a day
         if: ${{ github.event_name == 'schedule' }}
-        run: test -z $(git log -1 main --after="24 hours ago") && echo "::set-output name=should_run::false"; exit 0
+        run: test -z $(git log -1 main --after="24 hours ago") && echo "::set-output name=should_run::false"
 
   analyze:
     needs: check_date
