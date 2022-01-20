@@ -80,12 +80,10 @@ jobs:
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Terraform Plan
-        continue-on-error: true
-        run: terraform plan -input=false -lock=false -detailed-exitcode -out="${{ env.PLAN_DIR }}/terraform.plan" && echo "::set-output name=no_changes::true"
+        run: terraform plan -input=false -lock=false -out="${{ env.PLAN_DIR }}/terraform.plan"
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Store Plan
-        if: ${{ plan.outputs.no_changes != 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: plan
@@ -97,12 +95,11 @@ jobs:
   # Applies the terraform
   apply:
     name: Apply
-    needs:
-      - plan
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: ${{ github.event.inputs.environment }}
-    if: ${{ needs.plan.outputs.no_changes != 'true' }}
+    needs:
+      - plan
         
     steps:
       - name: Checkout
