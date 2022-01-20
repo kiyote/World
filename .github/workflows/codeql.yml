@@ -3,6 +3,14 @@ name: CodeQL
 on:
   schedule:
     - cron: '38 7 * * *'
+  push:
+    branches: 
+      - main
+    paths:
+      - '.github/workflows/codeql.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/codeql.yml'
 
 jobs:
   check_date:
