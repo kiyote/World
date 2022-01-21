@@ -5,10 +5,10 @@ namespace Manager.Actors.Repositories.DynamoDb;
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class DynamoDbActorRepository : IActorRepository {
 
-	private readonly WorldDynamoDbRepository _db;
+	private readonly IWorldDynamoDbRepository _db;
 
 	public DynamoDbActorRepository(
-		WorldDynamoDbRepository db
+		IWorldDynamoDbRepository db
 	) {
 		_db = db;
 	}
@@ -35,17 +35,21 @@ internal sealed class DynamoDbActorRepository : IActorRepository {
 		return ToActor( record );
 	}
 
-	async Task<Actor> IActorRepository.GetByIdAsync(
+	async Task<Actor?> IActorRepository.GetByIdAsync(
 		Id<World> worldId,
 		Id<Actor> actorId,
 		CancellationToken cancellationToken
 	) {
-		ActorRecord record = await _db
+		ActorRecord? record = await _db
 			.LoadAsync<ActorRecord>(
 				worldId.ToString(),
 				actorId.ToString(),
 				cancellationToken
 			).ConfigureAwait( false );
+
+		if (record is null) {
+			return default;
+		}
 
 		return ToActor( record );
 	}

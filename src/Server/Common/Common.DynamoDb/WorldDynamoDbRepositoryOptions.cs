@@ -2,4 +2,5 @@
 
 namespace Common.DynamoDb;
 
-public record WorldDynamoDbRepositoryOptions(string TableName): DynamoDbRepositoryOptions(TableName);
+public record WorldDynamoDbRepositoryOptions( string TableName, string IndexName )
+	: DynamoDbRepositoryOptions( TableName, IndexName );

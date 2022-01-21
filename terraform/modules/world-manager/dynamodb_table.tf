@@ -14,4 +14,11 @@ resource "aws_dynamodb_table" "world_manager_table" {
      name = "SK"
 	 type = "S"
   }
+
+  global_secondary_index {
+    name            = "GSI"
+    hash_key        = "SK"
+    range_key       = "PK"
+    projection_type = "ALL"
+  }
 }
