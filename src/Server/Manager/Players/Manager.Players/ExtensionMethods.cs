@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Manager.Worlds.Repositories.DynamoDb;
+namespace Manager.Players;
 
 public static class ExtensionMethods {
-
-	public static IServiceCollection AddDynamoDbWorlds(
+	public static IServiceCollection AddWorldManager(
 		this IServiceCollection services
 	) {
-		services.TryAddSingleton<IWorldRepository, DynamoDbWorldRepository>();
+
+		services.TryAddSingleton<IPlayerManager, PlayerManager>();
 
 		return services;
 	}
 }
+

@@ -10,7 +10,7 @@ public interface IActorRepository
 		CancellationToken cancellationToken
 	);
 
-	Task<Actor> GetByIdAsync(
+	Task<Actor?> GetByIdAsync(
 		Id<World> worldId,
 		Id<Actor> actorId,
 		CancellationToken cancellationToken

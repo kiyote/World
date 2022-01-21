@@ -5,11 +5,10 @@ public interface IActorManager {
 		Id<World> worldId,
 		Id<Actor> actorId,
 		string name,
-		DateTime createdOn,
 		CancellationToken cancellationToken
 	);
 
-	Task<Actor> GetByIdAsync(
+	Task<Actor?> GetByIdAsync(
 		Id<World> worldId,
 		Id<Actor> actorId,
 		CancellationToken cancellationToken
