@@ -1,6 +1,6 @@
 
 resource "aws_dynamodb_table" "world_manager_table" {
-  name = "${var.object_prefix}_world_manager"
+  name = "${var.object_prefix}manager.worlds.world"
   billing_mode = "PAY_PER_REQUEST"
   hash_key = "PK"
   range_key = "SK"

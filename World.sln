@@ -109,7 +109,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world-manager", "world-mana
 	ProjectSection(SolutionItems) = preProject
 		terraform\modules\world-manager\_inputs.tf = terraform\modules\world-manager\_inputs.tf
 		terraform\modules\world-manager\_outputs.tf = terraform\modules\world-manager\_outputs.tf
-		terraform\modules\world-manager\dynamodb_table.tf = terraform\modules\world-manager\dynamodb_table.tf
+		terraform\modules\world-manager\dynamodb_world.tf = terraform\modules\world-manager\dynamodb_world.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
@@ -156,33 +156,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{0EAA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{3BB968B3-4066-40B0-BA17-76D1D7ECFDBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Players.Tests", "test\Server\Manager\Players\Manager.Players.Tests\Manager.Players.Tests.csproj", "{517C4DE7-525F-431C-AB30-7263CF42ADAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Tests", "test\Server\Manager\Players\Manager.Players.Tests\Manager.Players.Tests.csproj", "{517C4DE7-525F-431C-AB30-7263CF42ADAF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{7EFE6301-F0E7-457E-BB82-7E465230870B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Actors.Tests", "test\Server\Manager\Actors\Manager.Actors.Tests\Manager.Actors.Tests.csproj", "{A9ADFDEF-0782-4519-9347-00CBC9920042}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Tests", "test\Server\Manager\Actors\Manager.Actors.Tests\Manager.Actors.Tests.csproj", "{A9ADFDEF-0782-4519-9347-00CBC9920042}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{FACF2156-149F-4A31-8914-2C5095023F87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Worlds.Tests", "test\Server\Manager\Worlds\Manager.Worlds.Tests\Manager.Worlds.Tests.csproj", "{DAED92CB-F25B-4437-98A2-E2A074387FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Tests", "test\Server\Manager\Worlds\Manager.Worlds.Tests\Manager.Worlds.Tests.csproj", "{DAED92CB-F25B-4437-98A2-E2A074387FF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{0437BBFB-EB98-444B-AFFB-2B7313EAD88B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{C75F22B7-4199-43C6-9190-8070787D125E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Actors.Repositories.DynamoDb.Tests", "test\Server\Manager\Actors\Manager.Actors.Repositories.DynamoDb.Tests.csproj\Manager.Actors.Repositories.DynamoDb.Tests.csproj", "{0D524930-330F-47B8-80BB-3D4A4ED5ECAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Repositories.DynamoDb.Tests", "test\Server\Manager\Actors\Manager.Actors.Repositories.DynamoDb.Tests.csproj\Manager.Actors.Repositories.DynamoDb.Tests.csproj", "{0D524930-330F-47B8-80BB-3D4A4ED5ECAD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{875BB675-802E-4195-8E22-D3DAF2D9F716}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{132A3441-A7E7-46C7-B7FC-531A9046747D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Players.Repositories.DynamoDb.Tests", "test\Server\Manager\Players\Manager.Players.Repositories.DynamoDb.Tests\Manager.Players.Repositories.DynamoDb.Tests.csproj", "{CC6AF3B7-0E47-4F54-8CB9-99CB1C446257}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Repositories.DynamoDb.Tests", "test\Server\Manager\Players\Manager.Players.Repositories.DynamoDb.Tests\Manager.Players.Repositories.DynamoDb.Tests.csproj", "{CC6AF3B7-0E47-4F54-8CB9-99CB1C446257}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{5942A181-2A2D-4DF6-A703-1A6C8D658DFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{759ABF0C-8841-4EA1-A1BC-B4A6BBDF00C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Worlds.Repositories.DynamoDb.Tests", "test\Server\Manager\Worlds\Manager.Worlds.Repositories.DynamoDb.Tests\Manager.Worlds.Repositories.DynamoDb.Tests.csproj", "{909FDE69-1233-40F7-A576-4A83B3733797}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories.DynamoDb.Tests", "test\Server\Manager\Worlds\Manager.Worlds.Repositories.DynamoDb.Tests\Manager.Worlds.Repositories.DynamoDb.Tests.csproj", "{909FDE69-1233-40F7-A576-4A83B3733797}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

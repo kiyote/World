@@ -2,5 +2,5 @@
 module "world" {
   source = "../../common"
 
-  object_prefix = "prod"
+  object_prefix = "world.prod."
 }
