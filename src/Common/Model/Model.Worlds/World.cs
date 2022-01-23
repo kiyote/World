@@ -1,7 +1,7 @@
 ﻿namespace Common.Model.Worlds;
 
 public record World(
-	Id<World> Id,
+	Id<World> WorldId,
 	string Name,
 	DateTime CreatedOn
 );

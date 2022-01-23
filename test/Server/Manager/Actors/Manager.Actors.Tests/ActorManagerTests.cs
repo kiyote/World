@@ -31,7 +31,7 @@ public class ActorManagerTests {
 
 		Actor result = await _actorManager.CreateAsync( worldId, actorId, name, CancellationToken.None );
 
-		Assert.AreEqual( actorId, result.Id );
+		Assert.AreEqual( actorId, result.ActorId );
 		Assert.AreEqual( name, result.Name );
 	}
 }

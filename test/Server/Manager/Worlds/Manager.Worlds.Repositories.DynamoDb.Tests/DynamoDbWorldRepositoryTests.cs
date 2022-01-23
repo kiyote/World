@@ -38,7 +38,7 @@ public class DynamoDbWorldRepositoryTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( worldId, result.Id );
+		Assert.AreEqual( worldId, result.WorldId );
 		Assert.AreEqual( name, result.Name );
 	}
 }

@@ -7,18 +7,21 @@ namespace Manager.Worlds.Tests;
 [TestFixture]
 public class WorldManagerTests {
 	private Mock<IWorldRepository> _worldRepository;
+	private Mock<IRegionRepository> _regionRepository;
 	private IWorldManager _worldManager;
 
 	[SetUp]
 	public void SetUp() {
 		_worldRepository = new Mock<IWorldRepository>( MockBehavior.Strict );
+		_regionRepository = new Mock<IRegionRepository>( MockBehavior.Strict );
 		_worldManager = new WorldManager(
-			_worldRepository.Object
+			_worldRepository.Object,
+			_regionRepository.Object
 		);
 	}
 
 	[Test]
-	public async Task CreateAsync_ValidParameters_PlayerReturned() {
+	public async Task CreateWorldAsync_ValidParameters_PlayerReturned() {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		string name = "world_name";
 		DateTime createdOn = new DateTime( 2022, 1, 13 );
@@ -27,9 +30,9 @@ public class WorldManagerTests {
 			.Setup( wr => wr.CreateAsync( worldId, name, It.IsAny<DateTime>(), CancellationToken.None ) )
 			.Returns( Task.FromResult( world ) );
 
-		World result = await _worldManager.CreateAsync( worldId, name, CancellationToken.None );
+		World result = await _worldManager.CreateWorldAsync( worldId, name, CancellationToken.None );
 
-		Assert.AreEqual( worldId, result.Id );
+		Assert.AreEqual( worldId, result.WorldId );
 		Assert.AreEqual( name, result.Name );
 	}
 }

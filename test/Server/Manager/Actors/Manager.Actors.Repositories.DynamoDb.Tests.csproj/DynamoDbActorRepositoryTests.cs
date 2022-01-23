@@ -41,7 +41,7 @@ public class DynamoDbActorRepositoryTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( actorId, result.Id );
+		Assert.AreEqual( actorId, result.ActorId );
 		Assert.AreEqual( name, result.Name );
 	}
 }

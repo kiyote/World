@@ -38,7 +38,7 @@ public class DynamoDbPlayerRepositoryTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( playerId, result.Id );
+		Assert.AreEqual( playerId, result.PlayerId );
 		Assert.AreEqual( name, result.Name );
 	}
 }

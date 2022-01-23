@@ -1,7 +1,7 @@
 ﻿namespace Common.Model.Players;
 
 public record Player(
-	Id<Player> Id,
+	Id<Player> PlayerId,
 	string Name,
 	DateTime CreatedOn
 );

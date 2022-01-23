@@ -1,7 +1,7 @@
 ﻿namespace Common.Model.Actors;
 
 public record Actor(
-	Id<Actor> Id,
+	Id<Actor> ActorId,
 	string Name,
 	DateTime CreatedOn
 );

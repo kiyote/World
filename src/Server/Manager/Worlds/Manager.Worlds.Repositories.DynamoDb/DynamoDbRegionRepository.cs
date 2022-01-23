@@ -3,56 +3,63 @@
 namespace Manager.Worlds.Repositories.DynamoDb;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
-internal sealed class DynamoDbWorldRepository : IWorldRepository {
+internal sealed class DynamoDbRegionRepository : IRegionRepository {
 
 	private readonly IWorldDynamoDbRepository _db;
 
-	public DynamoDbWorldRepository(
+	public DynamoDbRegionRepository(
 		IWorldDynamoDbRepository db
 	) {
 		_db = db;
 	}
 
-	async Task<World> IWorldRepository.CreateAsync(
+	async Task<Region> IRegionRepository.CreateAsync(
 		Id<World> worldId,
+		Id<Region> regionId,
 		string name,
+		IEnumerable<Id<RegionChunk>> chunks,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
-		WorldRecord record = new WorldRecord(
+		var record = new RegionRecord(
 			worldId,
+			regionId,
 			name,
+			chunks,
 			createdOn.ToUniversalTime()
 		);
 
 		await _db.CreateAsync( record, cancellationToken ).ConfigureAwait( false );
 
-		return new World(
+		return new Region(
+			regionId,
 			worldId,
 			name,
-			createdOn
+			chunks
 		);
 	}
 
-	async Task<World?> IWorldRepository.GetByIdAsync(
+	async Task<Region?> IRegionRepository.GetByIdAsync(
 		Id<World> worldId,
+		Id<Region> regionId,
 		CancellationToken cancellationToken
 	) {
-		WorldRecord? record = await _db.LoadAsync<WorldRecord?>(
+		RegionRecord? record = await _db.LoadAsync<RegionRecord?>(
 			worldId.Value,
 			worldId.Value,
 			cancellationToken
 		).ConfigureAwait( false );
 
-		if (record is null) {
+		if( record is null ) {
 			return null;
 		}
 
-		return new World(
+		return new Region(
+			regionId,
 			worldId,
 			record.Name,
-			record.CreatedOn
+			record.Chunks
 		);
-		
+
 	}
 }

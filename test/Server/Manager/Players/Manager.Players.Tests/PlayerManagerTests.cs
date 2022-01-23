@@ -30,7 +30,7 @@ public class PlayerManagerTests {
 
 		Player result = await _playerManager.CreateAsync( playerId, name, CancellationToken.None );
 
-		Assert.AreEqual( playerId, result.Id );
+		Assert.AreEqual( playerId, result.PlayerId );
 		Assert.AreEqual( name, result.Name );
 	}
 }
