@@ -5,7 +5,6 @@ public interface IRegionRepository {
 		Id<World> worldId,
 		Id<Region> regionId,
 		string name,
-		IEnumerable<Id<RegionChunk>> chunks,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	);

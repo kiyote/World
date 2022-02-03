@@ -16,12 +16,14 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 	async Task<World> IWorldRepository.CreateAsync(
 		Id<World> worldId,
 		string name,
+		string seed,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
 		WorldRecord record = new WorldRecord(
 			worldId,
 			name,
+			seed,
 			createdOn.ToUniversalTime()
 		);
 
@@ -30,6 +32,7 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 		return new World(
 			worldId,
 			name,
+			seed,
 			createdOn
 		);
 	}
@@ -51,6 +54,7 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 		return new World(
 			worldId,
 			record.Name,
+			record.Seed,
 			record.CreatedOn
 		);
 		

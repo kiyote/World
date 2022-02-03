@@ -9,7 +9,6 @@ internal class RegionRecord {
 		WorldId = "";
 		RegionId = "";
 		Name = "";
-		Chunks = Array.Empty<Id<RegionChunk>>();
 		CreatedOn = DateTime.UtcNow;
 	}
 
@@ -17,13 +16,11 @@ internal class RegionRecord {
 		Id<World> worldId,
 		Id<Region> regionId,
 		string name,
-		IEnumerable<Id<RegionChunk>> chunks,
 		DateTime createdOn
 	) {
 		WorldId = worldId.Value;
 		RegionId = regionId.Value;
 		Name = name;
-		Chunks = chunks.ToArray();
 		CreatedOn = createdOn;
 	}
 
@@ -32,9 +29,6 @@ internal class RegionRecord {
 
 	[DynamoDBRangeKey( "SK" )]
 	public string RegionId { get; set; }
-
-	[DynamoDBProperty]
-	public Id<RegionChunk>[] Chunks { get; set; }
 
 	[DynamoDBProperty]
 	public string Name { get; set; }

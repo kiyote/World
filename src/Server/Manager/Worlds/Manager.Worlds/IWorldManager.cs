@@ -5,6 +5,7 @@ public interface IWorldManager {
 	Task<World> CreateWorldAsync(
 		Id<World> worldId,
 		string name,
+		string seed,
 		CancellationToken cancellationToken
 	);
 
@@ -15,8 +16,4 @@ public interface IWorldManager {
 		CancellationToken cancellationToken
 	);
 
-	Task<IEnumerable<Tile>> GetRegionChunkTilesAsync(
-		Id<RegionChunk> regionChunkId,
-		CancellationToken cancellationToken
-	);
 }
