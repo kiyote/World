@@ -8,16 +8,19 @@ internal class WorldRecord {
 	public WorldRecord() {
 		WorldId = "";
 		Name = "";
+		Seed = "";
 		CreatedOn = DateTime.UtcNow;
 	}
 
 	public WorldRecord(
 		Id<World> worldId,
 		string name,
+		string seed,
 		DateTime createdOn
 	) {
 		WorldId = worldId.Value;
 		Name = name;
+		Seed = seed;
 		CreatedOn = createdOn;
 	}
 
@@ -27,6 +30,9 @@ internal class WorldRecord {
 
 	[DynamoDBProperty]
 	public string Name { get; set; }
+
+	[DynamoDBProperty]
+	public string Seed { get; set; }
 
 	[DynamoDBProperty]
 	public DateTime CreatedOn { get; set; }

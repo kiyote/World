@@ -19,11 +19,13 @@ internal sealed class WorldManager : IWorldManager {
 	Task<World> IWorldManager.CreateWorldAsync(
 		Id<World> worldId,
 		string name,
+		string seed,
 		CancellationToken cancellationToken
 	) {
 		return _worldRepository.CreateAsync(
 			worldId,
 			name,
+			seed,
 			DateTime.UtcNow,
 			cancellationToken );
 	}
@@ -38,16 +40,9 @@ internal sealed class WorldManager : IWorldManager {
 			worldId,
 			regionId,
 			name,
-			Array.Empty<Id<RegionChunk>>(),
 			DateTime.UtcNow,
 			cancellationToken );
 	}
 
-	Task<IEnumerable<Tile>> IWorldManager.GetRegionChunkTilesAsync(
-		Id<RegionChunk> regionChunkId,
-		CancellationToken cancellationToken
-	) {
-		throw new NotImplementedException();
-	}
 }
 

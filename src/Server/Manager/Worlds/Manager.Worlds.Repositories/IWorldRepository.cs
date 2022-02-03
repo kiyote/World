@@ -5,6 +5,7 @@ public interface IWorldRepository
 	Task<World> CreateAsync(
 		Id<World> worldId,
 		string name,
+		string seed,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	);

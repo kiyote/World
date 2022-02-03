@@ -4,5 +4,5 @@ public record Region(
 	Id<Region> RegionId,
 	Id<World> WorldId,
 	string Name,
-	IEnumerable<Id<RegionChunk>> Chunks
+	IEnumerable<Id<Tile>> TileIds
 );

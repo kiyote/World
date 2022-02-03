@@ -21,8 +21,9 @@ public class DynamoDbWorldRepositoryTests {
 	public async Task CreateAsync_ValidParameters_ActorCreated() {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		string name = "world_name";
+		string seed = "world_seed";
 		DateTime createdOn = new DateTime( 2022, 1, 21 );
-		WorldRecord record = new WorldRecord( worldId, name, createdOn );
+		WorldRecord record = new WorldRecord( worldId, name, seed, createdOn );
 
 		_db.Setup( db => db.CreateAsync( It.IsAny<WorldRecord>(), CancellationToken.None ) )
 			.Callback( ( WorldRecord worldRecord, CancellationToken _ ) => {
@@ -34,6 +35,7 @@ public class DynamoDbWorldRepositoryTests {
 		World result = await _repository.CreateAsync(
 			worldId,
 			name,
+			seed,
 			createdOn,
 			CancellationToken.None
 		);

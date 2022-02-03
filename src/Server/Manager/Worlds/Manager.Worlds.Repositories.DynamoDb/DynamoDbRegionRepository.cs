@@ -17,7 +17,6 @@ internal sealed class DynamoDbRegionRepository : IRegionRepository {
 		Id<World> worldId,
 		Id<Region> regionId,
 		string name,
-		IEnumerable<Id<RegionChunk>> chunks,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
@@ -25,7 +24,6 @@ internal sealed class DynamoDbRegionRepository : IRegionRepository {
 			worldId,
 			regionId,
 			name,
-			chunks,
 			createdOn.ToUniversalTime()
 		);
 
@@ -35,7 +33,7 @@ internal sealed class DynamoDbRegionRepository : IRegionRepository {
 			regionId,
 			worldId,
 			name,
-			chunks
+			Array.Empty<Id<Tile>>()
 		);
 	}
 
@@ -58,7 +56,7 @@ internal sealed class DynamoDbRegionRepository : IRegionRepository {
 			regionId,
 			worldId,
 			record.Name,
-			record.Chunks
+			Array.Empty<Id<Tile>>()
 		);
 
 	}
