@@ -1,4 +1,4 @@
-﻿namespace Common.Model.Players;
+﻿namespace Model.Players;
 
 public record Player(
 	Id<Player> PlayerId,

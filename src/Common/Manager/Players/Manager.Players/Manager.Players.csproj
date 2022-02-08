@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Core.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Model.Players\Model.Players.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Server\Common\Common.DynamoDb\Common.DynamoDb.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Manager.Players.Repositories\Manager.Players.Repositories.csproj" />
 	</ItemGroup>
 </Project>

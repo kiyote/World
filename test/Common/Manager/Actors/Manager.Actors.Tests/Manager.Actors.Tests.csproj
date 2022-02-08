@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
 		<Nullable>disable</Nullable>
@@ -13,7 +13,7 @@
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Model.Worlds\Model.Worlds.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Model.Actors\Model.Actors.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Actors\Manager.Actors.Repositories.DynamoDb\Manager.Actors.Repositories.DynamoDb.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Actors\Manager.Actors\Manager.Actors.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Actors\Manager.Actors.Repositories\Manager.Actors.Repositories.csproj" />
 	</ItemGroup>
 </Project>

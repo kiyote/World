@@ -13,6 +13,6 @@
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Model\Model.Players\Model.Players.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Players\Manager.Players.Repositories.DynamoDb\Manager.Players.Repositories.DynamoDb.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Server\Manager\Players\Manager.Players.Repositories\Manager.Players.Repositories.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Manager.Players.Repositories\Manager.Players.Repositories.csproj" />
 	</ItemGroup>
 </Project>
