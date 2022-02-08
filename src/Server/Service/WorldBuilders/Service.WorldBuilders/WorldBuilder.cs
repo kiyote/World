@@ -1,4 +1,6 @@
-﻿namespace Service.WorldBuilders;
+﻿
+
+namespace Service.WorldBuilders;
 
 public class WorldBuilder : IWorldBuilder {
 
@@ -14,8 +16,22 @@ public class WorldBuilder : IWorldBuilder {
 	}
 
 	void IWorldBuilder.Build(
-		string seed
+		string name,
+		string seed,
+		int rows,
+		int columns
 	) {
+		if (rows <= 0) {
+			throw new ArgumentException( "Rows must be >= 0.", nameof( rows ) );
+		}
+
+		if (columns <= 0) {
+			throw new ArgumentException( "Columns must be >= 0.", nameof( columns ) );
+		}
+
 		_random.Reinitialise( seed.GetHashCode( StringComparison.Ordinal ) );
+
+		Id<World> worldId = new Id<World>( Guid.NewGuid() );
+		World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );
 	}
 }

@@ -1,2 +1,2 @@
-﻿global using Common.Model.Players;
+﻿global using Model.Players;
 

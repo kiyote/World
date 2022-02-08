@@ -1,1 +1,2 @@
-﻿global using Manager.Worlds;
+﻿global using Model.Worlds;
+global using Manager.Worlds;
