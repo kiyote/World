@@ -1,2 +1,2 @@
-﻿global using Common.Model.Worlds;
+﻿global using Model.Worlds;
 

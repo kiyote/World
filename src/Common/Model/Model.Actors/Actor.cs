@@ -1,4 +1,4 @@
-﻿namespace Common.Model.Actors;
+﻿namespace Model.Actors;
 
 public record Actor(
 	Id<Actor> ActorId,

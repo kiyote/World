@@ -3,7 +3,10 @@
 internal interface IWorldBuilder {
 
 	void Build(
-		string seed
+		string name,
+		string seed,
+		int rows,
+		int columns
 	);
 }
 

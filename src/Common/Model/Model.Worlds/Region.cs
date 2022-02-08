@@ -1,4 +1,4 @@
-﻿namespace Common.Model.Worlds;
+﻿namespace Model.Worlds;
 
 public record Region(
 	Id<Region> RegionId,

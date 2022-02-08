@@ -22,8 +22,10 @@ public class DynamoDbWorldRepositoryTests {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		string name = "world_name";
 		string seed = "world_seed";
+		int rows = 1;
+		int columns = 2;
 		DateTime createdOn = new DateTime( 2022, 1, 21 );
-		WorldRecord record = new WorldRecord( worldId, name, seed, createdOn );
+		WorldRecord record = new WorldRecord( worldId, name, seed, rows, columns, createdOn );
 
 		_db.Setup( db => db.CreateAsync( It.IsAny<WorldRecord>(), CancellationToken.None ) )
 			.Callback( ( WorldRecord worldRecord, CancellationToken _ ) => {
@@ -36,6 +38,8 @@ public class DynamoDbWorldRepositoryTests {
 			worldId,
 			name,
 			seed,
+			rows,
+			columns,
 			createdOn,
 			CancellationToken.None
 		);

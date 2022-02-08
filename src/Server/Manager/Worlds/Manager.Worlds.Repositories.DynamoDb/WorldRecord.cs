@@ -9,6 +9,8 @@ internal class WorldRecord {
 		WorldId = "";
 		Name = "";
 		Seed = "";
+		Rows = 0;
+		Columns = 0;
 		CreatedOn = DateTime.UtcNow;
 	}
 
@@ -16,11 +18,15 @@ internal class WorldRecord {
 		Id<World> worldId,
 		string name,
 		string seed,
+		int rows,
+		int columns,
 		DateTime createdOn
 	) {
 		WorldId = worldId.Value;
 		Name = name;
 		Seed = seed;
+		Rows = rows;
+		Columns = columns;
 		CreatedOn = createdOn;
 	}
 
@@ -33,6 +39,12 @@ internal class WorldRecord {
 
 	[DynamoDBProperty]
 	public string Seed { get; set; }
+
+	[DynamoDBProperty]
+	public int Rows { get; set; }
+
+	[DynamoDBProperty]
+	public int Columns { get; set; }
 
 	[DynamoDBProperty]
 	public DateTime CreatedOn { get; set; }
