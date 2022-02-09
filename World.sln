@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28E4E30D-CBD7-47A2-8140-A9E3F7F95973}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A1769682-C0E8-400C-8E0F-FB6BA4B7A2CB}"
+	ProjectSection(SolutionItems) = preProject
+		test\.runsettings = test\.runsettings
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16CEE4C8-C03E-44E1-B6C8-F33DE81DBE25}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,13 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Common\Core\Core.csproj", "{A6E254E3-DBC5-4109-B417-B8B20A4C1B1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core", "src\Common\Common.Core\Common.Core.csproj", "{A6E254E3-DBC5-4109-B417-B8B20A4C1B1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Repositories", "src\Common\Manager\Actors\Manager.Actors.Repositories\Manager.Actors.Repositories.csproj", "{3AB14090-BB8C-4FAE-8E88-A48B622E676F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Actors.Repositories", "src\Common\Manager\Actors\Common.Manager.Actors.Repositories\Common.Manager.Actors.Repositories.csproj", "{3AB14090-BB8C-4FAE-8E88-A48B622E676F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Repositories.DynamoDb", "src\Server\Manager\Actors\Manager.Actors.Repositories.DynamoDb\Manager.Actors.Repositories.DynamoDb.csproj", "{E386EEA1-1C74-4522-91F2-404DA9171E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Actors.Repositories.DynamoDb", "src\Server\Manager\Actors\Server.Manager.Actors.Repositories.DynamoDb\Server.Manager.Actors.Repositories.DynamoDb.csproj", "{E386EEA1-1C74-4522-91F2-404DA9171E35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories.DynamoDb", "src\Server\Manager\Worlds\Manager.Worlds.Repositories.DynamoDb\Manager.Worlds.Repositories.DynamoDb.csproj", "{5BABE16B-D17A-4059-99E9-AD83A23DB8DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Worlds.Repositories.DynamoDb", "src\Server\Manager\Worlds\Server.Manager.Worlds.Repositories.DynamoDb\Server.Manager.Worlds.Repositories.DynamoDb.csproj", "{5BABE16B-D17A-4059-99E9-AD83A23DB8DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8D332E78-B3F7-4CF6-8179-1F136C596CE0}"
 EndProject
@@ -38,15 +41,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{3AAF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{BBB13D9D-2B70-4D1B-9030-4A674F48537A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors", "src\Common\Manager\Actors\Manager.Actors\Manager.Actors.csproj", "{AD6902A7-BD8D-4114-815D-0805796B4B39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Actors", "src\Common\Manager\Actors\Common.Manager.Actors\Common.Manager.Actors.csproj", "{AD6902A7-BD8D-4114-815D-0805796B4B39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{48AA8E8D-09AE-4EC3-9715-FEB500F7BB56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Actors", "src\Common\Model\Model.Actors\Model.Actors.csproj", "{E2950C62-2240-4C35-9383-67CF6299AFBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Model.Actors", "src\Common\Model\Common.Model.Actors\Common.Model.Actors.csproj", "{E2950C62-2240-4C35-9383-67CF6299AFBD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{50A64600-6B25-46C8-BE3E-A80FE4A06AA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Worlds", "src\Common\Model\Model.Worlds\Model.Worlds.csproj", "{BACCC677-CD80-46CE-9696-CB6778A5628B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Model.Worlds", "src\Common\Model\Common.Model.Worlds\Common.Model.Worlds.csproj", "{BACCC677-CD80-46CE-9696-CB6778A5628B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{CBF32B02-5D9E-4B6D-B379-C41BC8CADE55}"
 EndProject
@@ -62,17 +65,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D991
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilders", "WorldBuilders", "{8623CF88-EB73-4796-9468-5B86CFB87E0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders.Lambda", "src\Server\Service\WorldBuilders\Service.WorldBuilders.Lambda\Service.WorldBuilders.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Service.WorldBuilders.Lambda", "src\Server\Service\WorldBuilders\Server.Service.WorldBuilders.Lambda\Server.Service.WorldBuilders.Lambda.csproj", "{ED23DC55-5805-4C4D-8BA6-5F9F2F727C4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders.Lambda.Tests", "test\Server\Service\WorldBuilder\Service.WorldBuilders.Lambda.Tests\Service.WorldBuilders.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Service.WorldBuilders.Lambda.Tests", "test\Server\Service\WorldBuilder\Server.Service.WorldBuilders.Lambda.Tests\Server.Service.WorldBuilders.Lambda.Tests.csproj", "{7A5DB26D-AF61-4D6B-B4E9-9364DD56F75D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{78EA7CDB-298B-46BB-828C-4ADD54FD7138}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{018153D8-46A4-4630-8F4F-CE50BD4843B1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilder", "WorldBuilder", "{64AB9DEC-C9E1-4EC2-8BA2-0E9C97159365}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorldBuilders", "WorldBuilders", "{64AB9DEC-C9E1-4EC2-8BA2-0E9C97159365}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.WorldBuilders", "src\Server\Service\WorldBuilders\Service.WorldBuilders\Service.WorldBuilders.csproj", "{7DB84771-8083-4F2D-B4D2-78757538044A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Service.WorldBuilders", "src\Server\Service\WorldBuilders\Server.Service.WorldBuilders\Server.Service.WorldBuilders.csproj", "{7DB84771-8083-4F2D-B4D2-78757538044A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambda", "Lambda", "{FEF5122F-E708-4C8A-9BB6-09090D00D2E4}"
 EndProject
@@ -80,13 +83,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambda", "Lambda", "{546060
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8F190989-C697-49DC-92A6-2CD10ED0405F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.DynamoDb", "src\Server\Common\Common.DynamoDb\Common.DynamoDb.csproj", "{B5852561-96C4-4047-8F3D-E8B6A19679BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Common.DynamoDb", "src\Server\Common\Server.Common.DynamoDb\Server.Common.DynamoDb.csproj", "{B5852561-96C4-4047-8F3D-E8B6A19679BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{85B3992E-AE58-4C88-BCE0-1B6270798C8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds", "src\Common\Manager\Worlds\Manager.Worlds\Manager.Worlds.csproj", "{364168BE-9DA8-4282-9070-66DAA3F9C427}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Worlds", "src\Common\Manager\Worlds\Common.Manager.Worlds\Common.Manager.Worlds.csproj", "{364168BE-9DA8-4282-9070-66DAA3F9C427}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories", "src\Common\Manager\Worlds\Manager.Worlds.Repositories\Manager.Worlds.Repositories.csproj", "{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Worlds.Repositories", "src\Common\Manager\Worlds\Common.Manager.Worlds.Repositories\Common.Manager.Worlds.Repositories.csproj", "{E7D3D4C3-0B35-449C-AE06-91ACEA253EB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{CC1F174E-84FC-44C0-BD5B-15012DCCB094}"
 	ProjectSection(SolutionItems) = preProject
@@ -140,65 +143,65 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{4FB1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{5A4791FB-7E90-4A41-9416-E5D46BC3AB2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Players", "src\Common\Model\Model.Players\Model.Players.csproj", "{BD8F4593-6791-4ADC-9534-38EACEA094C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Model.Players", "src\Common\Model\Common.Model.Players\Common.Model.Players.csproj", "{BD8F4593-6791-4ADC-9534-38EACEA094C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players", "src\Common\Manager\Players\Manager.Players\Manager.Players.csproj", "{B612212B-6051-47A2-8E8C-E43F2213A8B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Players", "src\Common\Manager\Players\Common.Manager.Players\Common.Manager.Players.csproj", "{B612212B-6051-47A2-8E8C-E43F2213A8B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{AEE0D0EA-52F8-4343-964C-9EE3BA54CBB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Repositories", "src\Common\Manager\Players\Manager.Players.Repositories\Manager.Players.Repositories.csproj", "{5CA5E1E2-6F17-4FCE-8D33-746BC73DEFE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Players.Repositories", "src\Common\Manager\Players\Common.Manager.Players.Repositories\Common.Manager.Players.Repositories.csproj", "{5CA5E1E2-6F17-4FCE-8D33-746BC73DEFE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{32CAE000-4B92-4F74-B3F9-B9256D8D42C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Repositories.DynamoDb", "src\Server\Manager\Players\Manager.Players.Repositories.DynamoDb\Manager.Players.Repositories.DynamoDb.csproj", "{D358BA04-25C0-4629-8BFB-6637006848EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Players.Repositories.DynamoDb", "src\Server\Manager\Players\Server.Manager.Players.Repositories.DynamoDb\Server.Manager.Players.Repositories.DynamoDb.csproj", "{D358BA04-25C0-4629-8BFB-6637006848EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{0EAAE145-30D1-4EE0-A665-F858E522B8BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{3BB968B3-4066-40B0-BA17-76D1D7ECFDBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Tests", "test\Common\Manager\Players\Manager.Players.Tests\Manager.Players.Tests.csproj", "{517C4DE7-525F-431C-AB30-7263CF42ADAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Players.Tests", "test\Common\Manager\Players\Common.Manager.Players.Tests\Common.Manager.Players.Tests.csproj", "{517C4DE7-525F-431C-AB30-7263CF42ADAF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actors", "Actors", "{7EFE6301-F0E7-457E-BB82-7E465230870B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Tests", "test\Common\Manager\Actors\Manager.Actors.Tests\Manager.Actors.Tests.csproj", "{A9ADFDEF-0782-4519-9347-00CBC9920042}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Actors.Tests", "test\Common\Manager\Actors\Common.Manager.Actors.Tests\Common.Manager.Actors.Tests.csproj", "{A9ADFDEF-0782-4519-9347-00CBC9920042}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{FACF2156-149F-4A31-8914-2C5095023F87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Tests", "test\Common\Manager\Worlds\Manager.Worlds.Tests\Manager.Worlds.Tests.csproj", "{DAED92CB-F25B-4437-98A2-E2A074387FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Worlds.Tests", "test\Common\Manager\Worlds\Common.Manager.Worlds.Tests\Common.Manager.Worlds.Tests.csproj", "{DAED92CB-F25B-4437-98A2-E2A074387FF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{0437BBFB-EB98-444B-AFFB-2B7313EAD88B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{C75F22B7-4199-43C6-9190-8070787D125E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Actors.Repositories.DynamoDb.Tests", "test\Server\Manager\Actors\Manager.Actors.Repositories.DynamoDb.Tests.csproj\Manager.Actors.Repositories.DynamoDb.Tests.csproj", "{0D524930-330F-47B8-80BB-3D4A4ED5ECAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Actors.Repositories.DynamoDb.Tests", "test\Server\Manager\Actors\Server.Manager.Actors.Repositories.DynamoDb.Tests.csproj\Server.Manager.Actors.Repositories.DynamoDb.Tests.csproj", "{0D524930-330F-47B8-80BB-3D4A4ED5ECAD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{875BB675-802E-4195-8E22-D3DAF2D9F716}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{132A3441-A7E7-46C7-B7FC-531A9046747D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Players.Repositories.DynamoDb.Tests", "test\Server\Manager\Players\Manager.Players.Repositories.DynamoDb.Tests\Manager.Players.Repositories.DynamoDb.Tests.csproj", "{CC6AF3B7-0E47-4F54-8CB9-99CB1C446257}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Players.Repositories.DynamoDb.Tests", "test\Server\Manager\Players\Server.Manager.Players.Repositories.DynamoDb.Tests\Server.Manager.Players.Repositories.DynamoDb.Tests.csproj", "{CC6AF3B7-0E47-4F54-8CB9-99CB1C446257}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{5942A181-2A2D-4DF6-A703-1A6C8D658DFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamoDb", "DynamoDb", "{759ABF0C-8841-4EA1-A1BC-B4A6BBDF00C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Worlds.Repositories.DynamoDb.Tests", "test\Server\Manager\Worlds\Manager.Worlds.Repositories.DynamoDb.Tests\Manager.Worlds.Repositories.DynamoDb.Tests.csproj", "{909FDE69-1233-40F7-A576-4A83B3733797}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Manager.Worlds.Repositories.DynamoDb.Tests", "test\Server\Manager\Worlds\Server.Manager.Worlds.Repositories.DynamoDb.Tests\Server.Manager.Worlds.Repositories.DynamoDb.Tests.csproj", "{909FDE69-1233-40F7-A576-4A83B3733797}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Renderers", "Renderers", "{A28B5AD8-ACAD-41E1-9A40-7A146DEF0C49}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bitmap", "Bitmap", "{C509C6A6-DD7C-4645-B5E8-852ED063F132}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Renderers", "src\Common\Manager\Renderers\Manager.Renderers\Manager.Renderers.csproj", "{8F08D27F-F660-4A1D-876A-6F17CE81873C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Renderers", "src\Common\Manager\Renderers\Common.Manager.Renderers\Common.Manager.Renderers.csproj", "{8F08D27F-F660-4A1D-876A-6F17CE81873C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{61A616F4-C46D-4140-9133-56C08556BC17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{38712FEC-7F85-466D-BA5E-500F058107EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Worlds", "src\Common\Service\Worlds\Service.Worlds\Service.Worlds.csproj", "{14833EB7-D56F-4C05-8DE2-EAB60D93F8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Service.Worlds", "src\Common\Service\Worlds\Common.Service.Worlds\Common.Service.Worlds.csproj", "{14833EB7-D56F-4C05-8DE2-EAB60D93F8CE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{71EECD36-8318-4A59-81FA-F997239E8A59}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager.Renderers.Bitmap", "src\Common\Manager\Renderers\Manager.Renderers.Bitmap\Manager.Renderers.Bitmap.csproj", "{CC07B933-2DDA-4ECA-A6E7-A3D30CF60652}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Renderers.Bitmap", "src\Common\Manager\Renderers\Common.Manager.Renderers.Bitmap\Common.Manager.Renderers.Bitmap.csproj", "{CC07B933-2DDA-4ECA-A6E7-A3D30CF60652}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worlds", "Worlds", "{3D8A88F9-9769-40CD-BC76-CB8DCE6863B8}"
 EndProject
