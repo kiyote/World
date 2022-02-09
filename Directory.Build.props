@@ -9,7 +9,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
-		<Using Include="Core" />
+		<Using Include="Common.Core" />
 	</ItemGroup>
 
 	<PropertyGroup>
