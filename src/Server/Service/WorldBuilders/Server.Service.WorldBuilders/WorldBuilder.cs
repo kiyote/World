@@ -14,11 +14,12 @@ public class WorldBuilder : IWorldBuilder {
 		_random = random;
 	}
 
-	void IWorldBuilder.Build(
+	async Task<Id<World>> IWorldBuilder.BuildAsync(
 		string name,
 		string seed,
 		int rows,
-		int columns
+		int columns,
+		CancellationToken cancellationToken
 	) {
 		if (rows <= 0) {
 			throw new ArgumentException( "Rows must be >= 0.", nameof( rows ) );
@@ -28,9 +29,19 @@ public class WorldBuilder : IWorldBuilder {
 			throw new ArgumentException( "Columns must be >= 0.", nameof( columns ) );
 		}
 
-		_random.Reinitialise( seed.GetHashCode( StringComparison.Ordinal ) );
+		_random.Reinitialise( seed.GetHashCode( StringComparison.OrdinalIgnoreCase ) );
 
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
-		World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );
+		//World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );
+		await _worldManager.CreateWorldAsync(
+			worldId,
+			name,
+			seed,
+			rows,
+			columns,
+			cancellationToken
+		).ConfigureAwait( false );
+
+		return worldId;
 	}
 }

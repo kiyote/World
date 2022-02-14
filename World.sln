@@ -229,6 +229,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositorie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{B8F4D712-0A4E-484E-9EB5-8404166D68B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Service.WorldBuilders.Tests", "test\Server\Service\WorldBuilder\Server.Service.WorldBuilders\Server.Service.WorldBuilders.Tests.csproj", "{7E913C61-4448-48D3-935D-0C9C9181D1C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -339,6 +341,10 @@ Global
 		{CC07B933-2DDA-4ECA-A6E7-A3D30CF60652}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC07B933-2DDA-4ECA-A6E7-A3D30CF60652}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC07B933-2DDA-4ECA-A6E7-A3D30CF60652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E913C61-4448-48D3-935D-0C9C9181D1C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E913C61-4448-48D3-935D-0C9C9181D1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E913C61-4448-48D3-935D-0C9C9181D1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E913C61-4448-48D3-935D-0C9C9181D1C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -433,6 +439,7 @@ Global
 		{DBEC8F0C-1F0D-435B-8A89-7FD25FF5A38E} = {71EECD36-8318-4A59-81FA-F997239E8A59}
 		{7629C427-20E8-40A7-9594-EBE716926823} = {DBEC8F0C-1F0D-435B-8A89-7FD25FF5A38E}
 		{B8F4D712-0A4E-484E-9EB5-8404166D68B0} = {26C7D36A-8CC9-4D0E-9479-7082C7050D3F}
+		{7E913C61-4448-48D3-935D-0C9C9181D1C4} = {64AB9DEC-C9E1-4EC2-8BA2-0E9C97159365}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}
