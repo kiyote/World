@@ -2,11 +2,12 @@
 
 internal interface IWorldBuilder {
 
-	void Build(
+	Task<Id<World>> BuildAsync(
 		string name,
 		string seed,
 		int rows,
-		int columns
+		int columns,
+		CancellationToken cancellationToken
 	);
 }
 
