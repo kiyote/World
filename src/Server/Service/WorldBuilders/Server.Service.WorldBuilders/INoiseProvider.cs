@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server.Service.WorldBuilders;
+﻿namespace Server.Service.WorldBuilders;
 
 public interface INoiseProvider {
 
 	float[,] Generate(
+		long seed,
 		int rows,
-		int columns
+		int columns,
+		float frequency
 	);
 }
 

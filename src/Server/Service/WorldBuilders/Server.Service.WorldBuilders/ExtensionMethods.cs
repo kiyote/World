@@ -9,7 +9,7 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
-		services.AddSingleton<INoiseProvider, SimplexNoise>();
+		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
 
 		return services;
 	}

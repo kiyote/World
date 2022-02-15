@@ -129,6 +129,12 @@ public class FastRandom : IRandom {
 		}
 	}
 
+	public long NextLong() {
+		lock( _lock ) {
+			return ( (long)NextInt() << 32 ) | NextUInt();
+		}
+	}
+
 	/// <summary>
 	/// Generates a random int over the range 0 to upperBound-1, and not including upperBound.
 	/// </summary>
