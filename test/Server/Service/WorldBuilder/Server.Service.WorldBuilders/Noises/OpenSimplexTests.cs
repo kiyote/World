@@ -14,7 +14,7 @@ public class OpenSimplexNoiseTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to generate visible output." )]
+	[Ignore( "Used to generate visible output." )]
 	public void Generate_Image() {
 		int width = 512;
 		int height = 512;
