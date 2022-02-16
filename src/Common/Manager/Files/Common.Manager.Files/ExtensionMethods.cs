@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Manager.Renderers.Bitmap;
+namespace Common.Manager.Files;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddBitmapRenderer(
+	public static IServiceCollection AddFileManager(
 		this IServiceCollection services
 	) {
-		services.AddSingleton<IWorldRenderer, BitmapWorldRenderer>();
+		services.AddSingleton<IFileManager, FileManager>();
 
 		return services;
 	}
 }
+

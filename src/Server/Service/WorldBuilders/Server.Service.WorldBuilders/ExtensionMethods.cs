@@ -10,6 +10,8 @@ public static class ExtensionMethods {
 	) {
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
+		services.AddSingleton<INoiseThresholder, SimpleNoiseThresholder>();
+		services.AddSingleton<INoiseInverter, SimpleNoiseInverter>();
 
 		return services;
 	}

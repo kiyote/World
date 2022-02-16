@@ -4,7 +4,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Model\Common.Model.Worlds\Common.Model.Worlds.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Worlds\Common.Manager.Worlds.Repositories\Common.Manager.Worlds.Repositories.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Files\Common.Manager.Files.Repositories\Common.Manager.Files.Repositories.csproj" />
 	</ItemGroup>
 </Project>
