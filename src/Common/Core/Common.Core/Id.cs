@@ -11,7 +11,7 @@ public sealed class Id<T> : IEquatable<Id<T>> {
 			throw new ArgumentException( "Parameter must not be empty GUID.", nameof( id ) );
 		}
 
-		Value = $"{typeof(T).Name}::{id:N}";
+		Value = $"{typeof(T).Name}-{id:N}";
 	}
 
 	public Id( long id ) {
@@ -19,7 +19,7 @@ public sealed class Id<T> : IEquatable<Id<T>> {
 			throw new ArgumentException( "Parameter must not be default.", nameof( id ) );
 		}
 
-		Value = $"{typeof( T ).Name}::{id}";
+		Value = $"{typeof( T ).Name}-{id}";
 	}
 
 	public Id( string value ) {

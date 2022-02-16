@@ -2,7 +2,6 @@
 
 namespace Server.Manager.Players.Repositories.DynamoDb;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "TEMPORARY" )]
 internal sealed class PlayerRecord {
 
 	public PlayerRecord() {
