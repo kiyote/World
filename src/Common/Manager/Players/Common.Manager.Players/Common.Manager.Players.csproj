@@ -4,7 +4,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Model\Common.Model.Players\Common.Model.Players.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Common.Manager.Players.Repositories\Common.Manager.Players.Repositories.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Common.Manager.Players.Abstractions\Common.Manager.Players.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

@@ -11,8 +11,6 @@
 		<PackageReference Include="coverlet.collector" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Model\Common.Model.Players\Common.Model.Players.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Common.Manager.Players\Common.Manager.Players.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Players\Common.Manager.Players.Repositories\Common.Manager.Players.Repositories.csproj" />
 	</ItemGroup>
 </Project>
