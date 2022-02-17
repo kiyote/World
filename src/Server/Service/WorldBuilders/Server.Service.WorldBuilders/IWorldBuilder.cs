@@ -1,4 +1,6 @@
-﻿namespace Server.Service.WorldBuilders;
+﻿using Common.Manager.Worlds;
+
+namespace Server.Service.WorldBuilders;
 
 internal interface IWorldBuilder {
 

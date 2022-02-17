@@ -11,7 +11,6 @@
 		<PackageReference Include="coverlet.collector" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Model\Common.Model.Worlds\Common.Model.Worlds.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Renderers\Common.Manager.Renderers.Bitmap\Common.Manager.Renderers.Bitmap.csproj" />
 	</ItemGroup>
 </Project>
