@@ -108,13 +108,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "terraform", "terraform", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{DB909C79-55A2-4099-936B-7EBBBEA1AF89}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "world-manager", "world-manager", "{7FCF2DC6-94C5-4601-AABE-21F657F317A4}"
-	ProjectSection(SolutionItems) = preProject
-		terraform\modules\world-manager\_inputs.tf = terraform\modules\world-manager\_inputs.tf
-		terraform\modules\world-manager\_outputs.tf = terraform\modules\world-manager\_outputs.tf
-		terraform\modules\world-manager\dynamodb_world.tf = terraform\modules\world-manager\dynamodb_world.tf
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "environments", "environments", "{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{D6044069-B5EC-4661-8278-8D557EB90670}"
@@ -136,7 +129,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
 	ProjectSection(SolutionItems) = preProject
 		terraform\common\_inputs.tf = terraform\common\_inputs.tf
-		terraform\common\world-manager.tf = terraform\common\world-manager.tf
+		terraform\common\files-manager.tf = terraform\common\files-manager.tf
+		terraform\common\shared.tf = terraform\common\shared.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{4FB19705-8CD9-4D4B-BBF6-E99AE248A0BD}"
@@ -255,7 +249,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositorie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Disk", "Disk", "{6FCCA67F-96AC-407B-939D-D8D83E78F0BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Manager.Files.Repositories.Disk.Tests", "test\Common\Manager\Files\Common.Manager.Files.Repositories.Disk.Tests\Common.Manager.Files.Repositories.Disk.Tests.csproj", "{3E8C94E8-C039-4E28-A0FE-2D0063F2C3BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Manager.Files.Repositories.Disk.Tests", "test\Common\Manager\Files\Common.Manager.Files.Repositories.Disk.Tests\Common.Manager.Files.Repositories.Disk.Tests.csproj", "{3E8C94E8-C039-4E28-A0FE-2D0063F2C3BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files-manager", "files-manager", "{85986A69-7DF1-4D06-B827-B87E074B1095}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\modules\files-manager\_inputs.tf = terraform\modules\files-manager\_inputs.tf
+		terraform\modules\files-manager\_outputs.tf = terraform\modules\files-manager\_outputs.tf
+		terraform\modules\files-manager\bucket_files.tf = terraform\modules\files-manager\bucket_files.tf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{A753DD61-5704-4BD7-AFC8-359D8E425B99}"
+	ProjectSection(SolutionItems) = preProject
+		terraform\modules\shared\_inputs.tf = terraform\modules\shared\_inputs.tf
+		terraform\modules\shared\_outputs.tf = terraform\modules\shared\_outputs.tf
+		terraform\modules\shared\shared_dynamodb_table.tf = terraform\modules\shared\shared_dynamodb_table.tf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -435,7 +443,6 @@ Global
 		{5E22B6AD-5E96-4D2E-BB11-0BF174B8FD4F} = {CC1F174E-84FC-44C0-BD5B-15012DCCB094}
 		{CFA4F2F0-0437-46BF-931C-B09ECB947603} = {16CEE4C8-C03E-44E1-B6C8-F33DE81DBE25}
 		{DB909C79-55A2-4099-936B-7EBBBEA1AF89} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
-		{7FCF2DC6-94C5-4601-AABE-21F657F317A4} = {DB909C79-55A2-4099-936B-7EBBBEA1AF89}
 		{2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9} = {CFA4F2F0-0437-46BF-931C-B09ECB947603}
 		{D6044069-B5EC-4661-8278-8D557EB90670} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
 		{9A3371BE-F461-4CD1-B6D8-584677BB0EDE} = {2AAA5A0C-DE1C-4F8E-8C81-E52CEA219AD9}
@@ -499,6 +506,8 @@ Global
 		{97850973-EF13-417C-953E-5BB5702AC1E7} = {7BC521B3-B587-4F2D-B0A2-729BCCB70664}
 		{6FCCA67F-96AC-407B-939D-D8D83E78F0BA} = {97850973-EF13-417C-953E-5BB5702AC1E7}
 		{3E8C94E8-C039-4E28-A0FE-2D0063F2C3BD} = {6FCCA67F-96AC-407B-939D-D8D83E78F0BA}
+		{85986A69-7DF1-4D06-B827-B87E074B1095} = {DB909C79-55A2-4099-936B-7EBBBEA1AF89}
+		{A753DD61-5704-4BD7-AFC8-359D8E425B99} = {DB909C79-55A2-4099-936B-7EBBBEA1AF89}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}
