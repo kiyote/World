@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+	  <PackageReference Include="SixLabors.ImageSharp" Version="2.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Renderers\Common.Renderers.Abstractions\Common.Renderers.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>
