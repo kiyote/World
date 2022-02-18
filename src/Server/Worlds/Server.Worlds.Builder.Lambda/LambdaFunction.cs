@@ -1,8 +1,9 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SNSEvents;
 using Microsoft.Extensions.DependencyInjection;
+using Common.Worlds.Builder;
 
-namespace Server.Service.WorldBuilders.Lambda;
+namespace Server.Worlds.Builder.Lambda;
 
 public class LambdaFunction {
 	private readonly IServiceProvider _services;

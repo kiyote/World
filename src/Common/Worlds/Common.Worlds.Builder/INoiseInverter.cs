@@ -1,4 +1,4 @@
-﻿namespace Server.Service.WorldBuilders;
+﻿namespace Common.Worlds.Builder;
 
 public interface INoiseInverter {
 

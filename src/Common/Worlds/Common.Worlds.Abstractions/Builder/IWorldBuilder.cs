@@ -1,8 +1,6 @@
-﻿using Common.Worlds;
+﻿namespace Common.Worlds.Builder;
 
-namespace Server.Service.WorldBuilders;
-
-internal interface IWorldBuilder {
+public interface IWorldBuilder {
 
 	Task<Id<World>> BuildAsync(
 		string name,

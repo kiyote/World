@@ -2,7 +2,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Server.Service.WorldBuilders.Noises;
+namespace Common.Worlds.Builder.Noises;
 
 public class OpenSimplexNoiseTests {
 

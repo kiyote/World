@@ -1,9 +1,8 @@
-﻿using Common.Worlds;
-using Common.Worlds.Manager;
+﻿using Common.Worlds.Manager;
 
-namespace Server.Service.WorldBuilders;
+namespace Common.Worlds.Builder;
 
-public class WorldBuilder : IWorldBuilder {
+internal sealed class WorldBuilder : IWorldBuilder {
 
 	private readonly IWorldManager _worldManager;
 	private readonly IRandom _random;

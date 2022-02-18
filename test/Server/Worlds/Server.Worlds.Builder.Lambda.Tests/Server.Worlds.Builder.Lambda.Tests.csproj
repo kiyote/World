@@ -12,6 +12,6 @@
 		<PackageReference Include="coverlet.collector" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilders\Server.Service.WorldBuilders.Lambda\Server.Service.WorldBuilders.Lambda.csproj" />
+		<ProjectReference Include="$(SolutionDir)\src\Server\Worlds\Server.Worlds.Builder.Lambda\Server.Worlds.Builder.Lambda.csproj" />
 	</ItemGroup>
 </Project>
