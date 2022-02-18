@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 using Common.Files.Manager.Repositories;
 
-namespace Server.Files.Manager.Repositories.Disk;
+namespace Server.Files.Manager.Disk;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
-internal class DiskFileRepository : IFileContentRepository, IFileMetadataRepository {
+internal class DiskFileRepository : IMutableFileContentRepository, IMutableFileMetadataRepository {
 
 	private readonly string _fileFolder;
 	private readonly JsonSerializerOptions _options;
@@ -27,7 +27,7 @@ internal class DiskFileRepository : IFileContentRepository, IFileMetadataReposit
 		};
 	}
 
-	Task<Stream> IFileContentRepository.GetContentAsync(
+	Task<Stream> IImmutableFileContentRepository.GetContentAsync(
 		Id<FileMetadata> fileId,
 		CancellationToken cancellationToken
 	) {
@@ -36,7 +36,7 @@ internal class DiskFileRepository : IFileContentRepository, IFileMetadataReposit
 		return Task.FromResult( (Stream)fs );
 	}
 
-	async Task<FileMetadata> IFileMetadataRepository.GetMetadataAsync(
+	async Task<FileMetadata> IImmutableFileMetadataRepository.GetMetadataAsync(
 		Id<FileMetadata> fileId,
 		CancellationToken cancellationToken
 	) {
@@ -46,12 +46,11 @@ internal class DiskFileRepository : IFileContentRepository, IFileMetadataReposit
 		return result ?? throw new FileNotFoundException();
 	}
 
-	async Task IFileMetadataRepository.PutMetadataAsync(
-		Id<FileMetadata> fileId,
+	async Task IMutableFileMetadataRepository.PutMetadataAsync(
 		FileMetadata fileMetadata,
 		CancellationToken cancellationToken
 	) {
-		string filename = Path.Combine( _fileFolder, fileId.Value + ".metadata" );
+		string filename = Path.Combine( _fileFolder, fileMetadata.FileId.Value + ".metadata" );
 		using FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 		await JsonSerializer.SerializeAsync( fs, fileMetadata, _options, cancellationToken ).ConfigureAwait( false );
 	}

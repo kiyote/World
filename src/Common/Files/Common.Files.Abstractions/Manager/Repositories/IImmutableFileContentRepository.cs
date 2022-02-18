@@ -1,6 +1,6 @@
 ﻿namespace Common.Files.Manager.Repositories;
 
-public interface IFileContentRepository {
+public interface IImmutableFileContentRepository {
 	Task<Stream> GetContentAsync(
 		Id<FileMetadata> fileId,
 		CancellationToken cancellationToken

@@ -1,7 +1,7 @@
 using Common.Files.Manager.Repositories;
 using NUnit.Framework;
 
-namespace Server.Files.Manager.Repositories.Disk.Tests;
+namespace Server.Files.Manager.Disk.Tests;
 
 [TestFixture]
 public class DiskFileRepositoryTests {
@@ -24,11 +24,11 @@ public class DiskFileRepositoryTests {
 
 	[Test]
 	public void PutMetadataAsync_ValidMetadata_NoExceptionsThrown() {
-		IFileMetadataRepository repo = _diskRepository;
+		IMutableFileMetadataRepository repo = _diskRepository;
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>(Guid.NewGuid());
 		FileMetadata fileMetadata = new FileMetadata( fileId, "name", "mime type", 1234L, DateTime.UtcNow );
 
-		Assert.DoesNotThrowAsync( async () => { await repo.PutMetadataAsync( fileId, fileMetadata, CancellationToken.None ); } );
+		Assert.DoesNotThrowAsync( async () => { await repo.PutMetadataAsync( fileMetadata, CancellationToken.None ); } );
 	}
 }
