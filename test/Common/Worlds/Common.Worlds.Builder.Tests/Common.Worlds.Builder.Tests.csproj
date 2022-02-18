@@ -17,7 +17,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Server\Service\WorldBuilders\Server.Service.WorldBuilders\Server.Service.WorldBuilders.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder\Common.Worlds.Builder.csproj" />
 	</ItemGroup>
 
 </Project>

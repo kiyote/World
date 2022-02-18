@@ -4,7 +4,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Server.Service.WorldBuilders.Noises;
+namespace Common.Worlds.Builder.Noises;
 
 #pragma warning disable IDE0017 // Object initialization can be simplified
 #pragma warning disable IDE0048 // Add parentheses for clarity

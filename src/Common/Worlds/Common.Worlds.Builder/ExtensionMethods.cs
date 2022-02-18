@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Server.Service.WorldBuilders.Noises;
+using Common.Worlds.Builder.Noises;
 
-namespace Server.Service.WorldBuilders;
+namespace Common.Worlds.Builder;
 
 public static class ExtensionMethods {
 
