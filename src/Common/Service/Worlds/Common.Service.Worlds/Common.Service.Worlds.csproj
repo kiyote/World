@@ -1,6 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Manager\Worlds\Common.Manager.Worlds.Abstractions\Common.Manager.Worlds.Abstractions.csproj" />
-	</ItemGroup>
-</Project>

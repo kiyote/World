@@ -1,4 +1,4 @@
-﻿using Common.Manager.Worlds;
+﻿using Common.Worlds;
 
 namespace Server.Service.WorldBuilders;
 
