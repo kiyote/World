@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
 		<Nullable>disable</Nullable>
@@ -11,6 +11,6 @@
 		<PackageReference Include="coverlet.collector" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)\src\Server\Worlds\Server.Worlds.Manager.DynamoDb\Server.Worlds.Manager.DynamoDb.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Files\Server.Files.Manager.Repositories.Disk\Server.Files.Manager.Repositories.Disk.csproj" />
 	</ItemGroup>
 </Project>

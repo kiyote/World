@@ -1,6 +1,7 @@
+using Common.Files.Manager.Repositories;
 using NUnit.Framework;
 
-namespace Common.Files.Manager.Repositories.Disk.Tests;
+namespace Server.Files.Manager.Repositories.Disk.Tests;
 
 [TestFixture]
 public class DiskFileRepositoryTests {

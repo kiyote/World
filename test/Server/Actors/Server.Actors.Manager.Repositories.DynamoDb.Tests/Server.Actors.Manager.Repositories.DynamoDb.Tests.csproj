@@ -11,6 +11,6 @@
 		<PackageReference Include="coverlet.collector" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)\src\Server\Players\Server.Players.Manager.DynamoDb\Server.Players.Manager.DynamoDb.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Server\Actors\Server.Actors.Manager.Repositories.DynamoDb\Server.Actors.Manager.Repositories.DynamoDb.csproj" />
 	</ItemGroup>
 </Project>

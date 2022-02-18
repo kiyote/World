@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
+using Common.Files.Manager.Repositories;
 
-namespace Common.Files.Manager.Repositories.Disk;
+namespace Server.Files.Manager.Repositories.Disk;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal class DiskFileRepository : IFileContentRepository, IFileMetadataRepository {

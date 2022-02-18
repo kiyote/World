@@ -1,7 +1,7 @@
-﻿
+﻿using Common.Files.Manager.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Files.Manager.Repositories.Disk;
+namespace Server.Files.Manager.Repositories.Disk;
 
 public static class ExtensionMethods {
 
