@@ -5,14 +5,14 @@ namespace Common.Worlds.Builder;
 internal sealed class WorldBuilder : IWorldBuilder {
 
 	private readonly IWorldManager _worldManager;
-	private readonly IRandom _random;
+	private readonly IMapGenerator _mapGenerator;
 
 	public WorldBuilder(
 		IWorldManager worldManager,
-		IRandom random
+		IMapGenerator mapGenerator
 	) {
 		_worldManager = worldManager;
-		_random = random;
+		_mapGenerator = mapGenerator;
 	}
 
 	async Task<Id<World>> IWorldBuilder.BuildAsync(
@@ -30,7 +30,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 			throw new ArgumentException( "Columns must be >= 0.", nameof( columns ) );
 		}
 
-		_random.Reinitialise( seed.GetHashCode( StringComparison.OrdinalIgnoreCase ) );
+		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( seed, rows, columns );
 
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		//World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );

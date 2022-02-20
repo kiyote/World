@@ -1,6 +1,6 @@
-﻿namespace Common.Worlds.Builder;
+﻿namespace Common.Worlds.Builder.Noises;
 
-internal interface INoiseThresholder {
+public interface INoiseThresholder {
 
 	float[,] Threshold( float[,] source, float threshold );
 

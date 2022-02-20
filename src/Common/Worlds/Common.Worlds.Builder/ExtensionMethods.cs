@@ -8,6 +8,7 @@ public static class ExtensionMethods {
 	public static IServiceCollection AddWorldBuilder(
 		this IServiceCollection services
 	) {
+		services.AddSingleton<IMapGenerator, MapGenerator>();
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
 		services.AddSingleton<INoiseThresholder, SimpleNoiseThresholder>();

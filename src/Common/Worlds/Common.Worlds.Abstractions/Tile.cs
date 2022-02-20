@@ -2,5 +2,5 @@
 
 public record Tile(
 	Id<Tile> TileId,
-	Id<World> WorldId
+	TileTerrain Terrain
 );

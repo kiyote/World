@@ -1,9 +1,8 @@
 ﻿using NUnit.Framework;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using Common.Worlds.Builder.Noises;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.Noises;
 
 public class SimpleNoiseThresholderTests {
 

@@ -244,6 +244,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asset", "asset", "{61F05AE0-0560-4358-B3CA-171B2D6448D8}"
 	ProjectSection(SolutionItems) = preProject
 		asset\hex_blank.png = asset\hex_blank.png
+		asset\hex_hill.png = asset\hex_hill.png
 		asset\hex_mountain.png = asset\hex_mountain.png
 		asset\hex_plains.png = asset\hex_plains.png
 	EndProjectSection
@@ -258,7 +259,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{7143
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resource", "Resource", "{619C55C9-B7D1-415A-8FA1-5A31191E422A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Files.Manager.Resource.Tests", "test\Common\Files\Common.Files.Manager.Resource.Tests\Common.Files.Manager.Resource.Tests.csproj", "{254532DE-8995-49DA-A4A0-A7BC8F6C77B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Files.Manager.Resource.Tests", "test\Common\Files\Common.Files.Manager.Resource.Tests\Common.Files.Manager.Resource.Tests.csproj", "{254532DE-8995-49DA-A4A0-A7BC8F6C77B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
