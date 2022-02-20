@@ -1,4 +1,4 @@
-﻿namespace Common.Worlds.Builder;
+﻿namespace Common.Worlds.Builder.Noises;
 
 internal class SimpleNoiseThresholder : INoiseThresholder {
 	float[,] INoiseThresholder.Range(

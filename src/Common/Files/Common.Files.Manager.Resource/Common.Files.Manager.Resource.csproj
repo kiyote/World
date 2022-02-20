@@ -2,6 +2,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="$(SolutionDir)asset\hex_mountain.png" Link="hex_mountain.png" />
 		<EmbeddedResource Include="$(SolutionDir)asset\hex_plains.png" Link="hex_plains.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\hex_hill.png" Link="hex_hill.png" />
 	</ItemGroup>
 	<PropertyGroup>
 		<SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
