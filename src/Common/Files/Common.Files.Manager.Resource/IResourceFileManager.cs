@@ -1,5 +1,8 @@
 ﻿namespace Common.Files.Manager.Resource;
 
-internal interface IResourceFileManager: IImmutableFileManager {
+public interface IResourceFileManager: IImmutableFileManager {
+	public Id<FileMetadata> MountainTerrainId { get; }
+	public Id<FileMetadata> HillTerrainId { get; }
+	public Id<FileMetadata> PlainsTerrainId { get; }
 }
 

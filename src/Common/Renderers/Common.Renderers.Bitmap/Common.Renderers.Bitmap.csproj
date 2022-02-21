@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Renderers\Common.Renderers.Abstractions\Common.Renderers.Abstractions.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 	</ItemGroup>
 
 </Project>

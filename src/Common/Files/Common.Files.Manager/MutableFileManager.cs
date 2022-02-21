@@ -27,5 +27,13 @@ public abstract class MutableFileManager<TFileContentRepository, TFileMetadataRe
 	) {
 		return _fileMetadataRepository.PutMetadataAsync( fileMetadata, cancellationToken );
 	}
+
+	public Task PutContentAsync(
+		Id<FileMetadata> fileId,
+		Func<Stream, Task> asyncWriter,
+		CancellationToken cancellationToken
+	) {
+		return _fileContentRepository.PutContentAsync( fileId, asyncWriter, cancellationToken );
+	}
 }
 
