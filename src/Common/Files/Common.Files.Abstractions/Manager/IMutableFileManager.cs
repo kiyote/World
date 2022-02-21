@@ -6,4 +6,10 @@ public interface IMutableFileManager: IImmutableFileManager {
 		FileMetadata fileMetadata,
 		CancellationToken cancellationToken
 	);
+
+	Task PutContentAsync(
+		Id<FileMetadata> fileId,
+		Func<Stream, Task> asyncWriter,
+		CancellationToken cancellationToken
+	);
 }

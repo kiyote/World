@@ -3,4 +3,5 @@
 namespace Common.Files.Manager.Resource;
 
 internal interface IResourceFileRepository : IImmutableFileContentRepository, IImmutableFileMetadataRepository {
+
 }

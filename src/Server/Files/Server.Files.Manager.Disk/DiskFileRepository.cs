@@ -46,6 +46,16 @@ internal class DiskFileRepository : IMutableFileContentRepository, IMutableFileM
 		return result ?? throw new FileNotFoundException();
 	}
 
+	async Task IMutableFileContentRepository.PutContentAsync(
+		Id<FileMetadata> fileId,
+		Func<Stream, Task> asyncWriter,
+		CancellationToken cancellationToken
+	) {
+		string filename = Path.Combine( _fileFolder, fileId.Value );
+		using FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
+		await asyncWriter( fs ).ConfigureAwait( false );
+	}
+
 	async Task IMutableFileMetadataRepository.PutMetadataAsync(
 		FileMetadata fileMetadata,
 		CancellationToken cancellationToken
