@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace Common.Files.Manager.Resource.Tests;
 
 [TestFixture]
-public class ResourceFileRepositoryTests {
+public class ResourceFileRepositoryIntegrationTests {
 
 	private IResourceFileRepository _repo;
 

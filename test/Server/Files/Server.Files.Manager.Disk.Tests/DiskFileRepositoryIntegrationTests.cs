@@ -1,24 +1,42 @@
 using Common.Files.Manager.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace Server.Files.Manager.Disk.Tests;
 
 [TestFixture]
-public class DiskFileRepositoryTests {
+public class DiskFileRepositoryIntegrationTests {
 
+	private IServiceScope _scope;
+	private IServiceProvider _provider;
+	private IDiskFileRepository _diskRepository;
 	private string _testFolder;
-	private DiskFileRepository _diskRepository;
 
-	[SetUp]
-	public void SetUp() {
+	[OneTimeSetUp]
+	public void OneTimeSetUp() {
 		string root = Path.GetTempPath();
 		_testFolder = Path.Combine( root, Guid.NewGuid().ToString( "N" ) );
 		Directory.CreateDirectory( _testFolder );
-		_diskRepository = new DiskFileRepository( _testFolder );
+
+		var services = new ServiceCollection();
+		services.AddDiskFileManager( _testFolder );
+
+		_provider = services.BuildServiceProvider();
+		_diskRepository = _provider.GetRequiredService<IDiskFileRepository>();
+	}
+
+	[SetUp]
+	public void SetUp() {
+		_scope = _provider.CreateScope();
 	}
 
 	[TearDown]
 	public void TearDown() {
+		_scope.Dispose();
+	}
+
+	[OneTimeTearDown]
+	public void OneTimeTearDown() {
 		Directory.Delete( _testFolder, true );
 	}
 

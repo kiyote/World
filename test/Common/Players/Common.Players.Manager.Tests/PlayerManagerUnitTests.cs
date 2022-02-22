@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Common.Players.Manager.Tests;
 
 [TestFixture]
-public class PlayerManagerTests {
+public class PlayerManagerUnitTests {
 	private Mock<IPlayerRepository> _playerRepository;
 	private IPlayerManager _playerManager;
 

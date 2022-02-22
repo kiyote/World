@@ -14,15 +14,17 @@ internal sealed class ResourceFileRepository : IResourceFileRepository {
 		_assembly = Assembly.GetExecutingAssembly();
 	}
 
-	Task<Stream> IImmutableFileContentRepository.GetContentAsync(
+	async Task<bool> IImmutableFileContentRepository.TryGetContentAsync(
 		Id<FileMetadata> fileId,
+		AsyncStreamHandler contentReader,
 		CancellationToken cancellationToken
 	) {
 		Stream? resource = _assembly.GetManifestResourceStream( ResourceRoot + fileId.Value );
 		if( resource is null ) {
-			throw new FileNotFoundException();
+			return false;
 		}
-		return Task.FromResult( resource );
+		await contentReader( resource ).ConfigureAwait( false );
+		return true;
 	}
 
 	Task<FileMetadata> IImmutableFileMetadataRepository.GetMetadataAsync(

@@ -6,7 +6,7 @@ using Server.Core.DynamoDb;
 
 namespace Server.Players.Manager.Repositories.DynamoDb.Tests;
 
-public class DynamoDbPlayerRepositoryTests {
+public class DynamoDbPlayerRepositoryUnitTests {
 
 	private Mock<IWorldDynamoDbRepository> _db;
 	private IPlayerRepository _repository;

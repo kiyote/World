@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Common.Worlds.Builder.Tests;
 
 [TestFixture]
-public sealed class MapGeneratorTests {
+public sealed class MapGeneratorUnitTests {
 
 	private Mock<IRandom> _random;
 	private Mock<INoiseProvider> _noiseProvider;

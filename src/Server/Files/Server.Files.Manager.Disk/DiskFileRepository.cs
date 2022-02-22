@@ -1,21 +1,23 @@
-﻿using System.Text.Json;
+﻿using System.IO.Abstractions;
+using System.Text.Json;
+using Common.Files.Manager;
 using Common.Files.Manager.Repositories;
 
 namespace Server.Files.Manager.Disk;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
-internal class DiskFileRepository : IMutableFileContentRepository, IMutableFileMetadataRepository {
+internal class DiskFileRepository : IDiskFileRepository {
 
-	private readonly string _fileFolder;
 	private readonly JsonSerializerOptions _options;
+	private readonly IFileFolderProvider _fileFolderProvider;
+	private readonly IFileSystem _fileSystem;
 
 	public DiskFileRepository(
-		string fileFolder
+		IFileFolderProvider fileFolderProvider,
+		IFileSystem fileSystem
 	) {
-		if( !Directory.Exists( fileFolder ) ) {
-			throw new InvalidOperationException( $"File folder '{fileFolder}' must exist." );
-		}
-		_fileFolder = fileFolder;
+		_fileFolderProvider = fileFolderProvider;
+		_fileSystem = fileSystem;
 		_options = new JsonSerializerOptions() {
 			AllowTrailingCommas = true,
 			ReadCommentHandling = JsonCommentHandling.Skip,
@@ -27,32 +29,37 @@ internal class DiskFileRepository : IMutableFileContentRepository, IMutableFileM
 		};
 	}
 
-	Task<Stream> IImmutableFileContentRepository.GetContentAsync(
+	async Task<bool> IImmutableFileContentRepository.TryGetContentAsync(
 		Id<FileMetadata> fileId,
+		AsyncStreamHandler contentReader,
 		CancellationToken cancellationToken
 	) {
-		string filename = Path.Combine( _fileFolder, fileId.Value );
-		FileStream fs = new FileStream( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
-		return Task.FromResult( (Stream)fs );
+		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value );
+		if (!_fileSystem.File.Exists( filename )) {
+			return false;
+		}
+		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
+		await contentReader( fs ).ConfigureAwait( false );
+		return true;
 	}
 
 	async Task<FileMetadata> IImmutableFileMetadataRepository.GetMetadataAsync(
 		Id<FileMetadata> fileId,
 		CancellationToken cancellationToken
 	) {
-		string filename = Path.Combine( _fileFolder, fileId.Value + ".metadata" );
-		using FileStream fs = new FileStream( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
+		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value + ".metadata" );
+		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
 		FileMetadata? result = await JsonSerializer.DeserializeAsync<FileMetadata>( fs, _options, cancellationToken ).ConfigureAwait( false );
 		return result ?? throw new FileNotFoundException();
 	}
 
 	async Task IMutableFileContentRepository.PutContentAsync(
 		Id<FileMetadata> fileId,
-		Func<Stream, Task> asyncWriter,
+		AsyncStreamHandler asyncWriter,
 		CancellationToken cancellationToken
 	) {
-		string filename = Path.Combine( _fileFolder, fileId.Value );
-		using FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
+		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value );
+		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 		await asyncWriter( fs ).ConfigureAwait( false );
 	}
 
@@ -60,8 +67,8 @@ internal class DiskFileRepository : IMutableFileContentRepository, IMutableFileM
 		FileMetadata fileMetadata,
 		CancellationToken cancellationToken
 	) {
-		string filename = Path.Combine( _fileFolder, fileMetadata.FileId.Value + ".metadata" );
-		using FileStream fs = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
+		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileMetadata.FileId.Value + ".metadata" );
+		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 		await JsonSerializer.SerializeAsync( fs, fileMetadata, _options, cancellationToken ).ConfigureAwait( false );
 	}
 }

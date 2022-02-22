@@ -2,9 +2,9 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Common.Worlds.Builder.Noises;
+namespace Common.Worlds.Builder.Noises.Test;
 
-public class SimpleNoiseThresholderTests {
+public class SimpleNoiseThresholderIntegrationTests {
 
 	private INoiseProvider _noise;
 	private INoiseThresholder _thresholder;

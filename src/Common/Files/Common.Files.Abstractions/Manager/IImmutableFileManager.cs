@@ -2,8 +2,9 @@
 
 public interface IImmutableFileManager {
 
-	Task<Stream> GetContentAsync(
+	Task<bool> TryGetContentAsync(
 		Id<FileMetadata> fileId,
+		AsyncStreamHandler contentReader,
 		CancellationToken cancellationToken
 	);
 
@@ -12,4 +13,3 @@ public interface IImmutableFileManager {
 		CancellationToken cancellationToken
 	);
 }
-

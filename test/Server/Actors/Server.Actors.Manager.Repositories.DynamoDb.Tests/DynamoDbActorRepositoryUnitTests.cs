@@ -7,7 +7,7 @@ using Server.Core.DynamoDb;
 
 namespace Server.Actors.Manager.Repositories.DynamoDb.Tests;
 
-public class DynamoDbActorRepositoryTests {
+public class DynamoDbActorRepositoryUnitTests {
 
 	private Mock<IWorldDynamoDbRepository> _db;
 	private IActorRepository _repository;
