@@ -2,6 +2,6 @@
 
 namespace Server.Files.Manager.Disk;
 
-internal interface IDiskFileManager: IMutableFileManager {
+public interface IDiskFileManager: IMutableFileManager {
 }
 

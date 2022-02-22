@@ -12,7 +12,7 @@ internal class MapGenerator : IMapGenerator {
 	public const float Frequency = 2.0f;
 	public const float Epsilon = 0.00001f;
 	public const float MountainMin = HillMax + Epsilon;
-	public const float HillMin = 0.75f;
+	public const float HillMin = 0.85f;
 	public const float HillMax = 0.9f;
 
 	public MapGenerator(
