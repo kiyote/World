@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Common.Actors.Manager.Tests;
 
 [TestFixture]
-public class ActorManagerTests {
+public class ActorManagerUnitTests {
 	private Mock<IActorRepository> _actorRepository;
 	private IActorManager _actorManager;
 

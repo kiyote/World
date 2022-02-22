@@ -1,23 +1,15 @@
 ﻿namespace Common.Files.Manager.Resource;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
-internal class ResourceFileManager : ImmutableFileManager<ResourceFileRepository, ResourceFileRepository>, IResourceFileManager {
-
-	internal static ResourceFileManager GetInstance() {
-		ResourceFileRepository repository = new ResourceFileRepository();
-		return new ResourceFileManager(
-			repository,
-			repository
-		);
-	}
+internal class ResourceFileManager : ImmutableFileManager<IResourceFileRepository, IResourceFileRepository>, IResourceFileManager {
 
 	private readonly static Id<FileMetadata> _mountainTerrainId = new Id<FileMetadata>( "hex_mountain.png" );
 	private readonly static Id<FileMetadata> _hillTerrainId = new Id<FileMetadata>( "hex_hill.png" );
 	private readonly static Id<FileMetadata> _plainsTerrainId = new Id<FileMetadata>( "hex_plains.png" );
 
 	public ResourceFileManager(
-		ResourceFileRepository fileContentRepository,
-		ResourceFileRepository fileMetadataRepository
+		IResourceFileRepository fileContentRepository,
+		IResourceFileRepository fileMetadataRepository
 	) : base(
 		fileContentRepository,
 		fileMetadataRepository

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Common.Worlds.Manager.Tests;
 
 [TestFixture]
-public class WorldManagerTests {
+public class WorldManagerUnitTests {
 	private Mock<IWorldRepository> _worldRepository;
 	private Mock<IRegionRepository> _regionRepository;
 	private IWorldManager _worldManager;

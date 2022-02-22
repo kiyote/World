@@ -12,11 +12,14 @@ namespace Common.Renderers.Bitmap;
 internal sealed class BitmapWorldRenderer : IWorldRenderer {
 
 	private readonly IResourceFileManager _resourceFileManager;
+	private readonly IImageFactory _imageFactory;
 
 	public BitmapWorldRenderer(
-		IResourceFileManager resourceFileManager
+		IResourceFileManager resourceFileManager,
+		IImageFactory imageFactory
 	) {
 		_resourceFileManager = resourceFileManager;
+		_imageFactory = imageFactory;
 	}
 
 	async Task IWorldRenderer.RenderTerrainToAsync(
@@ -25,27 +28,54 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		TileTerrain[,] terrain,
 		CancellationToken cancellationToken
 	) {
-		using Stream mountainStream = await _resourceFileManager.GetContentAsync( _resourceFileManager.MountainTerrainId, cancellationToken ).ConfigureAwait( false );
-		Image<Argb32> mountain = await Image.LoadAsync<Argb32>( mountainStream, cancellationToken ).ConfigureAwait( false );
+		Image<Argb32>? mountain = null;
+		bool loadedMountain = await _resourceFileManager.TryGetContentAsync(
+				_resourceFileManager.MountainTerrainId,
+				async ( Stream stream ) => {
+					mountain = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+				},
+				cancellationToken
+			).ConfigureAwait( false );
+		if( !loadedMountain ) {
+			throw new InvalidOperationException();
+		}
 
-		using Stream hillStream = await _resourceFileManager.GetContentAsync( _resourceFileManager.HillTerrainId, cancellationToken ).ConfigureAwait( false );
-		Image<Argb32> hill = await Image.LoadAsync<Argb32>( hillStream, cancellationToken ).ConfigureAwait( false );
+		Image<Argb32>? hill = null;
+		bool loadedHill = await _resourceFileManager.TryGetContentAsync(
+				_resourceFileManager.HillTerrainId,
+				async ( Stream stream ) => {
+					hill = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+				},
+				cancellationToken
+			).ConfigureAwait( false );
+		if( !loadedHill ) {
+			throw new InvalidOperationException();
+		}
 
-		using Stream plainsStream = await _resourceFileManager.GetContentAsync( _resourceFileManager.PlainsTerrainId, cancellationToken ).ConfigureAwait( false );
-		Image<Argb32> plains = await Image.LoadAsync<Argb32>( plainsStream, cancellationToken ).ConfigureAwait( false );
+		Image<Argb32>? plains = null;
+		bool loadedPlains = await _resourceFileManager.TryGetContentAsync(
+				_resourceFileManager.PlainsTerrainId,
+				async ( Stream stream ) => {
+					plains = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+				},
+				cancellationToken
+			).ConfigureAwait( false );
+		if( !loadedPlains ) {
+			throw new InvalidOperationException();
+		}
 
 		int rows = terrain.GetLength( 0 );
 		int columns = terrain.GetLength( 1 );
-		using Image<Argb32> img = new Image<Argb32>( (columns * 53) + 16, (rows * 64) + 32 );
+		using Image<Argb32> img = _imageFactory.Create( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
 
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < columns; c++) {
+		for( int r = 0; r < rows; r++ ) {
+			for( int c = 0; c < columns; c++ ) {
 				int x = 53 * c;
-				int y = (64 * r) + ( 32 * ( x & 1 ) );
+				int y = ( 64 * r ) + ( 32 * ( x & 1 ) );
 
-				switch (terrain[c, r]) {
+				switch( terrain[c, r] ) {
 					case TileTerrain.Mountain:
-						img.Mutate( i => i.DrawImage( mountain, new Point(x, y), 1.0f ) );
+						img.Mutate( i => i.DrawImage( mountain, new Point( x, y ), 1.0f ) );
 						break;
 					case TileTerrain.Hill:
 						img.Mutate( i => i.DrawImage( hill, new Point( x, y ), 1.0f ) );

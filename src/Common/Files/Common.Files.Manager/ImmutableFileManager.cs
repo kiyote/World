@@ -19,11 +19,12 @@ public abstract class ImmutableFileManager<TFileContentRepository, TFileMetadata
 		_fileMetadataRepository = fileMetadataRepository;
 	}
 
-	public Task<Stream> GetContentAsync(
+	public Task<bool> TryGetContentAsync(
 		Id<FileMetadata> fileId,
+		AsyncStreamHandler contentReader,
 		CancellationToken cancellationToken
 	) {
-		return _fileContentRepository.GetContentAsync( fileId, cancellationToken );
+		return _fileContentRepository.TryGetContentAsync( fileId, contentReader, cancellationToken );
 	}
 
 	public Task<FileMetadata> GetMetadataAsync(
