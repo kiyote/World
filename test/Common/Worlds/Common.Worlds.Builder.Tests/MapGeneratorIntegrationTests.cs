@@ -1,29 +1,31 @@
-using Common.Files;
+﻿using Common.Files;
 using Common.Files.Manager.Resource;
-using Common.Worlds;
+using Common.Renderers;
+using Common.Renderers.Bitmap;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Server.Files.Manager.Disk;
 
-namespace Common.Renderers.Bitmap.Tests;
+namespace Common.Worlds.Builder.Tests;
 
 [TestFixture]
-public class BitmapWorldRendererIntegrationTests {
+public sealed class MapGeneratorIntegrationTests {
 
-	private IServiceScope _scope;
+	private IMapGenerator _mapGenerator;
 	private IServiceProvider _provider;
-	private IWorldRenderer _renderer;
+	private IServiceScope _scope;
 	private string _folder;
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		_folder = Path.Combine( Path.GetTempPath(), Guid.NewGuid().ToString( "N" ) );
 		Directory.CreateDirectory( _folder );
-
 		var services = new ServiceCollection();
-		services.AddResourceFileManager();
-		services.AddDiskFileManager( _folder );
+		services.AddCore();
+		services.AddWorldBuilder();
 		services.AddBitmapRenderer();
+		services.AddDiskFileManager( _folder );
+		services.AddResourceFileManager();
 
 		_provider = services.BuildServiceProvider();
 	}
@@ -37,7 +39,7 @@ public class BitmapWorldRendererIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_renderer = _provider.GetRequiredService<IWorldRenderer>();
+		_mapGenerator = _provider.GetRequiredService<IMapGenerator>();
 	}
 
 	[TearDown]
@@ -47,23 +49,17 @@ public class BitmapWorldRendererIntegrationTests {
 
 	[Test]
 	[Ignore("Used to generate visual output for inspection.")]
-	public async Task RenderTerrain() {
-		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
-
+	public void GenerateImage() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		TileTerrain[,] tileTerrain = new TileTerrain[10, 10];
-
-		for( int r = 0; r < tileTerrain.GetLength( 0 ); r++ ) {
-			for( int c = 0; c < tileTerrain.GetLength( 1 ); c++ ) {
-				tileTerrain[c, r] = TileTerrain.Plain;
-			}
-		}
-
-		await _renderer.RenderTerrainToAsync(
+		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( "test", 100, 100 );
+		IWorldRenderer worldRenderer = _provider.GetRequiredService<IWorldRenderer>();
+		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
+		worldRenderer.RenderTerrainToAsync(
 			diskFileManager,
 			fileId,
-			tileTerrain,
+			terrain,
 			CancellationToken.None
-		).ConfigureAwait( false );
+		);
 	}
 }
+
