@@ -95,7 +95,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 
 		int rows = terrain.GetLength( 0 );
 		int columns = terrain.GetLength( 1 );
-		using Image<Argb32> img = _imageFactory.CreateImage( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
+		using Image<Rgba32> img = _imageFactory.CreateImage( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
