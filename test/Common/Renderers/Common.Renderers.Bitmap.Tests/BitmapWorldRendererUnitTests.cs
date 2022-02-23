@@ -35,7 +35,7 @@ public class BitmapWorldRendererUnitTests {
 		TileTerrain[,] terrain = new TileTerrain[2, 2];
 		for( int r = 0; r < terrain.GetLength(0); r++) {
 			for (int c = 0; c < terrain.GetLength(1); c++) {
-				terrain[c, r] = TileTerrain.Plain;
+				terrain[c, r] = TileTerrain.Grass;
 			}
 		}
 		Mock<IMutableFileManager> fileManager = new Mock<IMutableFileManager>( MockBehavior.Strict );
@@ -70,7 +70,7 @@ public class BitmapWorldRendererUnitTests {
 			.Setup( f => f.LoadImageAsync( stream.Object, It.IsAny<CancellationToken>() ) )
 			.Returns( Task.FromResult( image ) );
 		resourceFileManager
-			.Setup( rfm => rfm.MountainTerrainId )
+			.Setup( rfm => rfm.MountainTileId )
 			.Returns( mountainId );
 		resourceFileManager
 			.Setup( rfm => rfm.TryGetContentAsync( mountainId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
@@ -81,7 +81,7 @@ public class BitmapWorldRendererUnitTests {
 
 		Id<FileMetadata> hillId = new Id<FileMetadata>( "hill" );
 		resourceFileManager
-			.Setup( rfm => rfm.HillTerrainId )
+			.Setup( rfm => rfm.HillTileId )
 			.Returns( hillId );
 		resourceFileManager
 			.Setup( rfm => rfm.TryGetContentAsync( hillId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
@@ -90,12 +90,34 @@ public class BitmapWorldRendererUnitTests {
 			} )
 			.Returns( Task.FromResult( true ) );
 
-		Id<FileMetadata> plainsId = new Id<FileMetadata>( "plains" );
+		Id<FileMetadata> grassId = new Id<FileMetadata>( "grass" );
 		resourceFileManager
-			.Setup( rfm => rfm.PlainsTerrainId )
-			.Returns( plainsId );
+			.Setup( rfm => rfm.GrassTileId )
+			.Returns( grassId );
 		resourceFileManager
-			.Setup( rfm => rfm.TryGetContentAsync( plainsId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
+			.Setup( rfm => rfm.TryGetContentAsync( grassId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
+			.Callback<Id<FileMetadata>, AsyncStreamHandler, CancellationToken>( ( fileId, func, token ) => {
+				func.Invoke( stream.Object ).Wait( token );
+			} )
+			.Returns( Task.FromResult( true ) );
+
+		Id<FileMetadata> coastId = new Id<FileMetadata>( "coast" );
+		resourceFileManager
+			.Setup( rfm => rfm.CoastTileId )
+			.Returns( coastId );
+		resourceFileManager
+			.Setup( rfm => rfm.TryGetContentAsync( coastId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
+			.Callback<Id<FileMetadata>, AsyncStreamHandler, CancellationToken>( ( fileId, func, token ) => {
+				func.Invoke( stream.Object ).Wait( token );
+			} )
+			.Returns( Task.FromResult( true ) );
+
+		Id<FileMetadata> oceanId = new Id<FileMetadata>( "ocean" );
+		resourceFileManager
+			.Setup( rfm => rfm.OceanTileId )
+			.Returns( oceanId );
+		resourceFileManager
+			.Setup( rfm => rfm.TryGetContentAsync( oceanId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
 			.Callback<Id<FileMetadata>, AsyncStreamHandler, CancellationToken>( ( fileId, func, token ) => {
 				func.Invoke( stream.Object ).Wait( token );
 			} )

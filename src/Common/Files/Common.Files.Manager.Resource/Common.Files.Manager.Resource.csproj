@@ -1,8 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<EmbeddedResource Include="$(SolutionDir)asset\hex_mountain.png" Link="hex_mountain.png" />
-		<EmbeddedResource Include="$(SolutionDir)asset\hex_plains.png" Link="hex_plains.png" />
-		<EmbeddedResource Include="$(SolutionDir)asset\hex_hill.png" Link="hex_hill.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_mountain.png" Link="tile_mountain.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_grass.png" Link="tile_grass.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_forest.png" Link="tile_forest.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_coast.png" Link="tile_coast.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_ocean.png" Link="tile_ocean.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\tile_hill.png" Link="tile_hill.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\feature_forest.png" Link="feature_forest.png" />
+		<EmbeddedResource Include="$(SolutionDir)asset\feature_water.png" Link="feature_water.png" />
 	</ItemGroup>
 	<PropertyGroup>
 		<SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>

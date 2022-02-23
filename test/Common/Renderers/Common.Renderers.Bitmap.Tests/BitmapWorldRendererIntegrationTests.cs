@@ -55,7 +55,7 @@ public class BitmapWorldRendererIntegrationTests {
 
 		for( int r = 0; r < tileTerrain.GetLength( 0 ); r++ ) {
 			for( int c = 0; c < tileTerrain.GetLength( 1 ); c++ ) {
-				tileTerrain[c, r] = TileTerrain.Plain;
+				tileTerrain[c, r] = TileTerrain.Grass;
 			}
 		}
 

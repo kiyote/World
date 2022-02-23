@@ -243,10 +243,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Files.Manager.Resour
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asset", "asset", "{61F05AE0-0560-4358-B3CA-171B2D6448D8}"
 	ProjectSection(SolutionItems) = preProject
+		asset\feature_forest.png = asset\feature_forest.png
+		asset\feature_water.png = asset\feature_water.png
 		asset\hex_blank.png = asset\hex_blank.png
-		asset\hex_hill.png = asset\hex_hill.png
-		asset\hex_mountain.png = asset\hex_mountain.png
-		asset\hex_plains.png = asset\hex_plains.png
+		asset\tile_coast.png = asset\tile_coast.png
+		asset\tile_forest.png = asset\tile_forest.png
+		asset\tile_grass.png = asset\tile_grass.png
+		asset\tile_hill.png = asset\tile_hill.png
+		asset\tile_mountain.png = asset\tile_mountain.png
+		asset\tile_ocean.png = asset\tile_ocean.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Disk", "Disk", "{892C5855-11A9-4010-9120-45EBA7295B27}"

@@ -57,41 +57,11 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		TileTerrain[,] terrain,
 		CancellationToken cancellationToken
 	) {
-		Image<Rgba32>? mountain = null;
-		bool loadedMountain = await _resourceFileManager.TryGetContentAsync(
-				_resourceFileManager.MountainTerrainId,
-				async ( Stream stream ) => {
-					mountain = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
-				},
-				cancellationToken
-			).ConfigureAwait( false );
-		if( !loadedMountain ) {
-			throw new InvalidOperationException();
-		}
-
-		Image<Rgba32>? hill = null;
-		bool loadedHill = await _resourceFileManager.TryGetContentAsync(
-				_resourceFileManager.HillTerrainId,
-				async ( Stream stream ) => {
-					hill = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
-				},
-				cancellationToken
-			).ConfigureAwait( false );
-		if( !loadedHill ) {
-			throw new InvalidOperationException();
-		}
-
-		Image<Rgba32>? plains = null;
-		bool loadedPlains = await _resourceFileManager.TryGetContentAsync(
-				_resourceFileManager.PlainsTerrainId,
-				async ( Stream stream ) => {
-					plains = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
-				},
-				cancellationToken
-			).ConfigureAwait( false );
-		if( !loadedPlains ) {
-			throw new InvalidOperationException();
-		}
+		Image<Rgba32> mountain = await LoadImageAsync( _resourceFileManager.MountainTileId, cancellationToken ).ConfigureAwait( false );
+		Image<Rgba32> hill = await LoadImageAsync( _resourceFileManager.HillTileId, cancellationToken ).ConfigureAwait( false );
+		Image<Rgba32> grass = await LoadImageAsync( _resourceFileManager.GrassTileId, cancellationToken ).ConfigureAwait( false );
+		Image<Rgba32> coast = await LoadImageAsync( _resourceFileManager.CoastTileId, cancellationToken ).ConfigureAwait( false );
+		Image<Rgba32> ocean = await LoadImageAsync( _resourceFileManager.OceanTileId, cancellationToken ).ConfigureAwait( false );
 
 		int rows = terrain.GetLength( 0 );
 		int columns = terrain.GetLength( 1 );
@@ -109,8 +79,14 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 					case TileTerrain.Hill:
 						img.Mutate( i => i.DrawImage( hill, new Point( x, y ), 1.0f ) );
 						break;
-					case TileTerrain.Plain:
-						img.Mutate( i => i.DrawImage( plains, new Point( x, y ), 1.0f ) );
+					case TileTerrain.Grass:
+						img.Mutate( i => i.DrawImage( grass, new Point( x, y ), 1.0f ) );
+						break;
+					case TileTerrain.Coast:
+						img.Mutate( i => i.DrawImage( coast, new Point( x, y ), 1.0f ) );
+						break;
+					case TileTerrain.Ocean:
+						img.Mutate( i => i.DrawImage( ocean, new Point( x, y ), 1.0f ) );
 						break;
 					default:
 						throw new InvalidOperationException();
@@ -123,6 +99,27 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 			async ( Stream s ) => await img.SaveAsPngAsync( s, cancellationToken ).ConfigureAwait( false ),
 			cancellationToken
 		).ConfigureAwait( false );
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Maintainability", "CA1508:Avoid dead conditional code", Justification = "Code is not dead." )]
+	private async Task<Image<Rgba32>> LoadImageAsync(
+		Id<FileMetadata> fileId,
+		CancellationToken cancellationToken
+	) {
+		Image<Rgba32>? image = null;
+		bool loadedImage = await _resourceFileManager.TryGetContentAsync(
+				fileId,
+				async ( Stream stream ) => {
+					image = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
+				},
+				cancellationToken
+			).ConfigureAwait( false );
+		if( image is null
+			|| !loadedImage ) {
+			throw new InvalidOperationException();
+		}
+
+		return image;
 	}
 }
 

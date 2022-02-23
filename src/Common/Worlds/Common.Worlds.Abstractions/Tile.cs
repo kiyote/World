@@ -2,5 +2,6 @@
 
 public record Tile(
 	Id<Tile> TileId,
-	TileTerrain Terrain
+	TileTerrain Terrain,
+	IEnumerable<TileFeature> Features
 );

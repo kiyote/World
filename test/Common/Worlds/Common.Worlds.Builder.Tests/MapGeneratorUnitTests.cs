@@ -10,26 +10,29 @@ public sealed class MapGeneratorUnitTests {
 	private Mock<IRandom> _random;
 	private Mock<INoiseProvider> _noiseProvider;
 	private Mock<INoiseThresholder> _noiseThresholder;
+	private Mock<IEdgeDetector> _edgeDetector;
 	private IMapGenerator _mapGenerator;
 
 	[SetUp]
 	public void SetUp() {
 		_random = new Mock<IRandom>( MockBehavior.Strict );
 		_noiseProvider = new Mock<INoiseProvider>( MockBehavior.Strict );
-		_noiseThresholder = new Mock<INoiseThresholder>( MockBehavior.Strict );	
+		_noiseThresholder = new Mock<INoiseThresholder>( MockBehavior.Strict );
+		_edgeDetector = new Mock<IEdgeDetector>( MockBehavior.Strict );
 
 		_mapGenerator = new MapGenerator(
 			_random.Object,
 			_noiseProvider.Object,
-			_noiseThresholder.Object
+			_noiseThresholder.Object,
+			_edgeDetector.Object
 		);
 	}
 
 	[Test]
 	public void GenerateTerrain_ValidParameters_TerrainReturned() {
 		string seed = "test seed";
-		int intSeed = seed.GetHashCode( StringComparison.Ordinal );
-		long longSeed = (intSeed << 32) | intSeed;
+		long longSeed = Hash.GetLong( seed );
+		int intSeed = (int)longSeed;
 		int rows = 10;
 		int columns = 10;
 		float[,] noise = new float[columns, rows];
@@ -37,6 +40,11 @@ public sealed class MapGeneratorUnitTests {
 		mountains[1, 1] = 1.0f;
 		float[,] hills = new float[columns, rows];
 		hills[2, 2] = 1.0f;
+		float[,] grass = new float[columns, rows];
+		Fill( ref grass, 1.0f );
+		float[,] coast = new float[columns, rows];
+		float[,] ocean = new float[columns, rows];
+		float[,] edges = new float[columns, rows];
 
 		_random
 			.Setup( r => r.Reinitialise( intSeed ) );
@@ -46,20 +54,44 @@ public sealed class MapGeneratorUnitTests {
 			.Returns( noise );
 
 		_noiseThresholder
-			.Setup( nt => nt.Threshold( noise, MapGenerator.MountainMin ) )
+			.Setup( nt => nt.Range( noise, MapGenerator.MountainMin, MapGenerator.MountainMax ) )
 			.Returns( mountains );
 
 		_noiseThresholder
 			.Setup( nt => nt.Range( noise, MapGenerator.HillMin, MapGenerator.HillMax ) )
 			.Returns( hills );
 
+		_noiseThresholder
+			.Setup( nt => nt.Range( noise, MapGenerator.GrassMin, MapGenerator.GrassMax ) )
+			.Returns( grass );
+
+		_edgeDetector
+			.Setup( ed => ed.Detect( grass ) )
+			.Returns( edges );
+
+		_noiseThresholder
+			.Setup( nt => nt.Range( noise, MapGenerator.CoastMin, MapGenerator.CoastMax ) )
+			.Returns( coast );
+
+		_noiseThresholder
+			.Setup( nt => nt.Range( noise, MapGenerator.OceanMin, MapGenerator.OceanMax ) )
+			.Returns( ocean );
+
 		TileTerrain[,] result = _mapGenerator.GenerateTerrain( seed, rows, columns );
 
 		Assert.IsNotNull( result );
 		Assert.AreEqual( rows, result.GetLength( 0 ) );
 		Assert.AreEqual( columns, result.GetLength( 1 ) );
-		Assert.AreEqual( TileTerrain.Plain, result[0, 0] );
+		Assert.AreEqual( TileTerrain.Grass, result[0, 0] );
 		Assert.AreEqual( TileTerrain.Mountain, result[1, 1] );
 		Assert.AreEqual( TileTerrain.Hill, result[2, 2] );
+	}
+
+	private static void Fill( ref float[,] target, float value ) {
+		for (int r = 0; r < target.GetLength(0); r++) {
+			for (int c = 0; c < target.GetLength(1); c++) {
+				target[c, r] = value;
+			}
+		}
 	}
 }
