@@ -49,7 +49,7 @@ public class BitmapWorldRendererUnitTests {
 			.Setup( fm => fm.PutContentAsync( fileId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
 			.Returns( Task.CompletedTask );
 
-		await _renderer.RenderTerrainToAsync(
+		await _renderer.RenderAtlasToAsync(
 			fileManager.Object,
 			fileId,
 			terrain,

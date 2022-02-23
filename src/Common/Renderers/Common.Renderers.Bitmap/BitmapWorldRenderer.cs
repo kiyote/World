@@ -22,17 +22,46 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		_imageFactory = imageFactory;
 	}
 
-	async Task IWorldRenderer.RenderTerrainToAsync(
+	async Task IWorldRenderer.RenderTerrainMapToAsync(
+		IMutableFileManager fileManager,
+		Id<FileMetadata> fileId,
+		TileTerrain[,] terrain,
+		TileTerrain terrainToRender,
+		CancellationToken cancellationToken
+	) {
+		int rows = terrain.GetLength( 0 );
+		int columns = terrain.GetLength( 1 );
+		Image<L8> map = _imageFactory.CreateMap( columns, rows );
+
+		for( int r = 0; r < rows; r++ ) {
+			for( int c = 0; c < columns; c++ ) {
+
+				if (terrain[c, r] == terrainToRender) {
+					map[c, r] = new L8( 255 );
+				} else {
+					map[c, r] = new L8( 0 );
+				}
+			}
+		}
+
+		await fileManager.PutContentAsync(
+			fileId,
+			async ( Stream s ) => await map.SaveAsPngAsync( s, cancellationToken ).ConfigureAwait( false ),
+			cancellationToken
+		).ConfigureAwait( false );
+	}
+
+	async Task IWorldRenderer.RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
 		TileTerrain[,] terrain,
 		CancellationToken cancellationToken
 	) {
-		Image<Argb32>? mountain = null;
+		Image<Rgba32>? mountain = null;
 		bool loadedMountain = await _resourceFileManager.TryGetContentAsync(
 				_resourceFileManager.MountainTerrainId,
 				async ( Stream stream ) => {
-					mountain = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+					mountain = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
 				},
 				cancellationToken
 			).ConfigureAwait( false );
@@ -40,11 +69,11 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 			throw new InvalidOperationException();
 		}
 
-		Image<Argb32>? hill = null;
+		Image<Rgba32>? hill = null;
 		bool loadedHill = await _resourceFileManager.TryGetContentAsync(
 				_resourceFileManager.HillTerrainId,
 				async ( Stream stream ) => {
-					hill = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+					hill = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
 				},
 				cancellationToken
 			).ConfigureAwait( false );
@@ -52,11 +81,11 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 			throw new InvalidOperationException();
 		}
 
-		Image<Argb32>? plains = null;
+		Image<Rgba32>? plains = null;
 		bool loadedPlains = await _resourceFileManager.TryGetContentAsync(
 				_resourceFileManager.PlainsTerrainId,
 				async ( Stream stream ) => {
-					plains = await _imageFactory.LoadAsync( stream, cancellationToken ).ConfigureAwait( false );
+					plains = await _imageFactory.LoadImageAsync( stream, cancellationToken ).ConfigureAwait( false );
 				},
 				cancellationToken
 			).ConfigureAwait( false );
@@ -66,7 +95,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 
 		int rows = terrain.GetLength( 0 );
 		int columns = terrain.GetLength( 1 );
-		using Image<Argb32> img = _imageFactory.Create( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
+		using Image<Argb32> img = _imageFactory.CreateImage( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {

@@ -59,7 +59,7 @@ public class BitmapWorldRendererIntegrationTests {
 			}
 		}
 
-		await _renderer.RenderTerrainToAsync(
+		await _renderer.RenderAtlasToAsync(
 			diskFileManager,
 			fileId,
 			tileTerrain,
