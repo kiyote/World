@@ -79,9 +79,25 @@ public sealed class MapGeneratorIntegrationTests {
 
 		worldRenderer.RenderTerrainMapToAsync(
 			diskFileManager,
-			new Id<FileMetadata>( "terrain_plain.png" ),
+			new Id<FileMetadata>( "terrain_grass.png" ),
 			terrain,
-			TileTerrain.Plain,
+			TileTerrain.Grass,
+			CancellationToken.None
+		);
+
+		worldRenderer.RenderTerrainMapToAsync(
+			diskFileManager,
+			new Id<FileMetadata>( "terrain_coast.png" ),
+			terrain,
+			TileTerrain.Coast,
+			CancellationToken.None
+		);
+
+		worldRenderer.RenderTerrainMapToAsync(
+			diskFileManager,
+			new Id<FileMetadata>( "terrain_ocean.png" ),
+			terrain,
+			TileTerrain.Ocean,
 			CancellationToken.None
 		);
 	}

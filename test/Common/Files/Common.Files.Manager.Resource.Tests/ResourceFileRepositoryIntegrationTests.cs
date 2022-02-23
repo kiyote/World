@@ -15,7 +15,7 @@ public class ResourceFileRepositoryIntegrationTests {
     [Test]
     public async Task GetMetadata()
     {
-		string filename = "hex_mountain.png";
+		string filename = "tile_mountain.png";
 		Id<FileMetadata> fileId = new Id<FileMetadata>( filename );
 		FileMetadata fileMetadata = await _repo.GetMetadataAsync( fileId, CancellationToken.None ).ConfigureAwait( false );
 
