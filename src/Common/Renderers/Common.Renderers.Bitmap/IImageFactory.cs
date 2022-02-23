@@ -4,8 +4,9 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace Common.Renderers.Bitmap;
 
 internal interface IImageFactory {
-	Task<Image<Argb32>?> LoadAsync( Stream stream, CancellationToken cancellationToken );
+	Task<Image<Rgba32>?> LoadImageAsync( Stream stream, CancellationToken cancellationToken );
 
-	Image<Argb32> Create( int width, int height );
+	Image<Rgba32> CreateImage( int width, int height );
+	Image<L8> CreateMap( int width, int height );
 }
 

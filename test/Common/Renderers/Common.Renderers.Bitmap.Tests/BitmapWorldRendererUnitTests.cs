@@ -40,16 +40,16 @@ public class BitmapWorldRendererUnitTests {
 		}
 		Mock<IMutableFileManager> fileManager = new Mock<IMutableFileManager>( MockBehavior.Strict );
 
-		Image<Argb32> image = new Image<Argb32>( 122, 160 );
+		Image<Rgba32> image = new Image<Rgba32>( 122, 160 );
 		_imageFactory
-			.Setup( f => f.Create( 122, 160 ) )
+			.Setup( f => f.CreateImage( 122, 160 ) )
 			.Returns( image );
 
 		fileManager
 			.Setup( fm => fm.PutContentAsync( fileId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
 			.Returns( Task.CompletedTask );
 
-		await _renderer.RenderTerrainToAsync(
+		await _renderer.RenderAtlasToAsync(
 			fileManager.Object,
 			fileId,
 			terrain,
@@ -62,12 +62,12 @@ public class BitmapWorldRendererUnitTests {
 		Mock<IResourceFileManager> resourceFileManager,
 		Mock<IImageFactory> imageFactory
 	) {
-		Image<Argb32> image = new Image<Argb32>( 1, 1 );
+		Image<Rgba32> image = new Image<Rgba32>( 1, 1 );
 
 		Id<FileMetadata> mountainId = new Id<FileMetadata>( "mountain" );
 		Mock<Stream> stream = new Mock<Stream>( MockBehavior.Strict );
 		imageFactory
-			.Setup( f => f.LoadAsync( stream.Object, It.IsAny<CancellationToken>() ) )
+			.Setup( f => f.LoadImageAsync( stream.Object, It.IsAny<CancellationToken>() ) )
 			.Returns( Task.FromResult( image ) );
 		resourceFileManager
 			.Setup( rfm => rfm.MountainTerrainId )

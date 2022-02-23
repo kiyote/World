@@ -4,15 +4,19 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace Common.Renderers.Bitmap;
 
 internal sealed class ImageFactory : IImageFactory {
-	Image<Argb32> IImageFactory.Create( int width, int height ) {
-		return new Image<Argb32>( width, height );
+	Image<Rgba32> IImageFactory.CreateImage( int width, int height ) {
+		return new Image<Rgba32>( width, height );
 	}
 
-	async Task<Image<Argb32>?> IImageFactory.LoadAsync(
+	Image<L8> IImageFactory.CreateMap( int width, int height ) {
+		return new Image<L8>( width, height );
+	}
+
+	async Task<Image<Rgba32>?> IImageFactory.LoadImageAsync(
 		Stream stream,
 		CancellationToken cancellationToken
 	) {
-		return await Image.LoadAsync<Argb32>( stream, cancellationToken ).ConfigureAwait( false );
+		return await Image.LoadAsync<Rgba32>( stream, cancellationToken ).ConfigureAwait( false );
 	}
 }
 

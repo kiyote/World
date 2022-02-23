@@ -5,10 +5,18 @@ using Common.Worlds;
 namespace Common.Renderers;
 
 public interface IWorldRenderer {
-	Task RenderTerrainToAsync(
-		IMutableFileManager fileSystem,
+	Task RenderAtlasToAsync(
+		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
 		TileTerrain[,] terrain,
+		CancellationToken cancellationToken
+	);
+
+	Task RenderTerrainMapToAsync(
+		IMutableFileManager fileManager,
+		Id<FileMetadata> fileId,
+		TileTerrain[,] terrain,
+		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	);
 }
