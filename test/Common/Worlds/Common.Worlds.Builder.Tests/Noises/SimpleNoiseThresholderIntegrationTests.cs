@@ -24,7 +24,7 @@ public class SimpleNoiseThresholderIntegrationTests {
 		noise[0, 1] = 0.25f;
 		noise[1, 1] = 0.0f;
 
-		float[,] result = _thresholder.Threshold( noise, 0.76f );
+		float[,] result = _thresholder.Threshold( ref noise, 0.76f );
 
 		Assert.AreEqual( 1.0f, result[0, 0] );
 		Assert.AreEqual( 0.0f, result[1, 0] );
@@ -39,7 +39,7 @@ public class SimpleNoiseThresholderIntegrationTests {
 		noise[1, 0] = 0.75f;
 		noise[0, 1] = 0.25f;
 		noise[1, 1] = 0.0f;
-		float[,] result = _thresholder.Range( noise, 0.75f, 0.99f );
+		float[,] result = _thresholder.Range( ref noise, 0.75f, 0.99f );
 
 		Assert.AreEqual( 0.0f, result[0, 0] );
 		Assert.AreEqual( 1.0f, result[1, 0] );
@@ -57,7 +57,7 @@ public class SimpleNoiseThresholderIntegrationTests {
 		long seed = random.NextLong();
 
 		float[,] noise = _noise.Generate( seed, height, width, 2.0f );
-		float[,] threshold = _thresholder.Threshold( noise, 0.75f );
+		float[,] threshold = _thresholder.Threshold( ref noise, 0.75f );
 
 		using var img = new Image<Rgb24>( width, height );
 		for( int r = 0; r < height; r++ ) {

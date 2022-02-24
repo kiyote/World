@@ -11,6 +11,7 @@ public sealed class MapGeneratorUnitTests {
 	private Mock<INoiseProvider> _noiseProvider;
 	private Mock<INoiseThresholder> _noiseThresholder;
 	private Mock<IEdgeDetector> _edgeDetector;
+	private Mock<ILogicalOperator> _logicalOperator;
 	private IMapGenerator _mapGenerator;
 
 	[SetUp]
@@ -19,12 +20,14 @@ public sealed class MapGeneratorUnitTests {
 		_noiseProvider = new Mock<INoiseProvider>( MockBehavior.Strict );
 		_noiseThresholder = new Mock<INoiseThresholder>( MockBehavior.Strict );
 		_edgeDetector = new Mock<IEdgeDetector>( MockBehavior.Strict );
+		_logicalOperator = new Mock<ILogicalOperator>( MockBehavior.Strict );
 
 		_mapGenerator = new MapGenerator(
 			_random.Object,
 			_noiseProvider.Object,
 			_noiseThresholder.Object,
-			_edgeDetector.Object
+			_edgeDetector.Object,
+			_logicalOperator.Object
 		);
 	}
 
@@ -54,27 +57,27 @@ public sealed class MapGeneratorUnitTests {
 			.Returns( noise );
 
 		_noiseThresholder
-			.Setup( nt => nt.Range( noise, MapGenerator.MountainMin, MapGenerator.MountainMax ) )
+			.Setup( nt => nt.Range( ref noise, MapGenerator.MountainMin, MapGenerator.MountainMax ) )
 			.Returns( mountains );
 
 		_noiseThresholder
-			.Setup( nt => nt.Range( noise, MapGenerator.HillMin, MapGenerator.HillMax ) )
+			.Setup( nt => nt.Range( ref noise, MapGenerator.HillMin, MapGenerator.HillMax ) )
 			.Returns( hills );
 
 		_noiseThresholder
-			.Setup( nt => nt.Range( noise, MapGenerator.GrassMin, MapGenerator.GrassMax ) )
+			.Setup( nt => nt.Range( ref noise, MapGenerator.GrassMin, MapGenerator.GrassMax ) )
 			.Returns( grass );
 
 		_edgeDetector
-			.Setup( ed => ed.Detect( grass ) )
+			.Setup( ed => ed.Detect( ref grass, 0.0f ) )
 			.Returns( edges );
 
 		_noiseThresholder
-			.Setup( nt => nt.Range( noise, MapGenerator.CoastMin, MapGenerator.CoastMax ) )
+			.Setup( nt => nt.Range( ref noise, MapGenerator.CoastMin, MapGenerator.CoastMax ) )
 			.Returns( coast );
 
 		_noiseThresholder
-			.Setup( nt => nt.Range( noise, MapGenerator.OceanMin, MapGenerator.OceanMax ) )
+			.Setup( nt => nt.Range( ref noise, MapGenerator.OceanMin, MapGenerator.OceanMax ) )
 			.Returns( ocean );
 
 		TileTerrain[,] result = _mapGenerator.GenerateTerrain( seed, rows, columns );

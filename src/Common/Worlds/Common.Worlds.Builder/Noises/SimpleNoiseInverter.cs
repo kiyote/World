@@ -2,7 +2,7 @@
 
 internal class SimpleNoiseInverter : INoiseInverter {
 	float[,] INoiseInverter.Invert(
-		float[,] source
+		ref float[,] source
 	) {
 		int rows = source.GetLength( 0 );
 		int columns = source.GetLength( 1 );
