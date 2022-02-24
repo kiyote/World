@@ -80,6 +80,10 @@ public sealed class MapGeneratorUnitTests {
 			.Setup( nt => nt.Range( ref noise, MapGenerator.OceanMin, MapGenerator.OceanMax ) )
 			.Returns( ocean );
 
+		_logicalOperator
+			.Setup( lo => lo.PerformOr( ref coast, 0.0f, ref edges, 0.0f ) )
+			.Returns( coast );
+
 		TileTerrain[,] result = _mapGenerator.GenerateTerrain( seed, rows, columns );
 
 		Assert.IsNotNull( result );
