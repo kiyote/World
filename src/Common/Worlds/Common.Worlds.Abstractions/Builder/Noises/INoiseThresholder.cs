@@ -2,8 +2,8 @@
 
 public interface INoiseThresholder {
 
-	float[,] Threshold( float[,] source, float threshold );
+	float[,] Threshold( ref float[,] source, float threshold );
 
-	float[,] Range( float[,] source, float min, float max );
+	float[,] Range( ref float[,] source, float min, float max );
 }
 

@@ -2,7 +2,7 @@
 
 internal class SimpleNoiseThresholder : INoiseThresholder {
 	float[,] INoiseThresholder.Range(
-		float[,] source,
+		ref float[,] source,
 		float min,
 		float max
 	) {
@@ -24,7 +24,7 @@ internal class SimpleNoiseThresholder : INoiseThresholder {
 	}
 
 	float[,] INoiseThresholder.Threshold(
-		float[,] source,
+		ref float[,] source,
 		float threshold
 	) {
 		int rows = source.GetLength( 0 );

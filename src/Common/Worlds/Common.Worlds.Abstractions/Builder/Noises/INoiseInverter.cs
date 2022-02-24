@@ -2,6 +2,6 @@
 
 public interface INoiseInverter {
 
-	float[,] Invert( float[,] source );
+	float[,] Invert( ref float[,] source );
 }
 

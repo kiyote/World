@@ -2,6 +2,6 @@
 
 public interface IEdgeDetector {
 
-	float[,] Detect( float[,] source );
+	float[,] Detect( ref float[,] source, float threshold );
 }
 

@@ -48,7 +48,7 @@ public sealed class MapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore("Used to generate visual output for inspection.")]
+	[Ignore("Used to generate visual output for inspection.")]
 	public void GenerateImage() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
 		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( "test", 100, 100 );

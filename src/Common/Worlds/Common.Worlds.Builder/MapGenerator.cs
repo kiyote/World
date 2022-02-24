@@ -9,6 +9,7 @@ internal class MapGenerator : IMapGenerator {
 	private readonly INoiseProvider _noiseProvider;
 	private readonly INoiseThresholder _noiseThresholder;
 	private readonly IEdgeDetector _edgeDetector;
+	private readonly ILogicalOperator _logicalOperator;
 
 	public const float Frequency = 4.00f;
 	public const float Epsilon = 0.00001f;
@@ -28,12 +29,14 @@ internal class MapGenerator : IMapGenerator {
 		IRandom random,
 		INoiseProvider noiseProvider,
 		INoiseThresholder noiseThresholder,
-		IEdgeDetector edgeDetector
+		IEdgeDetector edgeDetector,
+		ILogicalOperator logicalOperator
 	) {
 		_random = random;
 		_noiseProvider = noiseProvider;
 		_noiseThresholder = noiseThresholder;
 		_edgeDetector = edgeDetector;
+		_logicalOperator = logicalOperator;
 	}
 
 	public TileTerrain[,] GenerateTerrain(
@@ -44,12 +47,13 @@ internal class MapGenerator : IMapGenerator {
 		long code = Hash.GetLong( seed );
 		_random.Reinitialise( (int)code );
 		float[,] raw = _noiseProvider.Generate( code, rows, columns, Frequency );
-		float[,] mountains = _noiseThresholder.Range( raw, MountainMin, MountainMax );
-		float[,] hills = _noiseThresholder.Range( raw, HillMin, HillMax );
-		float[,] grass = _noiseThresholder.Range( raw, GrassMin, GrassMax );
-		float[,] grassEdges = _edgeDetector.Detect( grass );
-		float[,] coast = _noiseThresholder.Range( raw, CoastMin, CoastMax );
-		float[,] ocean = _noiseThresholder.Range( raw, OceanMin, OceanMax );
+		float[,] mountains = _noiseThresholder.Range( ref raw, MountainMin, MountainMax );
+		float[,] hills = _noiseThresholder.Range( ref raw, HillMin, HillMax );
+		float[,] grass = _noiseThresholder.Range( ref raw, GrassMin, GrassMax );
+		float[,] coast = _noiseThresholder.Range( ref raw, CoastMin, CoastMax );
+		float[,] grassEdges = _edgeDetector.Detect( ref grass, 0.0f );
+		coast = _logicalOperator.PerformOr( ref coast, 0.0f, ref grassEdges, 0.0f );
+		float[,] ocean = _noiseThresholder.Range( ref raw, OceanMin, OceanMax );
 
 		TileTerrain[,] terrain = new TileTerrain[columns, rows];
 		for( int r = 0; r < rows; r++ ) {
@@ -60,7 +64,7 @@ internal class MapGenerator : IMapGenerator {
 					terrain[c, r] = TileTerrain.Hill;
 				} else if( grass[c, r] > 0.0f ) {
 					terrain[c, r] = TileTerrain.Grass;
-				} else if( coast[c, r] > 0.0f || grassEdges[c, r] > 0.0f ) {
+				} else if( coast[c, r] > 0.0f ) {
 					terrain[c, r] = TileTerrain.Coast;
 				} else if( ocean[c, r] > 0.0f ) {
 					terrain[c, r] = TileTerrain.Ocean;
