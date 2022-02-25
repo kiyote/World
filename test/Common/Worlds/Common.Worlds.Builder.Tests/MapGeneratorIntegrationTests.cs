@@ -51,7 +51,7 @@ public sealed class MapGeneratorIntegrationTests {
 	[Ignore("Used to generate visual output for inspection.")]
 	public void GenerateImage() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( "test", 100, 100 );
+		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( DateTime.UtcNow.ToFileTime()/*"test"*/, new Size( 100, 100 ) );
 		IWorldRenderer worldRenderer = _provider.GetRequiredService<IWorldRenderer>();
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		worldRenderer.RenderAtlasToAsync(
@@ -63,7 +63,7 @@ public sealed class MapGeneratorIntegrationTests {
 
 		worldRenderer.RenderTerrainMapToAsync(
 			diskFileManager,
-			new Id<FileMetadata>( "terrain_mountain.png"),
+			new Id<FileMetadata>( "terrain_mountain.png" ),
 			terrain,
 			TileTerrain.Mountain,
 			CancellationToken.None
@@ -74,6 +74,14 @@ public sealed class MapGeneratorIntegrationTests {
 			new Id<FileMetadata>( "terrain_hill.png" ),
 			terrain,
 			TileTerrain.Hill,
+			CancellationToken.None
+		);
+
+		worldRenderer.RenderTerrainMapToAsync(
+			diskFileManager,
+			new Id<FileMetadata>( "terrain_forest.png" ),
+			terrain,
+			TileTerrain.Forest,
 			CancellationToken.None
 		);
 

@@ -3,7 +3,11 @@
 public interface IMapGenerator {
 	TileTerrain[,] GenerateTerrain(
 		string seed,
-		int rows,
-		int columns
+		Size size
+	);
+
+	TileTerrain[,] GenerateTerrain(
+		long seed,
+		Size size
 	);
 }

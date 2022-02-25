@@ -6,8 +6,6 @@
 		<EmbeddedResource Include="$(SolutionDir)asset\tile_coast.png" Link="tile_coast.png" />
 		<EmbeddedResource Include="$(SolutionDir)asset\tile_ocean.png" Link="tile_ocean.png" />
 		<EmbeddedResource Include="$(SolutionDir)asset\tile_hill.png" Link="tile_hill.png" />
-		<EmbeddedResource Include="$(SolutionDir)asset\feature_forest.png" Link="feature_forest.png" />
-		<EmbeddedResource Include="$(SolutionDir)asset\feature_water.png" Link="feature_water.png" />
 	</ItemGroup>
 	<PropertyGroup>
 		<SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>

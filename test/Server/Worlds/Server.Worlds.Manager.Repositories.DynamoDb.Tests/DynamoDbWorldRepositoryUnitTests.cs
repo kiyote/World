@@ -26,6 +26,7 @@ public class DynamoDbWorldRepositoryUnitTests {
 		string seed = "world_seed";
 		int rows = 1;
 		int columns = 2;
+		Size size = new Size( columns, rows );
 		DateTime createdOn = new DateTime( 2022, 1, 21 );
 		WorldRecord record = new WorldRecord( worldId, name, seed, rows, columns, createdOn );
 
@@ -40,8 +41,7 @@ public class DynamoDbWorldRepositoryUnitTests {
 			worldId,
 			name,
 			seed,
-			rows,
-			columns,
+			size,
 			createdOn,
 			CancellationToken.None
 		);

@@ -9,13 +9,10 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 		services.AddSingleton<INeighbourLocator, HexNeighbourLocator>();
-		services.AddSingleton<ILogicalOperator, SimpleLogicalOperator>();
 		services.AddSingleton<IMapGenerator, MapGenerator>();
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
-		services.AddSingleton<INoiseThresholder, SimpleNoiseThresholder>();
-		services.AddSingleton<INoiseInverter, SimpleNoiseInverter>();
-		services.AddSingleton<IEdgeDetector, SimpleEdgeDetector>();
+		services.AddSingleton<INoiseOperator, SimpleNoiseOperator>();
 
 		return services;
 	}

@@ -6,8 +6,7 @@ public interface IWorldRepository
 		Id<World> worldId,
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	);

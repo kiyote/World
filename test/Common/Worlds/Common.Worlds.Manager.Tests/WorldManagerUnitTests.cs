@@ -27,13 +27,14 @@ public class WorldManagerUnitTests {
 		string seed = "world_seed";
 		int rows = 1;
 		int columns = 2;
+		Size size = new Size( columns, rows );
 		DateTime createdOn = new DateTime( 2022, 1, 13 );
-		World world = new World( worldId, name, seed, rows, columns, createdOn );
+		World world = new World( worldId, name, seed, size, createdOn );
 		_worldRepository
-			.Setup( wr => wr.CreateAsync( worldId, name, seed, rows, columns, It.IsAny<DateTime>(), CancellationToken.None ) )
+			.Setup( wr => wr.CreateAsync( worldId, name, seed, size, It.IsAny<DateTime>(), CancellationToken.None ) )
 			.Returns( Task.FromResult( world ) );
 
-		World result = await _worldManager.CreateWorldAsync( worldId, name, seed, rows, columns, CancellationToken.None );
+		World result = await _worldManager.CreateWorldAsync( worldId, name, seed, size, CancellationToken.None );
 
 		Assert.AreEqual( worldId, result.WorldId );
 		Assert.AreEqual( name, result.Name );

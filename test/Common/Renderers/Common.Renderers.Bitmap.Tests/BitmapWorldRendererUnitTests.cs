@@ -90,6 +90,17 @@ public class BitmapWorldRendererUnitTests {
 			} )
 			.Returns( Task.FromResult( true ) );
 
+		Id<FileMetadata> forestId = new Id<FileMetadata>( "forest" );
+		resourceFileManager
+			.Setup( rfm => rfm.ForestTileId )
+			.Returns( forestId );
+		resourceFileManager
+			.Setup( rfm => rfm.TryGetContentAsync( forestId, It.IsAny<AsyncStreamHandler>(), It.IsAny<CancellationToken>() ) )
+			.Callback<Id<FileMetadata>, AsyncStreamHandler, CancellationToken>( ( fileId, func, token ) => {
+				func.Invoke( stream.Object ).Wait( token );
+			} )
+			.Returns( Task.FromResult( true ) );
+
 		Id<FileMetadata> grassId = new Id<FileMetadata>( "grass" );
 		resourceFileManager
 			.Setup( rfm => rfm.GrassTileId )
