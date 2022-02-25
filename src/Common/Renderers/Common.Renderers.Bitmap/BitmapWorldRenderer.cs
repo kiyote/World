@@ -59,6 +59,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 	) {
 		Image<Rgba32> mountain = await LoadImageAsync( _resourceFileManager.MountainTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> hill = await LoadImageAsync( _resourceFileManager.HillTileId, cancellationToken ).ConfigureAwait( false );
+		Image<Rgba32> forest = await LoadImageAsync( _resourceFileManager.ForestTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> grass = await LoadImageAsync( _resourceFileManager.GrassTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> coast = await LoadImageAsync( _resourceFileManager.CoastTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> ocean = await LoadImageAsync( _resourceFileManager.OceanTileId, cancellationToken ).ConfigureAwait( false );
@@ -78,6 +79,9 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 						break;
 					case TileTerrain.Hill:
 						img.Mutate( i => i.DrawImage( hill, new Point( x, y ), 1.0f ) );
+						break;
+					case TileTerrain.Forest:
+						img.Mutate( i => i.DrawImage( forest, new Point( x, y ), 1.0f ) );
 						break;
 					case TileTerrain.Grass:
 						img.Mutate( i => i.DrawImage( grass, new Point( x, y ), 1.0f ) );

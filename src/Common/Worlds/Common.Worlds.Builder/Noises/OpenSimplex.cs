@@ -209,7 +209,7 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		}
 	}
 
-	float[,] INoiseProvider.Generate(
+	float[,] INoiseProvider.Random(
 		long seed,
 		int rows,
 		int columns,

@@ -18,19 +18,10 @@ internal sealed class WorldBuilder : IWorldBuilder {
 	async Task<Id<World>> IWorldBuilder.BuildAsync(
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		CancellationToken cancellationToken
 	) {
-		if (rows <= 0) {
-			throw new ArgumentException( "Rows must be >= 0.", nameof( rows ) );
-		}
-
-		if (columns <= 0) {
-			throw new ArgumentException( "Columns must be >= 0.", nameof( columns ) );
-		}
-
-		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( seed, rows, columns );
+		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( seed, size );
 
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		//World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );
@@ -38,8 +29,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 			worldId,
 			name,
 			seed,
-			rows,
-			columns,
+			size,
 			cancellationToken
 		).ConfigureAwait( false );
 

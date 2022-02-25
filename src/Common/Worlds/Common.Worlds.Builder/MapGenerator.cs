@@ -7,53 +7,66 @@ internal class MapGenerator : IMapGenerator {
 
 	private readonly IRandom _random;
 	private readonly INoiseProvider _noiseProvider;
-	private readonly INoiseThresholder _noiseThresholder;
-	private readonly IEdgeDetector _edgeDetector;
-	private readonly ILogicalOperator _logicalOperator;
+	private readonly INoiseOperator _noiseOperator;
 
-	public const float Frequency = 4.00f;
-	public const float Epsilon = 0.00001f;
+	public const float Frequency = 6.00f;
 
-	public const float OceanMin = 0.00f;
-	public const float OceanMax = 0.20f;
-	public const float CoastMin = OceanMax + Epsilon;
-	public const float CoastMax = 0.22f;
-	public const float GrassMin = CoastMax + Epsilon;
-	public const float GrassMax = 0.87f;
-	public const float HillMin = GrassMax + Epsilon;
-	public const float HillMax = 0.92f;
-	public const float MountainMin = HillMax + Epsilon;
-	public const float MountainMax = 1.00f;
+	public const float OceanMin = float.MinValue;
+	public const float OceanMax = 0.2f;
+	public const float CoastMin = OceanMax;
+	public const float CoastMax = 0.4f;
+	public const float GrassMin = CoastMax;
+	public const float GrassMax = 0.6f;
+	public const float HillMin = GrassMax;
+	public const float HillMax = 0.8f;
+	public const float MountainMin = HillMax;
+	public const float MountainMax = float.MaxValue;
 
 	public MapGenerator(
 		IRandom random,
 		INoiseProvider noiseProvider,
-		INoiseThresholder noiseThresholder,
-		IEdgeDetector edgeDetector,
-		ILogicalOperator logicalOperator
+		INoiseOperator noiseOperator
 	) {
 		_random = random;
 		_noiseProvider = noiseProvider;
-		_noiseThresholder = noiseThresholder;
-		_edgeDetector = edgeDetector;
-		_logicalOperator = logicalOperator;
+		_noiseOperator = noiseOperator;
 	}
 
-	public TileTerrain[,] GenerateTerrain(
+	TileTerrain[,] IMapGenerator.GenerateTerrain(
 		string seed,
-		int rows,
-		int columns
+		Size size
 	) {
 		long code = Hash.GetLong( seed );
-		_random.Reinitialise( (int)code );
-		float[,] raw = _noiseProvider.Generate( code, rows, columns, Frequency );
-		float[,] mountains = _noiseThresholder.Range( ref raw, MountainMin, MountainMax );
-		float[,] hills = _noiseThresholder.Range( ref raw, HillMin, HillMax );
-		float[,] grass = _noiseThresholder.Range( ref raw, GrassMin, GrassMax );
-		float[,] coast = _noiseThresholder.Range( ref raw, CoastMin, CoastMax );
-		float[,] grassEdges = _edgeDetector.Detect( ref grass, 0.0f );
-		coast = _logicalOperator.PerformOr( ref coast, 0.0f, ref grassEdges, 0.0f );
-		float[,] ocean = _noiseThresholder.Range( ref raw, OceanMin, OceanMax );
+		return ( this as IMapGenerator ).GenerateTerrain( code, size );
+	}
+
+	TileTerrain[,] IMapGenerator.GenerateTerrain(
+		long seed,
+		Size size
+	) {
+		int columns = size.Columns;
+		int rows = size.Rows;
+		float[,] terrainMask = GenerateTerrainMask( size );
+
+		_random.Reinitialise( (int)seed );
+		float[,] raw = _noiseProvider.Random( seed, rows, columns, 2.0f );
+		float[,] higherOrder = _noiseProvider.Random( seed, rows, columns, 10.0f );
+		//raw = _noiseOperator.Add( ref raw, ref higherOrder, true );
+		raw = _noiseOperator.Multiply( ref raw, ref terrainMask, true );
+		//raw = _noiseOperator.Normalize( ref raw );
+		//raw = gradient;
+		float[,] mountains = _noiseOperator.Range( ref raw, MountainMin, MountainMax );
+		float[,] hills = _noiseOperator.Range( ref raw, HillMin, HillMax );
+		float[,] grass = _noiseOperator.Range( ref raw, GrassMin, GrassMax );
+		float[,] coast = _noiseOperator.Range( ref raw, CoastMin, CoastMax );
+		float[,] grassEdges = _noiseOperator.EdgeDetect( ref grass, 0.0f );
+		coast = _noiseOperator.Or( ref coast, 0.0f, ref grassEdges, 0.0f );
+		float[,] ocean = _noiseOperator.Range( ref raw, OceanMin, OceanMax );
+
+		// Seed in forests
+		float[,] forest = _noiseProvider.Random( seed, rows, columns, 10.0f );
+		forest = _noiseOperator.Range( ref forest, 0.55f, 1.00f );
+		forest = _noiseOperator.And( ref grass, 0.0f, ref forest, 0.0f );
 
 		TileTerrain[,] terrain = new TileTerrain[columns, rows];
 		for( int r = 0; r < rows; r++ ) {
@@ -62,6 +75,8 @@ internal class MapGenerator : IMapGenerator {
 					terrain[c, r] = TileTerrain.Mountain;
 				} else if( hills[c, r] > 0.0f ) {
 					terrain[c, r] = TileTerrain.Hill;
+				} else if( forest[c, r] > 0.0f ) {
+					terrain[c, r] = TileTerrain.Forest;
 				} else if( grass[c, r] > 0.0f ) {
 					terrain[c, r] = TileTerrain.Grass;
 				} else if( coast[c, r] > 0.0f ) {
@@ -77,4 +92,34 @@ internal class MapGenerator : IMapGenerator {
 		return terrain;
 	}
 
+	private float[,] GenerateTerrainMask(
+		Size size
+	) {
+		float cx = (float)size.Columns / 2.0f;
+		float cy = (float)size.Rows / 2.0f;
+		float[,] gradient = new float[size.Columns, size.Rows];
+		float maxValue = float.MinValue;
+		float minValue = float.MaxValue;
+		for( int r = 0; r < size.Rows; r++ ) {
+			for( int c = 0; c < size.Columns; c++ ) {
+				double realDistance = Math.Pow( cx - c, 2 ) + Math.Pow( cy - r, 2 );
+				float distance = (float)Math.Sqrt( realDistance );
+				if( distance > maxValue ) {
+					maxValue = distance;
+				}
+				if( distance < minValue ) {
+					minValue = distance;
+				}
+				gradient[c, r] = distance;
+			}
+		}
+
+		// Push the edge from the corner to the mid-point
+		float target = gradient[size.Columns / 2, 0];
+		gradient = _noiseOperator.Threshold( ref gradient, minValue, minValue, target, maxValue );
+		gradient = _noiseOperator.Normalize( ref gradient );
+		gradient = _noiseOperator.Invert( ref gradient );
+
+		return gradient;
+	}
 }

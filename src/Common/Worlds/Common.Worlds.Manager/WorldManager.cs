@@ -20,16 +20,14 @@ internal sealed class WorldManager : IWorldManager {
 		Id<World> worldId,
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		CancellationToken cancellationToken
 	) {
 		return _worldRepository.CreateAsync(
 			worldId,
 			name,
 			seed,
-			rows,
-			columns,
+			size,
 			DateTime.UtcNow,
 			cancellationToken );
 	}

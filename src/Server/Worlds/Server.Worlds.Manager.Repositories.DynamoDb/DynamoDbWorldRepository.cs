@@ -19,8 +19,7 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 		Id<World> worldId,
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	) {
@@ -28,8 +27,8 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 			worldId,
 			name,
 			seed,
-			rows,
-			columns,
+			rows: size.Rows,
+			columns: size.Columns,
 			createdOn.ToUniversalTime()
 		);
 
@@ -39,8 +38,7 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 			worldId,
 			name,
 			seed,
-			rows,
-			columns,
+			size,
 			createdOn
 		);
 	}
@@ -63,8 +61,7 @@ internal sealed class DynamoDbWorldRepository : IWorldRepository {
 			worldId,
 			record.Name,
 			record.Seed,
-			record.Rows,
-			record.Columns,
+			new Size(record.Columns, record.Rows),
 			record.CreatedOn
 		);
 		

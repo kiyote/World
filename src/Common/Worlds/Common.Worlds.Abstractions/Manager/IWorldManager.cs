@@ -5,8 +5,7 @@ public interface IWorldManager {
 		Id<World> worldId,
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		CancellationToken cancellationToken
 	);
 

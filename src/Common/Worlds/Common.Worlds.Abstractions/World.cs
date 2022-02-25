@@ -4,7 +4,6 @@ public record World(
 	Id<World> WorldId,
 	string Name,
 	string Seed,
-	int Rows,
-	int Columns,
+	Size Size,
 	DateTime CreatedOn
 );

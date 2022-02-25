@@ -5,8 +5,7 @@ public interface IWorldBuilder {
 	Task<Id<World>> BuildAsync(
 		string name,
 		string seed,
-		int rows,
-		int columns,
+		Size size,
 		CancellationToken cancellationToken
 	);
 }
