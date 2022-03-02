@@ -6,10 +6,10 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.2.0" />
-		<PackageReference Include="Amazon.Lambda.SNSEvents" Version="2.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Amazon.Lambda.Core" />
+		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" />
+		<PackageReference Include="Amazon.Lambda.SNSEvents" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder\Common.Worlds.Builder.csproj" />

@@ -3,13 +3,16 @@
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
-		<PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.1.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="NUnit" Version="3.13.2" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-		<PackageReference Include="coverlet.collector" Version="3.1.2" />
+		<PackageReference Include="Amazon.Lambda.Core" />
+		<PackageReference Include="Amazon.Lambda.TestUtilities" />
+		<PackageReference Include="Amazon.Lambda.SQSEvents" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter" />
+		<PackageReference Include="coverlet.collector">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)\src\Server\Worlds\Server.Worlds.Builder.Lambda\Server.Worlds.Builder.Lambda.csproj" />
