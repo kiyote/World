@@ -10,6 +10,7 @@ public sealed class MapGeneratorUnitTests {
 	private Mock<IRandom> _random;
 	private Mock<INoiseProvider> _noiseProvider;
 	private Mock<INoiseOperator> _noiseOperator;
+	private Mock<INoiseMaskGenerator> _noiseMaskGenerator;
 	private IMapGenerator _mapGenerator;
 
 	[SetUp]
@@ -17,11 +18,13 @@ public sealed class MapGeneratorUnitTests {
 		_random = new Mock<IRandom>( MockBehavior.Strict );
 		_noiseProvider = new Mock<INoiseProvider>( MockBehavior.Strict );
 		_noiseOperator = new Mock<INoiseOperator>( MockBehavior.Strict );
+		_noiseMaskGenerator = new Mock<INoiseMaskGenerator>( MockBehavior.Strict );
 
 		_mapGenerator = new MapGenerator(
 			_random.Object,
 			_noiseProvider.Object,
-			_noiseOperator.Object
+			_noiseOperator.Object,
+			_noiseMaskGenerator.Object
 		);
 	}
 

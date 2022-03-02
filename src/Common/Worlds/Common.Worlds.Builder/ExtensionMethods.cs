@@ -13,6 +13,7 @@ public static class ExtensionMethods {
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
 		services.AddSingleton<INoiseOperator, SimpleNoiseOperator>();
+		services.AddSingleton<INoiseMaskGenerator, SimpleNoiseMaskGenerator>();
 
 		return services;
 	}
