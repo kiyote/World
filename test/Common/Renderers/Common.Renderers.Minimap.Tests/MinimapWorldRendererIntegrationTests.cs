@@ -1,6 +1,7 @@
 using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
+using Common.Worlds.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Server.Files.Manager.Disk;
@@ -21,9 +22,11 @@ public class MinimapWorldRendererIntegrationTests {
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
+		services.AddCore();
 		services.AddResourceFileManager();
 		services.AddDiskFileManager( _folder );
 		services.AddMinimapRenderer();
+		services.AddWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
 	}
@@ -49,15 +52,11 @@ public class MinimapWorldRendererIntegrationTests {
 	[Ignore( "Used to generate visual output for inspection." )]
 	public async Task RenderTerrain() {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
+		IMapGenerator mapGenerator = _provider.GetRequiredService<IMapGenerator>();
+		Size size = new Size( 1000, 1000 );
+		TileTerrain[,] tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		TileTerrain[,] tileTerrain = new TileTerrain[1000, 1000];
-
-		for( int r = 0; r < tileTerrain.GetLength( 0 ); r++ ) {
-			for( int c = 0; c < tileTerrain.GetLength( 1 ); c++ ) {
-				tileTerrain[c, r] = TileTerrain.Grass;
-			}
-		}
 
 		await _renderer.RenderAtlasToAsync(
 			diskFileManager,

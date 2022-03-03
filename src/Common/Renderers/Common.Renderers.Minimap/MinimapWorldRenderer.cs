@@ -37,7 +37,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 			for( int c = 0; c < columns; c++ ) {
 
 				int x = 2 * c;
-				int y = ( 2 * r ) + ( 1 * ( x & 1 ) );
+				int y = ( 2 * r ) + ( 1 * ( c & 1 ) );
 
 				switch( terrain[c, r] ) {
 					case TileTerrain.Mountain:
