@@ -18,5 +18,6 @@
 		<ProjectReference Include="$(SolutionDir)\src\Common\Renderers\Common.Renderers.Minimap\Common.Renderers.Minimap.csproj" />
 		<ProjectReference Include="$(SolutionDir)\src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 		<ProjectReference Include="$(SolutionDir)\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
+		<ProjectReference Include="$(SolutionDir)\src\Common\Worlds\Common.Worlds.Builder\Common.Worlds.Builder.csproj" />
 	</ItemGroup>
 </Project>
