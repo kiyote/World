@@ -14,6 +14,7 @@ public static class ExtensionMethods {
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
 		services.AddSingleton<INoiseOperator, SimpleNoiseOperator>();
 		services.AddSingleton<INoiseMaskGenerator, SimpleNoiseMaskGenerator>();
+		services.AddSingleton<ILandformGenerator, RandomLandformGenerator>();
 
 		return services;
 	}

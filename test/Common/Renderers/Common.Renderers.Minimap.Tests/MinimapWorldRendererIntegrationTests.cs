@@ -54,7 +54,7 @@ public class MinimapWorldRendererIntegrationTests {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		IMapGenerator mapGenerator = _provider.GetRequiredService<IMapGenerator>();
 		Size size = new Size( 1000, 1000 );
-		TileTerrain[,] tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
+		Buffer<TileTerrain> tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
 

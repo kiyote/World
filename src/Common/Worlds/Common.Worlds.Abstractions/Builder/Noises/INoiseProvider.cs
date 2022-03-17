@@ -2,7 +2,7 @@
 
 public interface INoiseProvider {
 
-	float[,] Random(
+	Buffer<float> Random(
 		long seed,
 		int rows,
 		int columns,

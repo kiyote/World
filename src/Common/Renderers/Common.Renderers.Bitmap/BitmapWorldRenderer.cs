@@ -25,18 +25,18 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.GetLength( 0 );
-		int columns = terrain.GetLength( 1 );
+		int rows = terrain.Size.Rows;
+		int columns = terrain.Size.Columns;
 		Image<L8> map = _imageFactory.CreateMap( columns, rows );
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
 
-				if (terrain[c, r] == terrainToRender) {
+				if (terrain[r][c] == terrainToRender) {
 					map[c, r] = new L8( 255 );
 				} else {
 					map[c, r] = new L8( 0 );
@@ -54,7 +54,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	) {
 		Image<Rgba32> mountain = await LoadImageAsync( _resourceFileManager.MountainTileId, cancellationToken ).ConfigureAwait( false );
@@ -64,8 +64,8 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		Image<Rgba32> coast = await LoadImageAsync( _resourceFileManager.CoastTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> ocean = await LoadImageAsync( _resourceFileManager.OceanTileId, cancellationToken ).ConfigureAwait( false );
 
-		int rows = terrain.GetLength( 0 );
-		int columns = terrain.GetLength( 1 );
+		int rows = terrain.Size.Rows;
+		int columns = terrain.Size.Columns;
 		using Image<Rgba32> img = _imageFactory.CreateImage( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
 
 		for( int r = 0; r < rows; r++ ) {
@@ -73,7 +73,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 				int x = 53 * c;
 				int y = ( 64 * r ) + ( 32 * ( x & 1 ) );
 
-				switch( terrain[c, r] ) {
+				switch( terrain[r][c] ) {
 					case TileTerrain.Mountain:
 						img.Mutate( i => i.DrawImage( mountain, new Point( x, y ), 1.0f ) );
 						break;

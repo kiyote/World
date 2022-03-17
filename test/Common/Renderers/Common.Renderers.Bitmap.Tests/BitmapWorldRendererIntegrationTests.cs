@@ -51,11 +51,11 @@ public class BitmapWorldRendererIntegrationTests {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		TileTerrain[,] tileTerrain = new TileTerrain[10, 10];
+		Buffer<TileTerrain> tileTerrain = new Buffer<TileTerrain>( 10, 10 );
 
-		for( int r = 0; r < tileTerrain.GetLength( 0 ); r++ ) {
-			for( int c = 0; c < tileTerrain.GetLength( 1 ); c++ ) {
-				tileTerrain[c, r] = TileTerrain.Grass;
+		for( int r = 0; r < tileTerrain.Size.Rows; r++ ) {
+			for( int c = 0; c < tileTerrain.Size.Columns; c++ ) {
+				tileTerrain[r][c] = TileTerrain.Grass;
 			}
 		}
 

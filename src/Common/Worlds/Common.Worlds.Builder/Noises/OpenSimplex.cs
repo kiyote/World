@@ -209,7 +209,7 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		}
 	}
 
-	float[,] INoiseProvider.Random(
+	Buffer<float> INoiseProvider.Random(
 		long seed,
 		int rows,
 		int columns,
@@ -222,7 +222,7 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		float minValue = float.MaxValue;
 		float maxValue = float.MinValue;
 
-		float[,] result = new float[columns, rows];
+		var result = new Buffer<float>( columns, rows );
 		for( int r = 0; r < rows; r++ ) {
 			float fr = (float)r / (float)rows;
 			for( int c = 0; c < columns; c++ ) {
@@ -236,7 +236,7 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 					maxValue = value;
 				}
 
-				result[c, r] = value;
+				result[r][c] = value;
 			}
 		}
 
@@ -245,8 +245,8 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		float scale = 1.0f / range;
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
-				result[c, r] += Math.Abs( minValue );
-				result[c, r] *= scale;
+				result[r][c] += Math.Abs( minValue );
+				result[r][c] *= scale;
 			}
 		}
 

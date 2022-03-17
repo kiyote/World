@@ -18,33 +18,33 @@ public class SimpleNoiseThresholderIntegrationTests {
 
 	[Test]
 	public void Threshold_OnePixelAboveThreshold_OnlyOneSet() {
-		float[,] noise = new float[2, 2];
-		noise[0, 0] = 1.0f;
-		noise[1, 0] = 0.75f;
-		noise[0, 1] = 0.25f;
-		noise[1, 1] = 0.0f;
+		var noise = new Buffer<float>(2, 2);
+		noise[0][0] = 1.0f;
+		noise[1][0] = 0.75f;
+		noise[0][1] = 0.25f;
+		noise[1][1] = 0.0f;
 
-		float[,] result = _operator.GateHigh( ref noise, 0.76f );
+		Buffer<float> result = _operator.GateHigh( noise, 0.76f );
 
-		Assert.AreEqual( 1.0f, result[0, 0] );
-		Assert.AreEqual( 0.0f, result[1, 0] );
-		Assert.AreEqual( 0.0f, result[0, 1] );
-		Assert.AreEqual( 0.0f, result[1, 1] );
+		Assert.AreEqual( 1.0f, result[0][0] );
+		Assert.AreEqual( 0.0f, result[1][0] );
+		Assert.AreEqual( 0.0f, result[0][1] );
+		Assert.AreEqual( 0.0f, result[1][1] );
 	}
 
 	[Test]
 	public void Range_OnePixelInRange_OnlyOneSet() {
-		float[,] noise = new float[2, 2];
-		noise[0, 0] = 1.0f;
-		noise[1, 0] = 0.75f;
-		noise[0, 1] = 0.25f;
-		noise[1, 1] = 0.0f;
-		float[,] result = _operator.Range( ref noise, 0.74f, 0.9f );
+		var noise = new Buffer<float>( 2, 2 );
+		noise[0][0] = 1.0f;
+		noise[1][0] = 0.75f;
+		noise[0][1] = 0.25f;
+		noise[1][1] = 0.0f;
+		Buffer<float> result = _operator.Range( noise, 0.74f, 0.9f );
 
-		Assert.AreEqual( 0.0f, result[0, 0] );
-		Assert.AreEqual( 1.0f, result[1, 0] );
-		Assert.AreEqual( 0.0f, result[0, 1] );
-		Assert.AreEqual( 0.0f, result[1, 1] );
+		Assert.AreEqual( 0.0f, result[0][0] );
+		Assert.AreEqual( 1.0f, result[1][0] );
+		Assert.AreEqual( 0.0f, result[0][1] );
+		Assert.AreEqual( 0.0f, result[1][1] );
 	}
 
 	[Test]
@@ -56,13 +56,13 @@ public class SimpleNoiseThresholderIntegrationTests {
 		FastRandom random = new FastRandom();
 		long seed = random.NextLong();
 
-		float[,] noise = _noise.Random( seed, height, width, 2.0f );
-		float[,] threshold = _operator.GateHigh( ref noise, 0.75f );
+		Buffer<float> noise = _noise.Random( seed, height, width, 2.0f );
+		Buffer<float> threshold = _operator.GateHigh( noise, 0.75f );
 
 		using var img = new Image<Rgb24>( width, height );
 		for( int r = 0; r < height; r++ ) {
 			for( int c = 0; c < width; c++ ) {
-				float value = noise[c, r];
+				float value = noise[r][c];
 
 				img[c, r] = new Rgb24( (byte)( 255.0f * value ), (byte)( 255.0f * value ), (byte)( 255.0f * value ) );
 			}
@@ -72,7 +72,7 @@ public class SimpleNoiseThresholderIntegrationTests {
 		using var thr = new Image<Rgb24>( width, height );
 		for( int r = 0; r < height; r++ ) {
 			for( int c = 0; c < width; c++ ) {
-				float value = threshold[c, r];
+				float value = threshold[r][c];
 
 				thr[c, r] = new Rgb24( (byte)( 255.0f * value ), (byte)( 255.0f * value ), (byte)( 255.0f * value ) );
 			}

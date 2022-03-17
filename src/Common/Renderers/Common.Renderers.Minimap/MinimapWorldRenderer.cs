@@ -19,11 +19,11 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.GetLength( 0 );
-		int columns = terrain.GetLength( 1 );
+		int rows = terrain.Size.Rows;
+		int columns = terrain.Size.Columns;
 		using Image<Rgba32> img = _imageFactory.CreateImage( ( columns * 2 ), ( rows * 2 ) + 1 );
 
 		var ocean = new Rgba32( 28, 134, 238, 255 );
@@ -32,6 +32,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 		var forest = new Rgba32( 183, 193, 140, 255 );
 		var hill = new Rgba32( 220, 221, 190, 255 );
 		var mountain = new Rgba32( 247, 247, 247, 255 );
+		var unknown = new Rgba32( 0, 0, 0, 255 );
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
@@ -39,7 +40,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 				int x = 2 * c;
 				int y = ( 2 * r ) + ( 1 * ( c & 1 ) );
 
-				switch( terrain[c, r] ) {
+				switch( terrain[r][c] ) {
 					case TileTerrain.Mountain:
 						img[x + 0, y + 0] = mountain;
 						img[x + 1, y + 0] = mountain;
@@ -77,6 +78,13 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 						img[x + 1, y + 1] = ocean;
 						break;
 					default:
+						/*
+						img[x + 0, y + 0] = unknown;
+						img[x + 1, y + 0] = unknown;
+						img[x + 0, y + 1] = unknown;
+						img[x + 1, y + 1] = unknown;
+						break;
+						*/
 						throw new InvalidOperationException();
 				}
 			}
@@ -92,18 +100,18 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.GetLength( 0 );
-		int columns = terrain.GetLength( 1 );
+		int rows = terrain.Size.Rows;
+		int columns = terrain.Size.Columns;
 		Image<L8> map = _imageFactory.CreateMap( columns, rows );
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
 
-				if( terrain[c, r] == terrainToRender ) {
+				if( terrain[r][c] == terrainToRender ) {
 					map[c, r] = new L8( 255 );
 				} else {
 					map[c, r] = new L8( 0 );

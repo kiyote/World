@@ -21,7 +21,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 		Size size,
 		CancellationToken cancellationToken
 	) {
-		TileTerrain[,] terrain = _mapGenerator.GenerateTerrain( seed, size );
+		Buffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( seed, size );
 
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		//World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );
