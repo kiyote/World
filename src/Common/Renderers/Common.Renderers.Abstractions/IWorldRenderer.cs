@@ -8,14 +8,14 @@ public interface IWorldRenderer {
 	Task RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	);
 
 	Task RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		TileTerrain[,] terrain,
+		Buffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	);

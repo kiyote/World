@@ -32,10 +32,10 @@ public class BitmapWorldRendererUnitTests {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Reliability", "CA2000:Dispose objects before losing scope", Justification = "Will eventually expire with test run." )]
 	public async Task RenderToTerrainAsync() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "test" );
-		TileTerrain[,] terrain = new TileTerrain[2, 2];
-		for( int r = 0; r < terrain.GetLength(0); r++) {
-			for (int c = 0; c < terrain.GetLength(1); c++) {
-				terrain[c, r] = TileTerrain.Grass;
+		Buffer<TileTerrain> terrain = new Buffer<TileTerrain>( 2, 2 );
+		for( int r = 0; r < terrain.Size.Rows; r++) {
+			for (int c = 0; c < terrain.Size.Columns; c++) {
+				terrain[r][c] = TileTerrain.Grass;
 			}
 		}
 		Mock<IMutableFileManager> fileManager = new Mock<IMutableFileManager>( MockBehavior.Strict );

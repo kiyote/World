@@ -1,6 +1,7 @@
 ﻿namespace Common.Worlds.Builder.Noises;
 
 public interface INoiseMaskGenerator {
-	float[,] Circle( Size size );
+	INoiseMaskGenerator Circle( Size size, Buffer<float> output );
+	Buffer<float> Circle( Size size );
 }
 

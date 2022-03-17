@@ -10,12 +10,12 @@ internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 		_noiseOperator = noiseOperator;
 	}
 
-	public float[,] Circle(
-		Size size
+	INoiseMaskGenerator INoiseMaskGenerator.Circle(
+		Size size,
+		Buffer<float> output
 	) {
 		float cx = (float)size.Columns / 2.0f;
 		float cy = (float)size.Rows / 2.0f;
-		float[,] gradient = new float[size.Columns, size.Rows];
 		float maxValue = float.MinValue;
 		float minValue = float.MaxValue;
 		for( int r = 0; r < size.Rows; r++ ) {
@@ -28,17 +28,28 @@ internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 				if( distance < minValue ) {
 					minValue = distance;
 				}
-				gradient[c, r] = distance;
+				output[r][c] = distance;
 			}
 		}
 
+		var swap = new Buffer<float>( output.Size );
 		// Push the edge from the corner to the mid-point
-		float target = gradient[size.Columns / 2, 0];
-		gradient = _noiseOperator.Threshold( ref gradient, minValue, minValue, target, maxValue );
-		gradient = _noiseOperator.Normalize( ref gradient );
-		gradient = _noiseOperator.Invert( ref gradient );
+		float target = output[0][size.Columns / 2];
+		_noiseOperator.Threshold( output, 0.0f, 0.0f, target, target, swap );
+		_noiseOperator.Normalize( swap, output );
+		_noiseOperator.Invert( output, swap );
+		output.CopyFrom( swap );
 
-		return gradient;
+		return this;
 	}
+
+	public Buffer<float> Circle(
+		Size size
+	) {
+		var output = new Buffer<float>( size );
+		( this as INoiseMaskGenerator ).Circle( size, output );
+		return output;
+	}
+
 }
 

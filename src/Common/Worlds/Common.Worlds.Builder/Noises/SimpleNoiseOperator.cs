@@ -10,205 +10,436 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		_neighbourLocator = neighbourLocator;
 	}
 
-	float[,] INoiseOperator.Threshold(
-		ref float[,] source,
+	INoiseOperator INoiseOperator.Threshold(
+		Buffer<float> source,
+		float minimum,
+		float minimumValue,
+		float maximum,
+		float maximumValue,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( value < minimum ) {
+					return minimumValue;
+				} else if( value > maximum ) {
+					return maximumValue;
+				}
+				return value;
+			},
+			output
+		);
+
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Threshold(
+		Buffer<float> source,
 		float minimum,
 		float minimumValue,
 		float maximum,
 		float maximumValue
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( value < minimum ) {
-				return minimumValue;
-			} else if( value > maximum ) {
-				return maximumValue;
-			}
-			return value;
-		} );
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Threshold( source, minimum, minimumValue, maximum, maximumValue, output );
+		return output;
 	}
 
-	float[,] INoiseOperator.Multiply(
-		ref float[,] source,
+	INoiseOperator INoiseOperator.Multiply(
+		Buffer<float> source,
 		float amount,
-		bool clamp
+		bool clamp,
+		Buffer<float> output
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( clamp ) {
-				return Math.Clamp( value * amount, 0.0f, 1.0f );
-			}
-			return value * amount;
-		} );
-	}
-
-	float[,] INoiseOperator.Subtract(
-		ref float[,] source,
-		float amount,
-		bool clamp
-	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( clamp ) {
-				return Math.Clamp( value - amount, 0.0f, 1.0f );
-			}
-			return value - amount;
-		} );
-	}
-
-	float[,] INoiseOperator.Add(
-		ref float[,] source,
-		float amount,
-		bool clamp
-	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( clamp ) {
-				return Math.Clamp( value + amount, 0.0f, 1.0f );
-			}
-			return value + amount;
-		} );
-	}
-
-	float[,] INoiseOperator.Multiply(
-		ref float[,] source,
-		ref float[,] amount,
-		bool clamp
-	) {
-		return DoMultiOperator( ref source, ref amount, ( float left, float right ) => {
-			if( clamp ) {
-				return Math.Clamp( left * right, 0.0f, 1.0f );
-			}
-			return left * right;
-		} );
-	}
-
-	float[,] INoiseOperator.And(
-		ref float[,] a,
-		float thresholdA,
-		ref float[,] b,
-		float thresholdB
-	) {
-		return DoMultiOperator( ref a, ref b, ( float left, float right ) => {
-			bool leftTrue = left > thresholdA;
-			bool rightTrue = right > thresholdB;
-			return leftTrue && rightTrue ? 1.0f : 0.0f;
-		} );
-	}
-
-	float[,] INoiseOperator.Or(
-		ref float[,] a,
-		float thresholdA,
-		ref float[,] b,
-		float thresholdB
-	) {
-		return DoMultiOperator( ref a, ref b, ( float left, float right ) => {
-			bool leftTrue = left > thresholdA;
-			bool rightTrue = right > thresholdB;
-			return leftTrue || rightTrue ? 1.0f : 0.0f;
-		} );
-	}
-
-	float[,] INoiseOperator.Subtract(
-		ref float[,] source,
-		ref float[,] amount,
-		bool clamp
-	) {
-		return DoMultiOperator( ref source, ref amount, ( float left, float right ) => {
-			if( clamp ) {
-				return Math.Clamp( left - right, 0.0f, 1.0f );
-			}
-			return left - right;
-		} );
-	}
-
-	float[,] INoiseOperator.Add(
-		ref float[,] source,
-		ref float[,] amount,
-		bool clamp
-	) {
-		return DoMultiOperator( ref source, ref amount, ( float left, float right ) => {
-			if( clamp ) {
-				return Math.Clamp( left + right, 0.0f, 1.0f );
-			}
-			return left + right;
-		} );
-	}
-
-	float[,] INoiseOperator.EdgeDetect(
-		ref float[,] source,
-		float threshold
-	) {
-		int rows = source.GetLength( 0 );
-		int columns = source.GetLength( 1 );
-
-		return DoSingleRangeOperator( ref source, ( int row, int column, float[,] input, float value ) => {
-			if( value == 0.0f ) {
-				bool isEdge = false;
-				IEnumerable<(int x, int y)> neighbours = _neighbourLocator.GetNeighbours( columns, rows, column, row );
-				foreach( (int x, int y) in neighbours ) {
-					if( input[x, y] > threshold ) {
-						isEdge = true;
-					}
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( clamp ) {
+					return Math.Clamp( value * amount, 0.0f, 1.0f );
 				}
-				return isEdge ? 1.0f : 0.0f;
-			}
-			return 0.0f;
-		} );
+				return value * amount;
+			},
+			output
+		);
+
+		return this;
 	}
 
-	float[,] INoiseOperator.Invert(
-		ref float[,] source
+	Buffer<float> INoiseOperator.Multiply(
+		Buffer<float> source,
+		float amount,
+		bool clamp
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			return 1.0f - value;
-		} );
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Multiply( source, amount, clamp, output );
+		return output;
 	}
 
-	float[,] INoiseOperator.GateHigh(
-		ref float[,] source,
-		float threshold
+	INoiseOperator INoiseOperator.Multiply(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp,
+		Buffer<float> output
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( value < threshold ) {
+		DoMultiOperator(
+			source,
+			amount,
+			( float left, float right ) => {
+				if( clamp ) {
+					return Math.Clamp( left * right, 0.0f, 1.0f );
+				}
+				return left * right;
+			},
+			output
+		);
+		return this;
+	}
+	Buffer<float> INoiseOperator.Multiply(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp
+	) {
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Multiply( source, amount, clamp, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Subtract(
+		Buffer<float> source,
+		float amount,
+		bool clamp,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( clamp ) {
+					return Math.Clamp( value - amount, 0.0f, 1.0f );
+				}
+				return value - amount;
+			},
+			output
+		);
+
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Subtract(
+		Buffer<float> source,
+		float amount,
+		bool clamp
+	) {
+		Buffer<float> output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Subtract( source, amount, clamp, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Subtract(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp,
+		Buffer<float> output
+	) {
+		DoMultiOperator(
+			source,
+			amount,
+			( float left, float right ) => {
+				if( clamp ) {
+					return Math.Clamp( left - right, 0.0f, 1.0f );
+				}
+				return left - right;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Subtract(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp
+	) {
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Subtract( source, amount, clamp, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Add(
+		Buffer<float> source,
+		float amount,
+		bool clamp,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( clamp ) {
+					return Math.Clamp( value + amount, 0.0f, 1.0f );
+				}
+				return value + amount;
+			},
+			output
+		);
+
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Add(
+		Buffer<float> source,
+		float amount,
+		bool clamp
+	) {
+		Buffer<float> output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Add( source, amount, clamp, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Add(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp,
+		Buffer<float> output
+	) {
+		DoMultiOperator(
+			source,
+			amount,
+			( float left, float right ) => {
+				if( clamp ) {
+					return Math.Clamp( left + right, 0.0f, 1.0f );
+				}
+				return left + right;
+			},
+			output
+		);
+		return this;
+	}
+	Buffer<float> INoiseOperator.Add(
+		Buffer<float> source,
+		Buffer<float> amount,
+		bool clamp
+	) {
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Add(source, amount, clamp, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.And(
+		Buffer<float> a,
+		float thresholdA,
+		Buffer<float> b,
+		float thresholdB,
+		Buffer<float> output
+	) {
+		DoMultiOperator(
+			a,
+			b,
+			( float left, float right ) => {
+				bool leftTrue = left > thresholdA;
+				bool rightTrue = right > thresholdB;
+				return leftTrue && rightTrue ? 1.0f : 0.0f;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.And(
+		Buffer<float> a,
+		float thresholdA,
+		Buffer<float> b,
+		float thresholdB
+	) {
+		var output = new Buffer<float>( a.Size );
+		( (INoiseOperator)this ).And( a, thresholdA, b, thresholdB, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Or(
+		Buffer<float> a,
+		float thresholdA,
+		Buffer<float> b,
+		float thresholdB,
+		Buffer<float> output
+	) {
+		DoMultiOperator(
+			a,
+			b,
+			( float left, float right ) => {
+				bool leftTrue = left > thresholdA;
+				bool rightTrue = right > thresholdB;
+				return leftTrue || rightTrue ? 1.0f : 0.0f;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Or(
+		Buffer<float> a,
+		float thresholdA,
+		Buffer<float> b,
+		float thresholdB
+	) {
+		var output = new Buffer<float>( a.Size );
+		( (INoiseOperator)this ).Or( a, thresholdA, b, thresholdB, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.EdgeDetect(
+		Buffer<float> source,
+		float threshold,
+		Buffer<float> output
+	) {
+		int rows = source.Size.Rows;
+		int columns = source.Size.Columns;
+
+		DoSingleRangeOperator(
+			source,
+			( int row, int column, Buffer<float> input, float value ) => {
+				if( value == 0.0f ) {
+					bool isEdge = false;
+					IEnumerable<(int x, int y)> neighbours = _neighbourLocator.GetNeighbours( columns, rows, column, row );
+					foreach( (int x, int y) in neighbours ) {
+						if( input[y][x] > threshold ) {
+							isEdge = true;
+						}
+					}
+					return isEdge ? 1.0f : 0.0f;
+				}
 				return 0.0f;
-			}
-			return 1.0f;
-		} );
+			},
+			output
+		);
+		return this;
 	}
 
-	float[,] INoiseOperator.GateLow(
-		ref float[,] source,
+	Buffer<float> INoiseOperator.EdgeDetect(
+		Buffer<float> source,
 		float threshold
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( value > threshold ) {
-				return 1.0f;
-			}
-			return 0.0f;
-		} );
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).EdgeDetect( source, threshold, output );
+		return output;
 	}
 
-	float[,] INoiseOperator.Range(
-		ref float[,] source,
+	INoiseOperator INoiseOperator.Invert(
+		Buffer<float> source,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				return 1.0f - value;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Invert(
+		Buffer<float> source
+	) {
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Invert( source, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.GateHigh(
+		Buffer<float> source,
+		float threshold,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( value < threshold ) {
+					return 0.0f;
+				}
+				return 1.0f;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.GateHigh(
+		Buffer<float> source,
+		float threshold
+	) {
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).GateHigh( source, threshold, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.GateLow(
+		Buffer<float> source,
+		float threshold,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( value > threshold ) {
+					return 1.0f;
+				}
+				return 0.0f;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.GateLow(
+		Buffer<float> source,
+		float threshold
+	) {
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).GateLow(source, threshold, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Range(
+		Buffer<float> source,
+		float min,
+		float max,
+		Buffer<float> output
+	) {
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				if( ( value > min ) && ( value <= max ) ) {
+					return 1.0f;
+				} else {
+					return 0.0f;
+				}
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Range(
+		Buffer<float> source,
 		float min,
 		float max
 	) {
-		return DoSingleOperator( ref source, ( float value ) => {
-			if( ( value > min ) && ( value <= max ) ) {
-				return 1.0f;
-			} else {
-				return 0.0f;
-			}
-		} );
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Range(source, min, max, output );
+		return output;
 	}
 
-	float[,] INoiseOperator.Normalize(
-		ref float[,] source
+	INoiseOperator INoiseOperator.Normalize(
+		Buffer<float> source,
+		Buffer<float> output
 	) {
 		float minValue = float.MaxValue;
 		float maxValue = float.MinValue;
-		int rows = source.GetLength( 0 );
-		int columns = source.GetLength( 1 );
+		int rows = source.Size.Rows;
+		int columns = source.Size.Columns;
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
-				float value = source[c, r];
+				float value = source[r][c];
 				if( value < minValue ) {
 					minValue = value;
 				}
@@ -220,69 +451,137 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 
 		float range = maxValue - minValue;
 		float scale = 1.0f / range;
-		return DoSingleOperator( ref source, ( float value ) => {
-			float result = value + Math.Abs( minValue );
-			value *= scale;
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				float result = value + Math.Abs( minValue );
+				value *= scale;
 
-			return value;
-		} );
+				return value;
+			},
+			output
+		);
+		return this;
 	}
 
-	private static float[,] DoMultiOperator(
-		ref float[,] a,
-		ref float[,] b,
-		Func<float, float, float> op
+	Buffer<float> INoiseOperator.Normalize(
+		Buffer<float> source
 	) {
-		int rows = a.GetLength( 0 );
-		int columns = a.GetLength( 1 );
-		if( rows != b.GetLength( 0 )
-			|| columns != b.GetLength( 1 )
+		var output = new Buffer<float>( source.Size );
+		((INoiseOperator)this).Normalize(source, output);
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Quantize(
+		Buffer<float> source,
+		float[] ranges,
+		Buffer<float> output
+	) {
+		float level = 1.0f / (ranges.Length + 1);
+		DoSingleOperator(
+			source,
+			( float value ) => {
+				for( int i = 0; i < ranges.Length; i++ ) {
+					if (value < ranges[i]) {
+						return level * i;
+					}
+				}
+
+				throw new InvalidOperationException();
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Quantize(
+		Buffer<float> source,
+		float[] ranges
+	) {
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Quantize( source, ranges, output );
+		return output;
+	}
+
+	INoiseOperator INoiseOperator.Denoise(
+		Buffer<float> source,
+		Buffer<float> output
+	) {
+		int rows = source.Size.Rows;
+		int columns = source.Size.Columns;
+
+		DoSingleRangeOperator(
+			source,
+			( int row, int column, Buffer<float> input, float value ) => {
+				IEnumerable<(int x, int y)> neighbours = _neighbourLocator.GetNeighbours( columns, rows, column, row );
+				IEnumerable<float> values = neighbours.Select( neighbour => input[neighbour.y][neighbour.x] );
+				values = values.Distinct();
+				if (values.Count() == 1) {
+					return values.First();
+				}
+				return value;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Denoise(
+		Buffer<float> source
+	) {
+		var output = new Buffer<float>( source.Size );
+		( (INoiseOperator)this ).Denoise( source, output );
+		return output;
+	}
+
+	private static void DoMultiOperator(
+		Buffer<float> a,
+		Buffer<float> b,
+		Func<float, float, float> op,
+		Buffer<float> output
+	) {
+		int rows = a.Size.Rows;
+		int columns = a.Size.Columns;
+		if( rows != b.Size.Rows
+			|| columns != b.Size.Columns
 		) {
 			throw new InvalidOperationException( "Operands must be same dimensions." );
 		}
-		float[,] result = new float[rows, columns];
-
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
-				result[c, r] = op( a[c, r], b[c, r] );
+				output[r][c] = op( a[r][c], b[r][c] );
 			}
 		}
-
-		return result;
 	}
 
-	private static float[,] DoSingleOperator(
-		ref float[,] a,
-		Func<float, float> op
+	private static void DoSingleOperator(
+		Buffer<float> a,
+		Func<float, float> op,
+		Buffer<float> output
 	) {
-		int rows = a.GetLength( 0 );
-		int columns = a.GetLength( 1 );
-		float[,] result = new float[rows, columns];
+		int rows = a.Size.Rows;
+		int columns = a.Size.Columns;
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
-				result[c, r] = op( a[c, r] );
+				output[r][c] = op( a[r][c] );
 			}
 		}
-
-		return result;
 	}
 
-	private static float[,] DoSingleRangeOperator(
-		ref float[,] a,
-		Func<int, int, float[,], float, float> op
+	private static void DoSingleRangeOperator(
+		Buffer<float> a,
+		Func<int, int, Buffer<float>, float, float> op,
+		Buffer<float> output
 	) {
-		int rows = a.GetLength( 0 );
-		int columns = a.GetLength( 1 );
-		float[,] result = new float[rows, columns];
+		int rows = a.Size.Rows;
+		int columns = a.Size.Columns;
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
-				result[c, r] = op( c, r, a, a[c, r] );
+				output[r][c] = op( c, r, a, a[r][c] );
 			}
 		}
-
-		return result;
 	}
 }
 
