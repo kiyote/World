@@ -49,5 +49,8 @@ public interface INoiseOperator {
 
 	INoiseOperator Denoise( Buffer<float> source, Buffer<float> output );
 	Buffer<float> Denoise( Buffer<float> source );
+
+	INoiseOperator Mask( Buffer<float> source, Buffer<float> mask, float value, Buffer<float> output );
+	Buffer<float> Mask( Buffer<float> source, Buffer<float> mask, float value );
 }
 
