@@ -55,11 +55,22 @@ internal class MapGenerator : IMapGenerator {
 	) {
 		int columns = size.Columns;
 		int rows = size.Rows;
-		Buffer<float> terrainMask = _noiseMaskGenerator.Circle( size );
+		Buffer<float> shapeMask = _noiseMaskGenerator.Circle( size );
 
 		_random.Reinitialise( (int)seed );
 
-		Buffer<float> raw = _landformGenerator.Create( seed, size, _neighbourLocator, terrainMask );
+		Buffer<float> terrainMask = _landformGenerator.Create( seed, size, _neighbourLocator, shapeMask );
+
+		Buffer<float> raw = _noiseProvider.Random( seed, size.Rows, size.Columns, 32.0f );
+		_noiseOperator.Add( raw, shapeMask, false, raw );
+		_noiseOperator.Mask( raw, terrainMask, 0.0f, raw );
+//		_noiseOperator.Multiply( raw, shapeMask, false, raw );
+		_noiseOperator.Normalize( raw, raw );
+		_noiseOperator.Denoise( raw, raw );
+
+		Buffer<float> coast = _noiseOperator.EdgeDetect( terrainMask, 0.1f );
+		_noiseOperator.Mask( coast, terrainMask, 0.0f, coast );
+
 		float[] bands = new float[] {
 			0.3f,
 			0.4f,
@@ -87,7 +98,10 @@ internal class MapGenerator : IMapGenerator {
 					terrain[r][c] = TileTerrain.Hill;
 				} else if( raw[r][c] >= (level * 2.0f) ) {
 					terrain[r][c] = TileTerrain.Grass;
-				} else if( raw[r][c] >= (level * 1.0f) ) {
+				} else if(
+					raw[r][c] >= (level * 1.0f)
+					|| coast[r][c] == 1.0f
+				) {
 					terrain[r][c] = TileTerrain.Coast;
 				} else {
 					terrain[r][c] = TileTerrain.Ocean;

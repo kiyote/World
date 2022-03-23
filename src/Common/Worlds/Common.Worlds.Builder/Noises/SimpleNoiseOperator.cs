@@ -42,7 +42,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float maximumValue
 	) {
 		var output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).Threshold( source, minimum, minimumValue, maximum, maximumValue, output );
+		( this as INoiseOperator ).Threshold( source, minimum, minimumValue, maximum, maximumValue, output );
 		return output;
 	}
 
@@ -72,7 +72,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		var output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).Multiply( source, amount, clamp, output );
+		( this as INoiseOperator ).Multiply( source, amount, clamp, output );
 		return output;
 	}
 
@@ -101,7 +101,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		var output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).Multiply( source, amount, clamp, output );
+		( this as INoiseOperator ).Multiply( source, amount, clamp, output );
 		return output;
 	}
 
@@ -131,7 +131,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		Buffer<float> output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).Subtract( source, amount, clamp, output );
+		( this as INoiseOperator ).Subtract( source, amount, clamp, output );
 		return output;
 	}
 
@@ -161,7 +161,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Subtract( source, amount, clamp, output );
+		( this as INoiseOperator ).Subtract( source, amount, clamp, output );
 		return output;
 	}
 
@@ -191,7 +191,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		Buffer<float> output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Add( source, amount, clamp, output );
+		( this as INoiseOperator ).Add( source, amount, clamp, output );
 		return output;
 	}
 
@@ -220,7 +220,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		bool clamp
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Add(source, amount, clamp, output );
+		( this as INoiseOperator ).Add(source, amount, clamp, output );
 		return output;
 	}
 
@@ -251,7 +251,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float thresholdB
 	) {
 		var output = new Buffer<float>( a.Size );
-		( (INoiseOperator)this ).And( a, thresholdA, b, thresholdB, output );
+		( this as INoiseOperator ).And( a, thresholdA, b, thresholdB, output );
 		return output;
 	}
 
@@ -282,7 +282,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float thresholdB
 	) {
 		var output = new Buffer<float>( a.Size );
-		( (INoiseOperator)this ).Or( a, thresholdA, b, thresholdB, output );
+		( this as INoiseOperator ).Or( a, thresholdA, b, thresholdB, output );
 		return output;
 	}
 
@@ -319,7 +319,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float threshold
 	) {
 		var output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).EdgeDetect( source, threshold, output );
+		( this as INoiseOperator ).EdgeDetect( source, threshold, output );
 		return output;
 	}
 
@@ -341,7 +341,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		Buffer<float> source
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Invert( source, output );
+		( this as INoiseOperator ).Invert( source, output );
 		return output;
 	}
 
@@ -368,7 +368,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float threshold
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).GateHigh( source, threshold, output );
+		( this as INoiseOperator ).GateHigh( source, threshold, output );
 		return output;
 	}
 
@@ -395,7 +395,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float threshold
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).GateLow(source, threshold, output );
+		( this as INoiseOperator ).GateLow(source, threshold, output );
 		return output;
 	}
 
@@ -425,7 +425,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float max
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Range(source, min, max, output );
+		( this as INoiseOperator ).Range(source, min, max, output );
 		return output;
 	}
 
@@ -468,7 +468,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		Buffer<float> source
 	) {
 		var output = new Buffer<float>( source.Size );
-		((INoiseOperator)this).Normalize(source, output);
+		( this as INoiseOperator ).Normalize(source, output);
 		return output;
 	}
 
@@ -499,7 +499,7 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 		float[] ranges
 	) {
 		var output = new Buffer<float>( source.Size );
-		( (INoiseOperator)this ).Quantize( source, ranges, output );
+		( this as INoiseOperator ).Quantize( source, ranges, output );
 		return output;
 	}
 
@@ -531,6 +531,37 @@ internal sealed class SimpleNoiseOperator : INoiseOperator {
 	) {
 		var output = new Buffer<float>( source.Size );
 		( (INoiseOperator)this ).Denoise( source, output );
+		return output;
+	}
+
+
+	INoiseOperator INoiseOperator.Mask(
+		Buffer<float> source,
+		Buffer<float> mask,
+		float value,
+		Buffer<float> output
+	) {
+		DoMultiOperator(
+			source,
+			mask,
+			( sourceValue, maskValue ) => {
+				if (maskValue == 1.0f) {
+					return sourceValue;
+				}
+				return value;
+			},
+			output
+		);
+		return this;
+	}
+
+	Buffer<float> INoiseOperator.Mask(
+		Buffer<float> source,
+		Buffer<float> mask,
+		float value
+	) {
+		var output = new Buffer<float>( source.Size );
+		( this as INoiseOperator ).Mask( source, mask, value, output );
 		return output;
 	}
 
