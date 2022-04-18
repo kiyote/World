@@ -15,6 +15,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="SixLabors.ImageSharp" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 
@@ -25,4 +26,12 @@
 		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Reference Include="HullDelaunayVoronoi">
+			<HintPath>$(SolutionDir)dependencies\HullDelaunayVoronoi.dll</HintPath>
+		</Reference>
+		<Reference Include="VoronoiLib">
+			<HintPath>$(SolutionDir)dependencies\VoronoiLib.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>

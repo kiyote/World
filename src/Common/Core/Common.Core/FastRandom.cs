@@ -204,6 +204,22 @@ public class FastRandom : IRandom {
 		}
 	}
 
+	public float NextFloat( float upperBound ) {
+		lock( _lock ) {
+			double range = upperBound;
+			double value = NextDouble() * range;
+			return (float)( value );
+		}
+	}
+
+	public float NextFloat( float lowerBound, float upperBound ) {
+		lock( _lock ) {
+			double range = upperBound - lowerBound;
+			double value = NextDouble() * range;
+			return (float)( value + lowerBound );
+		}
+	}
+
 	public void NextBytes( byte[] buffer, int bound1, int bound2 ) {
 		if( buffer is null ) {
 			throw new ArgumentNullException( nameof( buffer ) );

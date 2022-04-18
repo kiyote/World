@@ -111,3 +111,5 @@ dotnet_diagnostic.CA1054.severity	= none		# URI-like parameters should not be st
 dotnet_diagnostic.CA1056.severity	= none		# URI-like parameters should not be strings (yep, it's really two rules for the same thing)
 dotnet_diagnostic.CA1014.severity	= none		# Mark assemblies with CLSCompliant
 dotnet_diagnostic.CA1814.severity	= none		# Return jagged array instead of multidimensional array
+dotnet_diagnostic.CA1062.severity	= none		# Validate arguments of public methods
+dotnet_code_quality.CA1822.api_surface = private, internal # Mark members as static
