@@ -18,7 +18,9 @@ public class MinimapWorldRendererIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		_folder = Path.Combine( Path.GetTempPath(), Guid.NewGuid().ToString( "N" ) );
+		string testRoot = Path.Combine( Path.GetTempPath(), "world" );
+		Directory.CreateDirectory( testRoot );
+		_folder = Path.Combine( testRoot, Guid.NewGuid().ToString( "N" ) );
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
@@ -46,6 +48,7 @@ public class MinimapWorldRendererIntegrationTests {
 	[TearDown]
 	public void TearDown() {
 		_scope.Dispose();
+		_scope = null;
 	}
 
 	[Test]

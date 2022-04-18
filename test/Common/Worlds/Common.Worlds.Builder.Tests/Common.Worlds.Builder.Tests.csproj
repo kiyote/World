@@ -15,6 +15,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="SixLabors.ImageSharp" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 
@@ -24,5 +25,4 @@
 		<ProjectReference Include="$(SolutionDir)src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 	</ItemGroup>
-
 </Project>

@@ -61,8 +61,10 @@ internal class MapGenerator : IMapGenerator {
 
 		Buffer<float> terrainMask = _landformGenerator.Create( seed, size, _neighbourLocator, shapeMask );
 
-		Buffer<float> raw = _noiseProvider.Random( seed, size.Rows, size.Columns, 32.0f );
-		_noiseOperator.Add( raw, shapeMask, false, raw );
+		//Buffer<float> raw = _noiseProvider.Random( seed, size.Rows, size.Columns, 32.0f );
+		Buffer<float> raw = new Buffer<float>( size );
+		_noiseOperator.Add( raw, 1.0f, true, raw );
+		//_noiseOperator.Add( raw, shapeMask, false, raw );
 		_noiseOperator.Mask( raw, terrainMask, 0.0f, raw );
 //		_noiseOperator.Multiply( raw, shapeMask, false, raw );
 		_noiseOperator.Normalize( raw, raw );
