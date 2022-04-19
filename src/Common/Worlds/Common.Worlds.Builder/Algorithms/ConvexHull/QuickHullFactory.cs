@@ -1,11 +1,18 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.ConvexHull;
 
+/// <summary>
+/// Calculates the convex hull of a set of points.
+/// </summary>
+/// <remarks>
+/// Algorithm generated from https://en.wikipedia.org/wiki/Quickhull
+/// </remarks>
 internal sealed class QuickHullFactory : IConvexHullFactory {
 	IReadOnlyList<IEdge> IConvexHullFactory.Create(
 		IEnumerable<IPoint> points
 	) {
+		points = points.Distinct();
 		if( points.Count() < 3 ) {
-			throw new ArgumentException( "A hull requires 3 or more points.", nameof( points ) );
+			throw new ArgumentException( "3 or more distinct points are required.", nameof( points ) );
 		}
 
 		// The hull will be a list of points wound clockwise around the set of points
@@ -53,8 +60,6 @@ internal sealed class QuickHullFactory : IConvexHullFactory {
 		if( !points.Any() ) {
 			return;
 		}
-		// Eliminate any duplicates
-		points = points.Distinct();
 		// Find the point that makes the largest triangle
 		IPoint farthest = FindFarthest( points, from, to );
 		// Add the new point between from and to

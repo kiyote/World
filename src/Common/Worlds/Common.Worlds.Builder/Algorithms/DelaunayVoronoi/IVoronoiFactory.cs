@@ -2,6 +2,6 @@
 
 public interface IVoronoiFactory {
 	Voronoi Create(
-		Delaunay delaunay
+		DelaunayGraph delaunay
 	);
 }

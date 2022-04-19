@@ -1,6 +1,6 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.DelaunayVoronoi;
 
-public sealed record Delaunay(
+public sealed record DelaunayGraph(
 	IReadOnlyList<Vertex> Vertices,
 	IReadOnlyList<DelaunayCell> Cells,
 	Vertex Centroid

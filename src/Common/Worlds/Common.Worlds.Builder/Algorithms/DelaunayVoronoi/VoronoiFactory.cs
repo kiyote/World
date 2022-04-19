@@ -2,7 +2,7 @@
 internal class VoronoiFactory : IVoronoiFactory {
 
 	Voronoi IVoronoiFactory.Create(
-		Delaunay delaunay
+		DelaunayGraph delaunay
 	) {
 		List<VoronoiRegion> regions = new List<VoronoiRegion>();
 
