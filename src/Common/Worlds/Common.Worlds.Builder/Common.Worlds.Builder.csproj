@@ -6,10 +6,4 @@
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
 	</ItemGroup>
-	
-	<ItemGroup>
-		<Reference Include="VoronoiLib">
-			<HintPath>$(SolutionDir)dependencies\VoronoiLib.dll</HintPath>
-		</Reference>
-	</ItemGroup>
 </Project>

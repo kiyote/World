@@ -1,6 +1,6 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.DelaunayVoronoi;
 
-public sealed record Region(
-	IReadOnlyList<Cell> Cells,
+public sealed record VoronoiRegion(
+	IReadOnlyList<DelaunayCell> Cells,
 	IReadOnlyList<Edge> Edges
 );

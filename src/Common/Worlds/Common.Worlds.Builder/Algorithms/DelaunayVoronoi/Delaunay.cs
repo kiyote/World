@@ -2,7 +2,7 @@
 
 public sealed record Delaunay(
 	IReadOnlyList<Vertex> Vertices,
-	IReadOnlyList<Cell> Cells,
+	IReadOnlyList<DelaunayCell> Cells,
 	Vertex Centroid
 );
 

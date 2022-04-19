@@ -4,13 +4,13 @@ internal class VoronoiFactory : IVoronoiFactory {
 	Voronoi IVoronoiFactory.Create(
 		Delaunay delaunay
 	) {
-		List<Region> regions = new List<Region>();
+		List<VoronoiRegion> regions = new List<VoronoiRegion>();
 
 		for( int i = 0; i < delaunay.Vertices.Count; i++ ) {
 
 			Vertex vertex = delaunay.Vertices[i];
 
-			List<Cell> cells = new List<Cell>();
+			List<DelaunayCell> cells = new List<DelaunayCell>();
 			for( int j = 0; j < delaunay.Cells.Count; j++ ) {
 				Simplex simplex = delaunay.Cells[j].Simplex;
 
@@ -24,7 +24,7 @@ internal class VoronoiFactory : IVoronoiFactory {
 
 			if( cells.Count > 0 ) {
 
-				Dictionary<int, Cell> neighbourCell = new Dictionary<int, Cell>();
+				Dictionary<int, DelaunayCell> neighbourCell = new Dictionary<int, DelaunayCell>();
 
 				for( int j = 0; j < cells.Count; j++ ) {
 					neighbourCell.Add( cells[j].CircumCenter.Id, cells[j] );
@@ -48,7 +48,7 @@ internal class VoronoiFactory : IVoronoiFactory {
 					}
 				}
 
-				Region region = new Region( cells, regionEdges );
+				VoronoiRegion region = new VoronoiRegion( cells, regionEdges );
 				regions.Add( region );
 			}
 		}

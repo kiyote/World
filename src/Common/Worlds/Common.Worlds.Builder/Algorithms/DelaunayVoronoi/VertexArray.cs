@@ -1,14 +1,14 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.DelaunayVoronoi;
 
-internal sealed class VertexBuffer {
+internal sealed class VertexArray {
 
-	public static readonly VertexBuffer Empty = new VertexBuffer();
+	public static readonly VertexArray Empty = new VertexArray();
 
 	private Vertex[] _items;
 	private int _count;
 	private int _capacity;
 
-	public VertexBuffer() {
+	public VertexArray() {
 		_items = Array.Empty<Vertex>();
 	}
 

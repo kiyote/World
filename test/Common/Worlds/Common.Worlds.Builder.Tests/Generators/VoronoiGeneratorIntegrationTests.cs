@@ -52,8 +52,8 @@ public sealed class VoronoiGeneratorIntegrationTests {
 	[Test]
 	[Ignore( "Used to generate visual output for inspection." )]
 	public void Visualize() {
-		int cells = 2000;
-		Core.Size size = new Core.Size( 1000, 1000 );
+		int cells = 1000;
+		Core.Size size = new Core.Size( 500, 500 );
 		Buffer<float> result = _generator.Generate( size, cells );
 
 		Rgba32[] colours = new Rgba32[cells];

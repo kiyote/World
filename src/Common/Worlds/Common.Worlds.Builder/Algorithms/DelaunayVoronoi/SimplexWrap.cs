@@ -4,7 +4,7 @@ internal sealed class SimplexWrap {
 
 	public SimplexWrap(
 		int dimension,
-		VertexBuffer beyondList
+		VertexArray beyondList
 	) {
 		AdjacentFaces = new SimplexWrap[dimension];
 		VerticesBeyond = beyondList;
@@ -14,7 +14,7 @@ internal sealed class SimplexWrap {
 
 	public SimplexWrap?[] AdjacentFaces { get; init; }
 
-	public VertexBuffer VerticesBeyond { get; set; }
+	public VertexArray VerticesBeyond { get; set; }
 
 	public Vertex? FurthestVertex { get; set; }
 
