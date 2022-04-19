@@ -1,10 +1,6 @@
-﻿namespace Common.Worlds.Builder.Algorithms.ConvexHull;
+﻿namespace Common.Worlds.Builder.Algorithms.Delaunay;
 
-internal sealed record HullPoint( int X, int Y ) : IPoint {
-	public HullPoint(
-		IPoint point
-	): this( point.X, point.Y ) {
-	}
+internal record Point( int X, int Y ) : IPoint {
 
 	bool IEquatable<IPoint>.Equals(
 		IPoint? other

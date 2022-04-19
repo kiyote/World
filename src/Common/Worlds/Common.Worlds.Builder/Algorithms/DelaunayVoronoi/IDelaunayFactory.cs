@@ -1,7 +1,7 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.DelaunayVoronoi;
 public interface IDelaunayFactory {
 
-	Delaunay Create(
+	DelaunayGraph Create(
 		IList<Vertex> input
 	);
 }

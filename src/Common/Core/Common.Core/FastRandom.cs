@@ -102,10 +102,14 @@ public class FastRandom : IRandom {
 	#region Public Methods [Next* methods]
 
 	public int NextNormalInt( int upperBound ) {
-		double u1 = this.NextDouble();
-		double u2 = this.NextDouble();
-		double randStdNormal = Math.Sqrt( -2.0 * Math.Log( u1 ) ) * Math.Sin( 2.0 * Math.PI * u2 );
-		return (int)( upperBound * randStdNormal );
+		int value;
+		do {
+			double u1 = this.NextDouble();
+			double u2 = this.NextDouble();
+			double randStdNormal = Math.Sqrt( -2.0 * Math.Log( u1 ) ) * Math.Sin( 2.0 * Math.PI * u2 );
+			value = (int)( upperBound * randStdNormal );
+		} while( value < 0 || value >= upperBound );
+		return value;
 	}
 
 	/// <summary>

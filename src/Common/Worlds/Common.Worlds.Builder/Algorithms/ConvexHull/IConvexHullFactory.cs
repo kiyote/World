@@ -1,7 +1,7 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.ConvexHull;
 
 public interface IConvexHullFactory {
-	IReadOnlyList<IPoint> Create(
+	IReadOnlyList<IEdge> Create(
 		IEnumerable<IPoint> points
 	);
 }

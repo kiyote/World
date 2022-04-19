@@ -1,6 +1,6 @@
 ﻿namespace Common.Worlds.Builder.Algorithms;
 
-public interface IPoint {
-	float X { get; }
-	float Y { get; }
+public interface IPoint : IEquatable<IPoint> {
+	int X { get; }
+	int Y { get; }
 }

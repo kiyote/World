@@ -77,7 +77,7 @@ internal class VoronoiHeightmap {
 			vertices.Add( new Vertex( x, y ) );
 		}
 		IDelaunayFactory delaunayFactory = new DelaunayFactory();
-		Delaunay delaunay = delaunayFactory.Create( vertices );
+		DelaunayGraph delaunay = delaunayFactory.Create( vertices );
 		IVoronoiFactory voronoiFactory = new VoronoiFactory();
 		Voronoi voronoi = voronoiFactory.Create( delaunay );
 

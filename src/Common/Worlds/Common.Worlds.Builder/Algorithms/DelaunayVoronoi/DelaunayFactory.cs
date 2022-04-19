@@ -2,7 +2,7 @@
 
 internal class DelaunayFactory : IDelaunayFactory {
 
-	Delaunay IDelaunayFactory.Create(
+	DelaunayGraph IDelaunayFactory.Create(
 		IList<Vertex> input
 	) {
 		int dimension = 2;
@@ -63,7 +63,7 @@ internal class DelaunayFactory : IDelaunayFactory {
 			cells[i].Simplex.Tag = i;
 		}
 
-		return new Delaunay(
+		return new DelaunayGraph(
 			vertices,
 			cells,
 			hull.Centroid
