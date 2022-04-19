@@ -6,7 +6,7 @@ internal class DelaunayFactory : IDelaunayFactory {
 		IList<Vertex> input
 	) {
 		int dimension = 2;
-		List<Cell> cells = new List<Cell>();
+		List<DelaunayCell> cells = new List<DelaunayCell>();
 		List<Vertex> vertices = new List<Vertex>();
 
 		int count = input.Count;
@@ -49,7 +49,7 @@ internal class DelaunayFactory : IDelaunayFactory {
 					}
 				}
 			} else {
-				Cell cell = CreateCell( simplex );
+				DelaunayCell cell = CreateCell( simplex );
 				cells.Add( cell );
 			}
 		}
@@ -70,7 +70,7 @@ internal class DelaunayFactory : IDelaunayFactory {
 		);
 	}
 
-	private static Cell CreateCell(
+	private static DelaunayCell CreateCell(
 		Simplex simplex
 	) {
 		// From MathWorld: http://mathworld.wolfram.com/Circumcircle.html
@@ -114,7 +114,7 @@ internal class DelaunayFactory : IDelaunayFactory {
 
 		float radius = Math.Abs( s ) * (float)Math.Sqrt( ( dx * dx ) + ( dy * dy ) - ( 4.0 * a * c ) );
 
-		return new Cell( simplex, new Vertex() { Position = circumCenter }, radius );
+		return new DelaunayCell( simplex, new Vertex() { Position = circumCenter }, radius );
 	}
 
 	private static float Determinant(

@@ -18,7 +18,7 @@ internal sealed class HullFactory : IHullFactory {
 		var coneFaceBuffer = new List<DeferredSimplex>();
 		int[] updateIndices = new int[Dimension];
 		var connectorTable = new Dictionary<long, ConnectorList>();
-		var beyondBuffer = new VertexBuffer();
+		var beyondBuffer = new VertexArray();
 
 		var hullSimplexes = new List<Simplex>();
 		var hullVertices = new List<Vertex>();
@@ -144,7 +144,7 @@ internal sealed class HullFactory : IHullFactory {
 
 		for( int i = 0; i < Dimension + 1; i++ ) {
 			Vertex[] vertices = hullVertices.Where( ( _, j ) => i != j ).ToArray(); // Skips the i-th vertex
-			var newFace = new SimplexWrap( Dimension, new VertexBuffer() ) {
+			var newFace = new SimplexWrap( Dimension, new VertexArray() ) {
 				Vertices = vertices
 			};
 			Array.Sort( vertices, new VertexIdComparer() );
@@ -315,7 +315,7 @@ internal sealed class HullFactory : IHullFactory {
 				int oldVertexIndex;
 				Vertex[] vertices;
 
-				newFace = new SimplexWrap( Dimension, new VertexBuffer() );
+				newFace = new SimplexWrap( Dimension, new VertexArray() );
 				vertices = newFace.Vertices;
 
 				for( int j = 0; j < Dimension; j++ ) {
@@ -397,14 +397,14 @@ internal sealed class HullFactory : IHullFactory {
 		// This means that all the affected faces must be on the hull and that all their "vertices beyond" are singular.
 		for( int fIndex = 0; fIndex < affectedFaceBuffer.Count; fIndex++ ) {
 			SimplexWrap face = affectedFaceBuffer[fIndex];
-			VertexBuffer vb = face.VerticesBeyond;
+			VertexArray vb = face.VerticesBeyond;
 			for( int i = 0; i < vb.Count; i++ ) {
 				singularVertices.Add( vb[i] );
 			}
 
 			convexSimplexes.Add( face );
 			unprocessedFaces.Remove( face );
-			face.VerticesBeyond = VertexBuffer.Empty;
+			face.VerticesBeyond = VertexArray.Empty;
 		}
 	}
 
@@ -689,7 +689,7 @@ internal sealed class HullFactory : IHullFactory {
 	/// </summary>
 	private static void IsBeyond(
 		SimplexWrap face,
-		VertexBuffer beyondVertices,
+		VertexArray beyondVertices,
 		Vertex v,
 		ref float maxDistance,
 		ref Vertex? furthestVertex
@@ -712,7 +712,7 @@ internal sealed class HullFactory : IHullFactory {
 		SimplexWrap face,
 		List<Vertex> inputVertices
 	) {
-		VertexBuffer beyondVertices = face.VerticesBeyond;
+		VertexArray beyondVertices = face.VerticesBeyond;
 
 		float maxDistance = float.NegativeInfinity;
 		Vertex? furthestVertex = default;
@@ -731,12 +731,12 @@ internal sealed class HullFactory : IHullFactory {
 	/// </summary>
 	private static void FindBeyondVertices(
 		SimplexWrap face,
-		VertexBuffer beyond,
-		VertexBuffer beyond1,
+		VertexArray beyond,
+		VertexArray beyond1,
 		Vertex currentVertex,
-		ref VertexBuffer beyondBuffer
+		ref VertexArray beyondBuffer
 	) {
-		VertexBuffer beyondVertices = beyondBuffer;
+		VertexArray beyondVertices = beyondBuffer;
 
 		float maxDistance = float.NegativeInfinity;
 		Vertex? furthestVertex = null;
@@ -771,7 +771,7 @@ internal sealed class HullFactory : IHullFactory {
 		face.FurthestVertex = furthestVertex;
 
 		// Pull the old switch a roo
-		VertexBuffer temp = face.VerticesBeyond;
+		VertexArray temp = face.VerticesBeyond;
 		face.VerticesBeyond = beyondVertices;
 		if( temp.Count > 0 ) {
 			temp.Clear();
@@ -789,7 +789,7 @@ internal sealed class HullFactory : IHullFactory {
 		List<SimplexWrap> convexSimplexes,
 		List<DeferredSimplex> coneFaceBuffer,
 		Dictionary<long, ConnectorList> connectorTable,
-		ref VertexBuffer beyondBuffer,
+		ref VertexArray beyondBuffer,
 		List<Vertex> hullVertices
 	) {
 		hullVertices.Add( currentVertex );
@@ -827,7 +827,7 @@ internal sealed class HullFactory : IHullFactory {
 			if( newFace.VerticesBeyond.Count == 0 ) {
 				convexSimplexes.Add( newFace );
 				unprocessedFaces.Remove( newFace );
-				newFace.VerticesBeyond = VertexBuffer.Empty;
+				newFace.VerticesBeyond = VertexArray.Empty;
 			} else // Add the face to the list
 			  {
 				unprocessedFaces.Add( newFace );

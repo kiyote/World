@@ -1,7 +1,6 @@
 ﻿namespace Common.Worlds.Builder.Algorithms.DelaunayVoronoi;
 
-public record Edge(
-	Cell From,
-	Cell To
+public sealed record Edge(
+	DelaunayCell From,
+	DelaunayCell To
 );
-

@@ -101,6 +101,13 @@ public class FastRandom : IRandom {
 
 	#region Public Methods [Next* methods]
 
+	public int NextNormalInt( int upperBound ) {
+		double u1 = this.NextDouble();
+		double u2 = this.NextDouble();
+		double randStdNormal = Math.Sqrt( -2.0 * Math.Log( u1 ) ) * Math.Sin( 2.0 * Math.PI * u2 );
+		return (int)( upperBound * randStdNormal );
+	}
+
 	/// <summary>
 	/// Generates a uint. Values returned are over the full range of a uint, 
 	/// uint.MinValue to uint.MaxValue, including the min and max values.
@@ -209,6 +216,12 @@ public class FastRandom : IRandom {
 			double range = upperBound;
 			double value = NextDouble() * range;
 			return (float)( value );
+		}
+	}
+
+	public float NextFloat() {
+		lock (_lock) {
+			return (float)NextDouble();
 		}
 	}
 
