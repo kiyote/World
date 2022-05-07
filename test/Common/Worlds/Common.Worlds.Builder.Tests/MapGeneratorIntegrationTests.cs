@@ -1,4 +1,5 @@
-﻿using Common.Files;
+﻿using Common.Buffer;
+using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Renderers;
 using Common.Renderers.Bitmap;
@@ -39,7 +40,7 @@ public sealed class MapGeneratorIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_mapGenerator = _provider.GetRequiredService<IMapGenerator>();
+		_mapGenerator = _scope.ServiceProvider.GetRequiredService<IMapGenerator>();
 	}
 
 	[TearDown]
@@ -51,7 +52,7 @@ public sealed class MapGeneratorIntegrationTests {
 	[Ignore("Used to generate visual output for inspection.")]
 	public void GenerateImage() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		Buffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( DateTime.UtcNow.ToFileTime()/*"test"*/, new Size( 100, 100 ) );
+		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( DateTime.UtcNow.ToFileTime()/*"test"*/, new Size( 100, 100 ) );
 		IWorldRenderer worldRenderer = _provider.GetRequiredService<IWorldRenderer>();
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		worldRenderer.RenderAtlasToAsync(

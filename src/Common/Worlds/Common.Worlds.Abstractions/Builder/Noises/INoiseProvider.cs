@@ -1,12 +1,13 @@
-﻿namespace Common.Worlds.Builder.Noises;
+﻿using Common.Buffer;
+
+namespace Common.Worlds.Builder.Noises;
 
 public interface INoiseProvider {
 
-	Buffer<float> Random(
+	void Random(
 		long seed,
-		int rows,
-		int columns,
-		float frequency
+		float frequency,
+		IBuffer<float> output
 	);
 }
 

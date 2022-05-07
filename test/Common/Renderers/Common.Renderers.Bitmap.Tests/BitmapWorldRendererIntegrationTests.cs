@@ -1,3 +1,4 @@
+using Common.Buffer;
 using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
@@ -21,6 +22,7 @@ public class BitmapWorldRendererIntegrationTests {
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
+		services.AddArrayBuffer();
 		services.AddResourceFileManager();
 		services.AddDiskFileManager( _folder );
 		services.AddBitmapRenderer();
@@ -37,7 +39,7 @@ public class BitmapWorldRendererIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_renderer = _provider.GetRequiredService<IWorldRenderer>();
+		_renderer = _scope.ServiceProvider.GetRequiredService<IWorldRenderer>();
 	}
 
 	[TearDown]
@@ -49,9 +51,10 @@ public class BitmapWorldRendererIntegrationTests {
 	[Ignore("Used to generate visual output for inspection.")]
 	public async Task RenderTerrain() {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
+		IBufferFactory bufferFactory = _provider.GetRequiredService<IBufferFactory>();
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		Buffer<TileTerrain> tileTerrain = new Buffer<TileTerrain>( 10, 10 );
+		IBuffer<TileTerrain> tileTerrain = bufferFactory.Create<TileTerrain>( 10, 10 );
 
 		for( int r = 0; r < tileTerrain.Size.Rows; r++ ) {
 			for( int c = 0; c < tileTerrain.Size.Columns; c++ ) {

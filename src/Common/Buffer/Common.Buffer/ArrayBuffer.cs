@@ -1,11 +1,11 @@
-﻿namespace Common.Core;
+﻿namespace Common.Buffer;
 
-public sealed class Buffer<T> {
+internal sealed class ArrayBuffer<T>: IBuffer<T> {
 
 	private readonly T[][] _buffer;
 	private readonly Size _size;
 
-	public Buffer(
+	public ArrayBuffer(
 		Size size
 	) {
 		if( size is null ) {
@@ -19,15 +19,8 @@ public sealed class Buffer<T> {
 		}
 	}
 
-	public Buffer(
-		int columns,
-		int rows
-	) : this( new Size( columns, rows ) ) {
-	}
-
 	public Size Size => _size;
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1819:Properties should not return arrays", Justification = "Abstracting away a multi-dimensional float array" )]
 	public T[] this[int row] {
 		get {
 			return _buffer[row];
@@ -49,7 +42,7 @@ public sealed class Buffer<T> {
 	}
 
 	public void CopyFrom(
-		Buffer<T> source
+		IBuffer<T> source
 	) {
 		if( source is null ) {
 			throw new ArgumentNullException( nameof( source ) );
