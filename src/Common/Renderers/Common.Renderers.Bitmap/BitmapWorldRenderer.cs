@@ -1,4 +1,5 @@
-﻿using Common.Files;
+﻿using Common.Buffer;
+using Common.Files;
 using Common.Files.Manager;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
@@ -25,7 +26,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {
@@ -54,7 +55,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	) {
 		Image<Rgba32> mountain = await LoadImageAsync( _resourceFileManager.MountainTileId, cancellationToken ).ConfigureAwait( false );

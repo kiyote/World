@@ -2,6 +2,7 @@
  * Ported from https://gist.github.com/KdotJPG/b1270127455a94ac5d19
  * and heavily refactored to improve performance. */
 
+using Common.Buffer;
 using System.Runtime.CompilerServices;
 
 namespace Common.Worlds.Builder.Noises;
@@ -177,7 +178,9 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		: this( DateTime.Now.Ticks ) {
 	}
 
-	public OpenSimplexNoise( long seed ) {
+	public OpenSimplexNoise(
+		long seed
+	) {
 		perm = new byte[256];
 		perm2D = new byte[256];
 		perm3D = new byte[256];
@@ -209,11 +212,10 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		}
 	}
 
-	Buffer<float> INoiseProvider.Random(
+	void INoiseProvider.Random(
 		long seed,
-		int rows,
-		int columns,
-		float frequency
+		float frequency,
+		IBuffer<float> output
 	) {
 		if (seed != 0) {
 			InitializePerm( seed );
@@ -222,11 +224,10 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		float minValue = float.MaxValue;
 		float maxValue = float.MinValue;
 
-		var result = new Buffer<float>( columns, rows );
-		for( int r = 0; r < rows; r++ ) {
-			float fr = (float)r / (float)rows;
-			for( int c = 0; c < columns; c++ ) {
-				float fc = (float)c / (float)columns;
+		for( int r = 0; r < output.Size.Rows; r++ ) {
+			float fr = (float)r / (float)output.Size.Rows;
+			for( int c = 0; c < output.Size.Columns; c++ ) {
+				float fc = (float)c / (float)output.Size.Columns;
 				float value = (float)Evaluate( fc * frequency, fr * frequency );
 
 				if( value < minValue ) {
@@ -236,21 +237,19 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 					maxValue = value;
 				}
 
-				result[r][c] = value;
+				output[r][c] = value;
 			}
 		}
 
 		// Normalize the data [0..1]
 		float range = maxValue - minValue;
 		float scale = 1.0f / range;
-		for( int r = 0; r < rows; r++ ) {
-			for( int c = 0; c < columns; c++ ) {
-				result[r][c] += Math.Abs( minValue );
-				result[r][c] *= scale;
+		for( int r = 0; r < output.Size.Rows; r++ ) {
+			for( int c = 0; c < output.Size.Columns; c++ ) {
+				output[r][c] += Math.Abs( minValue );
+				output[r][c] *= scale;
 			}
 		}
-
-		return result;
 	}
 
 	public double Evaluate( double x, double y ) {

@@ -1,13 +1,15 @@
-﻿namespace Common.Worlds.Builder;
+﻿using Common.Buffer;
+
+namespace Common.Worlds.Builder;
 
 public interface IMapGenerator {
 
-	Buffer<TileTerrain> GenerateTerrain(
+	IBuffer<TileTerrain> GenerateTerrain(
 		string seed,
 		Size size
 	);
 
-	Buffer<TileTerrain> GenerateTerrain(
+	IBuffer<TileTerrain> GenerateTerrain(
 		long seed,
 		Size size
 	);

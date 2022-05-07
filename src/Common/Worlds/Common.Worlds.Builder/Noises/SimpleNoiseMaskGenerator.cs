@@ -1,18 +1,23 @@
-﻿namespace Common.Worlds.Builder.Noises;
+﻿using Common.Buffer;
+
+namespace Common.Worlds.Builder.Noises;
 
 internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 
-	private readonly INoiseOperator _noiseOperator;
+	private readonly IBufferFactory _bufferFactory;
+	private readonly IBufferOperator _bufferOperator;
 
 	public SimpleNoiseMaskGenerator(
-		INoiseOperator noiseOperator
+		IBufferFactory bufferFactory,
+		IBufferOperator bufferOperator
 	) {
-		_noiseOperator = noiseOperator;
+		_bufferFactory = bufferFactory;
+		_bufferOperator = bufferOperator;
 	}
 
 	INoiseMaskGenerator INoiseMaskGenerator.Circle(
 		Size size,
-		Buffer<float> output
+		IBuffer<float> output
 	) {
 		float cx = (float)size.Columns / 2.0f;
 		float cy = (float)size.Rows / 2.0f;
@@ -32,21 +37,21 @@ internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 			}
 		}
 
-		var swap = new Buffer<float>( output.Size );
+		IBuffer<float> swap = _bufferFactory.Create<float>( output.Size );
 		// Push the edge from the corner to the mid-point
 		float target = output[0][size.Columns / 2];
-		_noiseOperator.Threshold( output, 0.0f, 0.0f, target, target, swap );
-		_noiseOperator.Normalize( swap, output );
-		_noiseOperator.Invert( output, swap );
+		_bufferOperator.Threshold( output, 0.0f, 0.0f, target, target, swap );
+		_bufferOperator.Normalize( swap, output );
+		_bufferOperator.Invert( output, swap );
 		output.CopyFrom( swap );
 
 		return this;
 	}
 
-	public Buffer<float> Circle(
+	public IBuffer<float> Circle(
 		Size size
 	) {
-		var output = new Buffer<float>( size );
+		IBuffer<float> output = _bufferFactory.Create<float>( size );
 		( this as INoiseMaskGenerator ).Circle( size, output );
 		return output;
 	}

@@ -1,4 +1,5 @@
-﻿using Common.Worlds.Builder.Noises;
+﻿using Common.Buffer;
+using Common.Worlds.Builder.Noises;
 using Moq;
 using NUnit.Framework;
 
@@ -9,7 +10,8 @@ public sealed class MapGeneratorUnitTests {
 
 	private Mock<IRandom> _random;
 	private Mock<INoiseProvider> _noiseProvider;
-	private Mock<INoiseOperator> _noiseOperator;
+	private Mock<IBufferOperator> _bufferOperator;
+	private Mock<IBufferFactory> _bufferFactory;
 	private Mock<INoiseMaskGenerator> _noiseMaskGenerator;
 	private Mock<ILandformGenerator> _landformGenerator;
 	private Mock<INeighbourLocator> _neighbourLocator;
@@ -19,18 +21,20 @@ public sealed class MapGeneratorUnitTests {
 	public void SetUp() {
 		_random = new Mock<IRandom>( MockBehavior.Strict );
 		_noiseProvider = new Mock<INoiseProvider>( MockBehavior.Strict );
-		_noiseOperator = new Mock<INoiseOperator>( MockBehavior.Strict );
+		_bufferOperator = new Mock<IBufferOperator>( MockBehavior.Strict );
 		_noiseMaskGenerator = new Mock<INoiseMaskGenerator>( MockBehavior.Strict );
 		_landformGenerator = new Mock<ILandformGenerator>( MockBehavior.Strict );
 		_neighbourLocator = new Mock<INeighbourLocator>( MockBehavior.Strict );
+		_bufferFactory = new Mock<IBufferFactory>( MockBehavior.Strict );
 
 		_mapGenerator = new MapGenerator(
 			_random.Object,
 			_noiseProvider.Object,
-			_noiseOperator.Object,
+			_bufferOperator.Object,
 			_noiseMaskGenerator.Object,
 			_landformGenerator.Object,
-			_neighbourLocator.Object
+			_neighbourLocator.Object,
+			_bufferFactory.Object
 		);
 	}
 

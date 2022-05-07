@@ -1,4 +1,5 @@
-﻿using Common.Worlds.Builder.Noises;
+﻿using Common.Buffer;
+using Common.Worlds.Builder.Noises;
 
 namespace Common.Worlds.Builder;
 
@@ -7,10 +8,11 @@ internal class MapGenerator : IMapGenerator {
 
 	private readonly IRandom _random;
 	private readonly INoiseProvider _noiseProvider;
-	private readonly INoiseOperator _noiseOperator;
+	private readonly IBufferOperator _bufferOperator;
 	private readonly INoiseMaskGenerator _noiseMaskGenerator;
 	private readonly ILandformGenerator _landformGenerator;
 	private readonly INeighbourLocator _neighbourLocator;
+	private readonly IBufferFactory _bufferFactory;
 
 	public const float Frequency = 6.00f;
 
@@ -28,20 +30,22 @@ internal class MapGenerator : IMapGenerator {
 	public MapGenerator(
 		IRandom random,
 		INoiseProvider noiseProvider,
-		INoiseOperator noiseOperator,
+		IBufferOperator bufferOperator,
 		INoiseMaskGenerator noiseMaskGenerator,
 		ILandformGenerator landformGenerator,
-		INeighbourLocator neighbourLocator
+		INeighbourLocator neighbourLocator,
+		IBufferFactory bufferFactory
 	) {
 		_random = random;
 		_noiseProvider = noiseProvider;
-		_noiseOperator = noiseOperator;
+		_bufferOperator = bufferOperator;
 		_noiseMaskGenerator = noiseMaskGenerator;
 		_landformGenerator = landformGenerator;
 		_neighbourLocator = neighbourLocator;
+		_bufferFactory = bufferFactory;
 	}
 
-	Buffer<TileTerrain> IMapGenerator.GenerateTerrain(
+	IBuffer<TileTerrain> IMapGenerator.GenerateTerrain(
 		string seed,
 		Size size
 	) {
@@ -49,29 +53,28 @@ internal class MapGenerator : IMapGenerator {
 		return ( this as IMapGenerator ).GenerateTerrain( code, size );
 	}
 
-	Buffer<TileTerrain> IMapGenerator.GenerateTerrain(
+	IBuffer<TileTerrain> IMapGenerator.GenerateTerrain(
 		long seed,
 		Size size
 	) {
 		int columns = size.Columns;
 		int rows = size.Rows;
-		Buffer<float> shapeMask = _noiseMaskGenerator.Circle( size );
 
 		_random.Reinitialise( (int)seed );
 
-		Buffer<float> terrainMask = _landformGenerator.Create( seed, size, _neighbourLocator, shapeMask );
+		IBuffer<float> terrainMask = _landformGenerator.Create( seed, size, _neighbourLocator );
 
 		//Buffer<float> raw = _noiseProvider.Random( seed, size.Rows, size.Columns, 32.0f );
-		Buffer<float> raw = new Buffer<float>( size );
-		_noiseOperator.Add( raw, 1.0f, true, raw );
+		IBuffer<float> raw = _bufferFactory.Create<float>( size );
+		_bufferOperator.Add( raw, 1.0f, true, raw );
 		//_noiseOperator.Add( raw, shapeMask, false, raw );
-		_noiseOperator.Mask( raw, terrainMask, 0.0f, raw );
+		_bufferOperator.Mask( raw, terrainMask, 0.0f, raw );
 //		_noiseOperator.Multiply( raw, shapeMask, false, raw );
-		_noiseOperator.Normalize( raw, raw );
-		_noiseOperator.Denoise( raw, raw );
+		_bufferOperator.Normalize( raw, raw );
+		_bufferOperator.Denoise( raw, raw );
 
-		Buffer<float> coast = _noiseOperator.EdgeDetect( terrainMask, 0.1f );
-		_noiseOperator.Mask( coast, terrainMask, 0.0f, coast );
+		IBuffer<float> coast = _bufferOperator.EdgeDetect( terrainMask, 0.1f );
+		_bufferOperator.Mask( coast, terrainMask, 0.0f, coast );
 
 		float[] bands = new float[] {
 			0.3f,
@@ -87,11 +90,11 @@ internal class MapGenerator : IMapGenerator {
 		raw = _noiseOperator.Normalize( ref raw );
 		raw = _noiseOperator.Quantize( ref raw, bands );
 		*/
-		Buffer<float> output = new Buffer<float>( raw.Size );
-		_noiseOperator.Denoise( raw, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( raw.Size );
+		_bufferOperator.Denoise( raw, output );
 		raw = output;
 
-		Buffer<TileTerrain> terrain = new Buffer<TileTerrain>( columns, rows );
+		IBuffer<TileTerrain> terrain = _bufferFactory.Create<TileTerrain>( columns, rows );
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
 				if( raw[r][c] >= (level * 4.0f) ) {

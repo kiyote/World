@@ -1,4 +1,5 @@
-﻿using Common.Worlds.Manager;
+﻿using Common.Buffer;
+using Common.Worlds.Manager;
 
 namespace Common.Worlds.Builder;
 
@@ -21,7 +22,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 		Size size,
 		CancellationToken cancellationToken
 	) {
-		Buffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( seed, size );
+		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( seed, size );
 
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 		//World world = new World( worldId, name, seed, rows, columns, DateTime.UtcNow );

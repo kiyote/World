@@ -1,4 +1,5 @@
-﻿using Common.Files;
+﻿using Common.Buffer;
+using Common.Files;
 using Common.Files.Manager;
 using Common.Worlds;
 using SixLabors.ImageSharp;
@@ -19,7 +20,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	) {
 		int rows = terrain.Size.Rows;
@@ -100,7 +101,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 	async Task IWorldRenderer.RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {

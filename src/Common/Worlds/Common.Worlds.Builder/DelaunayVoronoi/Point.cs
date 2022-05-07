@@ -1,0 +1,49 @@
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
+
+public sealed class Point : IPoint {
+
+	public Point(
+		int x,
+		int y
+	) {
+		X = x;
+		Y = y;
+	}
+
+	public int X { get; init; }
+
+	public int Y { get; init; }
+
+	public bool Equals(
+		int x,
+		int y
+	) {
+		return X == x && Y == y;
+	}
+
+	public bool Equals(
+		IPoint? other
+	) {
+		if (other is null) {
+			return false;
+		}
+
+		return Equals( other.X, other.Y );
+	}
+
+	public override bool Equals(
+		object? obj
+	) {
+		if (obj is null) {
+			return false;
+		}
+
+		return Equals( obj as Point );
+	}
+
+	public override int GetHashCode() {
+		return HashCode.Combine( X, Y );
+	}
+}
+
+

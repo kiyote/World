@@ -1,3 +1,4 @@
+using Common.Buffer;
 using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
@@ -42,7 +43,7 @@ public class MinimapWorldRendererIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_renderer = _provider.GetRequiredService<IWorldRenderer>();
+		_renderer = _scope.ServiceProvider.GetRequiredService<IWorldRenderer>();
 	}
 
 	[TearDown]
@@ -57,7 +58,7 @@ public class MinimapWorldRendererIntegrationTests {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		IMapGenerator mapGenerator = _provider.GetRequiredService<IMapGenerator>();
 		Size size = new Size( 1000, 1000 );
-		Buffer<TileTerrain> tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
+		IBuffer<TileTerrain> tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
 

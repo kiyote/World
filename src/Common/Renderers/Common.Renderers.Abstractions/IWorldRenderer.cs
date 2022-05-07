@@ -1,4 +1,5 @@
-﻿using Common.Files;
+﻿using Common.Buffer;
+using Common.Files;
 using Common.Files.Manager;
 using Common.Worlds;
 
@@ -8,14 +9,14 @@ public interface IWorldRenderer {
 	Task RenderAtlasToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	);
 
 	Task RenderTerrainMapToAsync(
 		IMutableFileManager fileManager,
 		Id<FileMetadata> fileId,
-		Buffer<TileTerrain> terrain,
+		IBuffer<TileTerrain> terrain,
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	);

@@ -4,6 +4,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer\Common.Buffer.csproj" />
 	</ItemGroup>
 </Project>

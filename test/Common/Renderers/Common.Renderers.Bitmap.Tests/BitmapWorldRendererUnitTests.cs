@@ -1,4 +1,5 @@
-﻿using Common.Files;
+﻿using Common.Buffer;
+using Common.Files;
 using Common.Files.Manager;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
@@ -15,9 +16,12 @@ public class BitmapWorldRendererUnitTests {
 	private Mock<IResourceFileManager> _resourceFileManager;
 	private Mock<IImageFactory> _imageFactory;
 	private IWorldRenderer _renderer;
+	private IBufferFactory _bufferFactory;
 
 	[SetUp]
 	public void SetUp() {
+		_bufferFactory = new ArrayBufferFactory(); // TODO: Fix this!
+
 		_imageFactory = new Mock<IImageFactory>( MockBehavior.Strict );
 		_resourceFileManager = new Mock<IResourceFileManager>( MockBehavior.Strict );
 		SetupResourceFileManager( _resourceFileManager, _imageFactory );
@@ -32,7 +36,7 @@ public class BitmapWorldRendererUnitTests {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Reliability", "CA2000:Dispose objects before losing scope", Justification = "Will eventually expire with test run." )]
 	public async Task RenderToTerrainAsync() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "test" );
-		Buffer<TileTerrain> terrain = new Buffer<TileTerrain>( 2, 2 );
+		IBuffer<TileTerrain> terrain = _bufferFactory.Create<TileTerrain>( 2, 2 );
 		for( int r = 0; r < terrain.Size.Rows; r++) {
 			for (int c = 0; c < terrain.Size.Columns; c++) {
 				terrain[r][c] = TileTerrain.Grass;
