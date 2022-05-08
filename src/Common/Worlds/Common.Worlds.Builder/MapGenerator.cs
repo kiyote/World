@@ -1,14 +1,16 @@
 ﻿using Common.Buffer;
+using Common.Buffer.FloatingPoint;
 using Common.Worlds.Builder.Noises;
 
 namespace Common.Worlds.Builder;
 
+/*
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal class MapGenerator : IMapGenerator {
 
 	private readonly IRandom _random;
 	private readonly INoiseProvider _noiseProvider;
-	private readonly IBufferOperator _bufferOperator;
+	private readonly IFloatBufferArithmeticOperators _bufferOperators;
 	private readonly INoiseMaskGenerator _noiseMaskGenerator;
 	private readonly ILandformGenerator _landformGenerator;
 	private readonly INeighbourLocator _neighbourLocator;
@@ -30,7 +32,7 @@ internal class MapGenerator : IMapGenerator {
 	public MapGenerator(
 		IRandom random,
 		INoiseProvider noiseProvider,
-		IBufferOperator bufferOperator,
+		IFloatBufferArithmeticOperators bufferOperators,
 		INoiseMaskGenerator noiseMaskGenerator,
 		ILandformGenerator landformGenerator,
 		INeighbourLocator neighbourLocator,
@@ -38,7 +40,7 @@ internal class MapGenerator : IMapGenerator {
 	) {
 		_random = random;
 		_noiseProvider = noiseProvider;
-		_bufferOperator = bufferOperator;
+		_bufferOperators = bufferOperators;
 		_noiseMaskGenerator = noiseMaskGenerator;
 		_landformGenerator = landformGenerator;
 		_neighbourLocator = neighbourLocator;
@@ -66,7 +68,7 @@ internal class MapGenerator : IMapGenerator {
 
 		//Buffer<float> raw = _noiseProvider.Random( seed, size.Rows, size.Columns, 32.0f );
 		IBuffer<float> raw = _bufferFactory.Create<float>( size );
-		_bufferOperator.Add( raw, 1.0f, true, raw );
+		_bufferOperators.Add( raw, 1.0f, true, raw );
 		//_noiseOperator.Add( raw, shapeMask, false, raw );
 		_bufferOperator.Mask( raw, terrainMask, 0.0f, raw );
 //		_noiseOperator.Multiply( raw, shapeMask, false, raw );
@@ -84,12 +86,6 @@ internal class MapGenerator : IMapGenerator {
 		};
 		float level = 1.0f / (bands.Length + 1);
 
-		/*
-		raw = _noiseOperator.Multiply( ref raw, ref terrainMask, false );
-
-		raw = _noiseOperator.Normalize( ref raw );
-		raw = _noiseOperator.Quantize( ref raw, bands );
-		*/
 		IBuffer<float> output = _bufferFactory.Create<float>( raw.Size );
 		_bufferOperator.Denoise( raw, output );
 		raw = output;
@@ -114,69 +110,8 @@ internal class MapGenerator : IMapGenerator {
 			}
 		}
 
-		/*
-		raw = _noiseOperator.Normalize( ref raw );
-		TileTerrain[,] terrain = new TileTerrain[columns, rows];
-		for( int r = 0; r < rows; r++ ) {
-			for( int c = 0; c < columns; c++ ) {
-				if( raw[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Grass;
-				} else { 
-					terrain[c, r] = TileTerrain.Ocean;
-				}
-			}
-		}
-		*/
-
-		/*
-		float[,] raw = _noiseProvider.Random( seed, rows, columns, 8.0f );
-		float[,] higherOrder = _noiseProvider.Random( seed, rows, columns, 32.0f );
-		higherOrder = _noiseOperator.Multiply( ref higherOrder, 0.5f, true );
-		raw = _noiseOperator.Add( ref raw, ref higherOrder, true );
-		raw = _noiseOperator.Multiply( ref raw, ref terrainMask, true );
-		*/
-
-		/*
-		raw = _noiseOperator.Normalize( ref raw );
-		float[,] mountains = _noiseOperator.Range( ref raw, MountainMin, MountainMax );
-		float[,] hills = _noiseOperator.Range( ref raw, HillMin, HillMax );
-		hills = _noiseOperator.BinaryFilter( ref hills );
-		float[,] grass = _noiseOperator.Range( ref raw, GrassMin, GrassMax );
-		grass = _noiseOperator.BinaryFilter( ref grass );
-		float[,] coast = _noiseOperator.Range( ref raw, CoastMin, CoastMax );
-		coast = _noiseOperator.BinaryFilter( ref coast );
-		float[,] grassEdges = _noiseOperator.EdgeDetect( ref grass, 0.0f );
-		coast = _noiseOperator.Or( ref coast, 0.0f, ref grassEdges, 0.0f );
-		float[,] ocean = _noiseOperator.Range( ref raw, OceanMin, OceanMax );
-		ocean = _noiseOperator.BinaryFilter( ref ocean );
-
-		// Seed in forests
-		float[,] forest = _noiseProvider.Random( seed, rows, columns, 10.0f );
-		forest = _noiseOperator.Range( ref forest, 0.55f, 1.00f );
-		forest = _noiseOperator.And( ref grass, 0.0f, ref forest, 0.0f );
-
-		TileTerrain[,] terrain = new TileTerrain[columns, rows];
-		for( int r = 0; r < rows; r++ ) {
-			for( int c = 0; c < columns; c++ ) {
-				if( mountains[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Mountain;
-				} else if( hills[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Hill;
-				} else if( forest[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Forest;
-				} else if( grass[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Grass;
-				} else if( coast[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Coast;
-				} else if( ocean[c, r] > 0.0f ) {
-					terrain[c, r] = TileTerrain.Ocean;
-				} else {
-					throw new InvalidOperationException();
-				}
-			}
-		}
-		*/
 
 		return terrain;
 	}
 }
+*/

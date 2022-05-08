@@ -1,4 +1,5 @@
 ﻿using Common.Buffer;
+using Common.Buffer.FloatingPoint;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
@@ -12,13 +13,15 @@ public class SimpleNoiseThresholderIntegrationTests {
 	private IServiceScope _scope;
 
 	private INoiseProvider _noise;
-	private IBufferOperator _bufferOperator;
+	private IFloatBufferFilterOperators _filterOperators;
+	private IFloatBufferClippingOperators _clippingOperators;
 	private IBufferFactory _bufferFactory;
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		var services = new ServiceCollection();
 		services.AddArrayBuffer();
+		services.AddFloatingPointBufferOperators();
 		services.AddWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -27,7 +30,8 @@ public class SimpleNoiseThresholderIntegrationTests {
 	[SetUp]
 	public void Setup() {
 		_scope = _provider.CreateScope();
-		_bufferOperator = _scope.ServiceProvider.GetRequiredService<IBufferOperator>();
+		_filterOperators = _scope.ServiceProvider.GetRequiredService<IFloatBufferFilterOperators>();
+		_clippingOperators = _scope.ServiceProvider.GetRequiredService<IFloatBufferClippingOperators>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 
 		_noise = new OpenSimplexNoise();
@@ -40,13 +44,13 @@ public class SimpleNoiseThresholderIntegrationTests {
 
 	[Test]
 	public void Threshold_OnePixelAboveThreshold_OnlyOneSet() {
-		var noise = _bufferFactory.Create<float>(2, 2);
+		IBuffer<float> noise = _bufferFactory.Create<float>(2, 2);
 		noise[0][0] = 1.0f;
 		noise[1][0] = 0.75f;
 		noise[0][1] = 0.25f;
 		noise[1][1] = 0.0f;
 
-		IBuffer<float> result = _bufferOperator.GateHigh( noise, 0.76f );
+		IBuffer<float> result = _filterOperators.GateHigh( noise, 0.76f );
 
 		Assert.AreEqual( 1.0f, result[0][0] );
 		Assert.AreEqual( 0.0f, result[1][0] );
@@ -56,12 +60,12 @@ public class SimpleNoiseThresholderIntegrationTests {
 
 	[Test]
 	public void Range_OnePixelInRange_OnlyOneSet() {
-		var noise = _bufferFactory.Create<float>( 2, 2 );
+		IBuffer<float> noise = _bufferFactory.Create<float>( 2, 2 );
 		noise[0][0] = 1.0f;
 		noise[1][0] = 0.75f;
 		noise[0][1] = 0.25f;
 		noise[1][1] = 0.0f;
-		IBuffer<float> result = _bufferOperator.Range( noise, 0.74f, 0.9f );
+		IBuffer<float> result = _clippingOperators.Range( noise, 0.74f, 0.9f );
 
 		Assert.AreEqual( 0.0f, result[0][0] );
 		Assert.AreEqual( 1.0f, result[1][0] );
@@ -80,7 +84,7 @@ public class SimpleNoiseThresholderIntegrationTests {
 
 		IBuffer<float> noise = _bufferFactory.Create<float>( width, height );
 		_noise.Random( seed, 2.0f, noise );
-		IBuffer<float> threshold = _bufferOperator.GateHigh( noise, 0.75f );
+		IBuffer<float> threshold = _filterOperators.GateHigh( noise, 0.75f );
 
 		using var img = new Image<Rgb24>( width, height );
 		for( int r = 0; r < height; r++ ) {

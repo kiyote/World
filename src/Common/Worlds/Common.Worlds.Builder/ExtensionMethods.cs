@@ -10,7 +10,7 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 		services.AddSingleton<INeighbourLocator, HexNeighbourLocator>();
-		services.AddSingleton<IMapGenerator, MapGenerator>();
+		//services.AddSingleton<IMapGenerator, MapGenerator>();
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
 		services.AddSingleton<INoiseMaskGenerator, SimpleNoiseMaskGenerator>();

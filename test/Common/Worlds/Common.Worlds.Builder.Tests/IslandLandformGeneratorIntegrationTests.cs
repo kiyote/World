@@ -1,4 +1,5 @@
 ﻿using Common.Buffer;
+using Common.Buffer.FloatingPoint;
 using Common.Worlds.Builder.DelaunayVoronoi;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -43,7 +44,7 @@ internal sealed class IslandLandformGeneratorIntegrationTests {
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IVoronoiFactory>(),
-			_scope.ServiceProvider.GetRequiredService<IBufferOperator>(),
+			_scope.ServiceProvider.GetRequiredService<IFloatBufferClippingOperators>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>()
 		);
 	}

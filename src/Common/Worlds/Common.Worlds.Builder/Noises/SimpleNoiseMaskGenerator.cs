@@ -1,18 +1,22 @@
 ﻿using Common.Buffer;
+using Common.Buffer.FloatingPoint;
 
 namespace Common.Worlds.Builder.Noises;
 
 internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
-	private readonly IBufferOperator _bufferOperator;
+	private readonly IFloatBufferFilterOperators _filterOperators;
+	private readonly IFloatBufferClippingOperators _clippingOperators;
 
 	public SimpleNoiseMaskGenerator(
 		IBufferFactory bufferFactory,
-		IBufferOperator bufferOperator
+		IFloatBufferFilterOperators filterOperators,
+		IFloatBufferClippingOperators clippingOperators
 	) {
 		_bufferFactory = bufferFactory;
-		_bufferOperator = bufferOperator;
+		_filterOperators = filterOperators;
+		_clippingOperators = clippingOperators;
 	}
 
 	INoiseMaskGenerator INoiseMaskGenerator.Circle(
@@ -40,9 +44,9 @@ internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 		IBuffer<float> swap = _bufferFactory.Create<float>( output.Size );
 		// Push the edge from the corner to the mid-point
 		float target = output[0][size.Columns / 2];
-		_bufferOperator.Threshold( output, 0.0f, 0.0f, target, target, swap );
-		_bufferOperator.Normalize( swap, output );
-		_bufferOperator.Invert( output, swap );
+		_clippingOperators.Threshold( output, 0.0f, 0.0f, target, target, swap );
+		_clippingOperators.Normalize( swap, output );
+		_filterOperators.Invert( output, swap );
 		output.CopyFrom( swap );
 
 		return this;
