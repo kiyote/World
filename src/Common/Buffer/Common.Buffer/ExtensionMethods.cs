@@ -4,7 +4,7 @@ namespace Common.Buffer;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddArrayBuffer(
+	public static IServiceCollection AddArrayBufferFactory(
 		this IServiceCollection services
 	) {
 		services.AddSingleton<IBufferFactory, ArrayBufferFactory>();

@@ -1,6 +1,15 @@
-﻿namespace Common.Buffer.FloatingPoint;
+﻿namespace Common.Buffer.Unit;
 
-internal sealed class FloatBufferClippingOperators : IFloatBufferClippingOperators {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class UnitBufferClippingOperators : IUnitBufferClippingOperators {
+
+	private readonly IBufferFactory _bufferFactory;
+
+	public UnitBufferClippingOperators(
+		IBufferFactory bufferFactory
+	) {
+		_bufferFactory = bufferFactory;
+	}
 
 	IBufferClippingOperators<float> IBufferClippingOperators<float>.Mask(
 		IBuffer<float> source,
@@ -27,8 +36,8 @@ internal sealed class FloatBufferClippingOperators : IFloatBufferClippingOperato
 		IBuffer<float> mask,
 		float value
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferClippingOperators ).Mask( source, mask, value, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferClippingOperators ).Mask( source, mask, value, output );
 		return output;
 	}
 
@@ -70,8 +79,8 @@ internal sealed class FloatBufferClippingOperators : IFloatBufferClippingOperato
 	IBuffer<float> IBufferClippingOperators<float>.Normalize(
 		IBuffer<float> source
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferClippingOperators ).Normalize( source, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferClippingOperators ).Normalize( source, output );
 		return output;
 	}
 
@@ -100,8 +109,8 @@ internal sealed class FloatBufferClippingOperators : IFloatBufferClippingOperato
 		float min,
 		float max
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferClippingOperators ).Range( source, min, max, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferClippingOperators ).Range( source, min, max, output );
 		return output;
 	}
 
@@ -136,8 +145,8 @@ internal sealed class FloatBufferClippingOperators : IFloatBufferClippingOperato
 		float maximum,
 		float maximumValue
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferClippingOperators ).Threshold( source, minimum, minimumValue, maximum, maximumValue, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferClippingOperators ).Threshold( source, minimum, minimumValue, maximum, maximumValue, output );
 		return output;
 	}
 

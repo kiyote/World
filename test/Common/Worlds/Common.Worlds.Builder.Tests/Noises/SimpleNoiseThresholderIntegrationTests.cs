@@ -1,5 +1,5 @@
 ﻿using Common.Buffer;
-using Common.Buffer.FloatingPoint;
+using Common.Buffer.Unit;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
@@ -13,15 +13,15 @@ public class SimpleNoiseThresholderIntegrationTests {
 	private IServiceScope _scope;
 
 	private INoiseProvider _noise;
-	private IFloatBufferFilterOperators _filterOperators;
-	private IFloatBufferClippingOperators _clippingOperators;
+	private IUnitBufferFilterOperators _filterOperators;
+	private IUnitBufferClippingOperators _clippingOperators;
 	private IBufferFactory _bufferFactory;
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		var services = new ServiceCollection();
-		services.AddArrayBuffer();
-		services.AddFloatingPointBufferOperators();
+		services.AddArrayBufferFactory();
+		services.AddUnitBufferOperators();
 		services.AddWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -30,8 +30,8 @@ public class SimpleNoiseThresholderIntegrationTests {
 	[SetUp]
 	public void Setup() {
 		_scope = _provider.CreateScope();
-		_filterOperators = _scope.ServiceProvider.GetRequiredService<IFloatBufferFilterOperators>();
-		_clippingOperators = _scope.ServiceProvider.GetRequiredService<IFloatBufferClippingOperators>();
+		_filterOperators = _scope.ServiceProvider.GetRequiredService<IUnitBufferFilterOperators>();
+		_clippingOperators = _scope.ServiceProvider.GetRequiredService<IUnitBufferClippingOperators>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 
 		_noise = new OpenSimplexNoise();

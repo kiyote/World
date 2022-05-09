@@ -1,6 +1,6 @@
 ﻿using Common.Worlds.Builder.DelaunayVoronoi;
 using Common.Buffer;
-using Common.Buffer.FloatingPoint;
+using Common.Buffer.Unit;
 
 namespace Common.Worlds.Builder;
 
@@ -10,14 +10,14 @@ internal class IslandLandformGenerator : ILandformGenerator {
 	private readonly IDelaunatorFactory _delaunatorFactory;
 	private readonly IVoronoiFactory _voronoiFactory;
 	private readonly IRandom _random;
-	private readonly IFloatBufferClippingOperators _bufferOperator;
+	private readonly IUnitBufferClippingOperators _bufferOperator;
 	private readonly IBufferFactory _bufferFactory;
 
 	public IslandLandformGenerator(
 		IRandom random,
 		IDelaunatorFactory delaunatorFactory,
 		IVoronoiFactory voronoiFactory,
-		IFloatBufferClippingOperators bufferOperator,
+		IUnitBufferClippingOperators bufferOperator,
 		IBufferFactory bufferFactory
 	) {
 		_random = random;

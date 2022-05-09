@@ -1,10 +1,11 @@
-﻿namespace Common.Buffer.FloatingPoint;
+﻿namespace Common.Buffer.Unit;
 
-internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOperators {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class UnitBufferArithmeticOperators : IUnitBufferArithmeticOperators {
 
 	private readonly IBufferFactory _bufferFactory;
 
-	public FloatBufferArithmeticOperators(
+	public UnitBufferArithmeticOperators(
 		IBufferFactory bufferFactory
 	) {
 		_bufferFactory = bufferFactory;
@@ -47,7 +48,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		float amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Add( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Add( source, amount, output );
 		return output;
 	}
 
@@ -56,7 +57,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		IBuffer<float> amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Add( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Add( source, amount, output );
 		return output;
 	}
 
@@ -97,7 +98,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		float amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Multiply( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Multiply( source, amount, output );
 		return output;
 	}
 
@@ -106,7 +107,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		IBuffer<float> amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Multiply( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Multiply( source, amount, output );
 		return output;
 	}
 
@@ -147,7 +148,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		IBuffer<float> amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Subtract( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Subtract( source, amount, output );
 		return output;
 	}
 
@@ -156,7 +157,7 @@ internal sealed class FloatBufferArithmeticOperators : IFloatBufferArithmeticOpe
 		float amount
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferArithmeticOperators ).Subtract( source, amount, output );
+		( this as IUnitBufferArithmeticOperators ).Subtract( source, amount, output );
 		return output;
 	}
 

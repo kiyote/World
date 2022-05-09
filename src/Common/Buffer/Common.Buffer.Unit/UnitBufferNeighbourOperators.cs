@@ -1,12 +1,16 @@
-﻿namespace Common.Buffer.FloatingPoint;
+﻿namespace Common.Buffer.Unit;
 
-internal sealed class FloatBufferNeighbourOperators : IFloatBufferNeighbourOperators {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class UnitBufferNeighbourOperators : IUnitBufferNeighbourOperators {
 
+	private readonly IBufferFactory _bufferFactory;
 	private readonly INeighbourLocator _neighbourLocator;
 
-	public FloatBufferNeighbourOperators(
+	public UnitBufferNeighbourOperators(
+		IBufferFactory bufferFactory,
 		INeighbourLocator neighbourLocator
 	) {
+		_bufferFactory = bufferFactory;
 		_neighbourLocator = neighbourLocator;
 	}
 
@@ -37,8 +41,8 @@ internal sealed class FloatBufferNeighbourOperators : IFloatBufferNeighbourOpera
 	IBuffer<float> IBufferNeighbourOperators<float>.Denoise(
 		IBuffer<float> source
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferNeighbourOperators ).Denoise( source, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferNeighbourOperators ).Denoise( source, output );
 		return output;
 	}
 
@@ -74,8 +78,8 @@ internal sealed class FloatBufferNeighbourOperators : IFloatBufferNeighbourOpera
 		IBuffer<float> source,
 		float threshold
 	) {
-		var output = new ArrayBuffer<float>( source.Size );
-		( this as IFloatBufferNeighbourOperators ).EdgeDetect( source, threshold, output );
+		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
+		( this as IUnitBufferNeighbourOperators ).EdgeDetect( source, threshold, output );
 		return output;
 	}
 

@@ -13,6 +13,7 @@ namespace Common.Renderers.Bitmap.Tests;
 [TestFixture]
 public class BitmapWorldRendererUnitTests {
 
+	/*
 	private Mock<IResourceFileManager> _resourceFileManager;
 	private Mock<IImageFactory> _imageFactory;
 	private IWorldRenderer _renderer;
@@ -138,4 +139,5 @@ public class BitmapWorldRendererUnitTests {
 			} )
 			.Returns( Task.FromResult( true ) );
 	}
+	*/
 }
