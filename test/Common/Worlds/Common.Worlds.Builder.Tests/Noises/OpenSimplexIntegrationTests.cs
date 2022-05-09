@@ -17,7 +17,7 @@ public class OpenSimplexNoiseIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		var services = new ServiceCollection();
-		services.AddArrayBufferFactory();
+		services.AddArrayBuffer();
 		_provider = services.BuildServiceProvider();
 	}
 
@@ -48,7 +48,7 @@ public class OpenSimplexNoiseIntegrationTests {
 		_noise.Random( seed, 2.0f, noise );
 		for( int r = 0; r < height; r++ ) {
 			for( int c = 0; c < width; c++ ) {
-				float value = noise[r][c];
+				float value = noise[c, r];
 
 				img[c, r] = new Rgb24( (byte)( 255.0f * value ), (byte)( 255.0f * value ), (byte)( 255.0f * value ) );
 			}

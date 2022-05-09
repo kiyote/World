@@ -1,8 +1,8 @@
 ﻿using Common.Buffer;
-using Common.Buffer.Unit;
 
 namespace Common.Worlds.Builder.Noises;
 
+/*
 internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
@@ -62,3 +62,4 @@ internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 
 }
 
+*/

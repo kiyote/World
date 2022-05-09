@@ -237,7 +237,7 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 					maxValue = value;
 				}
 
-				output[r][c] = value;
+				output[c, r] = value;
 			}
 		}
 
@@ -246,8 +246,8 @@ internal sealed class OpenSimplexNoise : INoiseProvider {
 		float scale = 1.0f / range;
 		for( int r = 0; r < output.Size.Rows; r++ ) {
 			for( int c = 0; c < output.Size.Columns; c++ ) {
-				output[r][c] += Math.Abs( minValue );
-				output[r][c] *= scale;
+				output[c, r] += Math.Abs( minValue );
+				output[c, r] *= scale;
 			}
 		}
 	}

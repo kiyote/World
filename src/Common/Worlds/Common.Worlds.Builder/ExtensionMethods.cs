@@ -13,7 +13,7 @@ public static class ExtensionMethods {
 		//services.AddSingleton<IMapGenerator, MapGenerator>();
 		services.AddSingleton<IWorldBuilder, WorldBuilder>();
 		services.AddSingleton<INoiseProvider, OpenSimplexNoise>();
-		services.AddSingleton<INoiseMaskGenerator, SimpleNoiseMaskGenerator>();
+		//services.AddSingleton<INoiseMaskGenerator, SimpleNoiseMaskGenerator>();
 		services.AddSingleton<ILandformGenerator, IslandLandformGenerator>();
 		services.AddSingleton<IDelaunatorFactory, DelaunatorFactory>();
 		services.AddSingleton<IVoronoiFactory, VoronoiFactory>();

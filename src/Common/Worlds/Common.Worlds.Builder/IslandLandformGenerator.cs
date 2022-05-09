@@ -1,6 +1,6 @@
 ﻿using Common.Worlds.Builder.DelaunayVoronoi;
 using Common.Buffer;
-using Common.Buffer.Unit;
+using Common.Buffer.Float;
 
 namespace Common.Worlds.Builder;
 
@@ -10,21 +10,21 @@ internal class IslandLandformGenerator : ILandformGenerator {
 	private readonly IDelaunatorFactory _delaunatorFactory;
 	private readonly IVoronoiFactory _voronoiFactory;
 	private readonly IRandom _random;
-	private readonly IUnitBufferClippingOperators _bufferOperator;
 	private readonly IBufferFactory _bufferFactory;
+	private readonly IFloatBufferOperators _floatBufferOperators;
 
 	public IslandLandformGenerator(
 		IRandom random,
 		IDelaunatorFactory delaunatorFactory,
 		IVoronoiFactory voronoiFactory,
-		IUnitBufferClippingOperators bufferOperator,
-		IBufferFactory bufferFactory
+		IBufferFactory bufferFactory,
+		IFloatBufferOperators floatBufferOperators
 	) {
 		_random = random;
 		_delaunatorFactory = delaunatorFactory;
 		_voronoiFactory = voronoiFactory;
-		_bufferOperator = bufferOperator;
 		_bufferFactory = bufferFactory;
+		_floatBufferOperators = floatBufferOperators;
 	}
 
 	IBuffer<float> ILandformGenerator.Create(
@@ -59,12 +59,12 @@ internal class IslandLandformGenerator : ILandformGenerator {
 		foreach (Cell cell in heights.Keys) {
 			PolygonRasterizer.Fill( cell.Points, ( int x, int y ) => {
 				if (x >= 0 && x < size.Columns && y >= 0 && y < size.Rows) {
-					heightmap[y][x] = heights[cell].Height;
+					heightmap[x, y] = heights[cell].Height;
 				}
 			} );
 		}
 
-		_bufferOperator.Normalize( heightmap, heightmap );
+		_floatBufferOperators.Normalize( heightmap, 0.0f, 1.0f );
 
 		return heightmap;
 	}
