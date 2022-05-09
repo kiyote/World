@@ -1,4 +1,4 @@
-﻿namespace Common.Buffer;
+﻿namespace Common.Buffers;
 
 public interface IBufferNeighbourOperators<T> {
 

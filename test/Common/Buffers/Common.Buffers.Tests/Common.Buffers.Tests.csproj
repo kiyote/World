@@ -15,6 +15,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer\Common.Buffer.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
 	</ItemGroup>
 </Project>

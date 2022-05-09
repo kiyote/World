@@ -1,6 +1,7 @@
 using NUnit.Framework;
 
-namespace Common.Buffer.Tests;
+namespace Common.Buffers.Tests;
+
 [TestFixture]
 public class BufferOperatorIntegrationTests {
 

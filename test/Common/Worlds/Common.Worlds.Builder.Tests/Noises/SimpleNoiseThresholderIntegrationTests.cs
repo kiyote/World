@@ -1,4 +1,4 @@
-﻿using Common.Buffer;
+﻿using Common.Buffers;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using SixLabors.ImageSharp;

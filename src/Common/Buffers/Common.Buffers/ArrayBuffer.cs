@@ -1,4 +1,4 @@
-﻿namespace Common.Buffer;
+﻿namespace Common.Buffers;
 
 internal sealed class ArrayBuffer<T>: IBuffer<T> {
 

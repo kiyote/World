@@ -1,5 +1,5 @@
-﻿using Common.Buffer;
-using Common.Buffer.Float;
+﻿using Common.Buffers;
+using Common.Buffers.Float;
 using Common.Worlds.Builder.DelaunayVoronoi;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;

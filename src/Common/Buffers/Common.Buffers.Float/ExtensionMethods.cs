@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Buffer.Float;
+namespace Common.Buffers.Float;
 
 public static class ExtensionMethods {
 
