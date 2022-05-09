@@ -1,18 +1,18 @@
 ﻿using Common.Buffer;
-using Common.Buffer.FloatingPoint;
+using Common.Buffer.Unit;
 
 namespace Common.Worlds.Builder.Noises;
 
 internal sealed class SimpleNoiseMaskGenerator : INoiseMaskGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
-	private readonly IFloatBufferFilterOperators _filterOperators;
-	private readonly IFloatBufferClippingOperators _clippingOperators;
+	private readonly IUnitBufferFilterOperators _filterOperators;
+	private readonly IUnitBufferClippingOperators _clippingOperators;
 
 	public SimpleNoiseMaskGenerator(
 		IBufferFactory bufferFactory,
-		IFloatBufferFilterOperators filterOperators,
-		IFloatBufferClippingOperators clippingOperators
+		IUnitBufferFilterOperators filterOperators,
+		IUnitBufferClippingOperators clippingOperators
 	) {
 		_bufferFactory = bufferFactory;
 		_filterOperators = filterOperators;

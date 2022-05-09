@@ -1,10 +1,11 @@
-﻿namespace Common.Buffer.FloatingPoint;
+﻿namespace Common.Buffer.Unit;
 
-internal class FloatBufferFilterOperators : IFloatBufferFilterOperators {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class UnitBufferFilterOperators : IUnitBufferFilterOperators {
 
 	private readonly IBufferFactory _bufferFactory;
 
-	public FloatBufferFilterOperators(
+	public UnitBufferFilterOperators(
 		IBufferFactory bufferFactory
 	) {
 		_bufferFactory = bufferFactory;
@@ -33,7 +34,7 @@ internal class FloatBufferFilterOperators : IFloatBufferFilterOperators {
 		float threshold
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferFilterOperators ).GateHigh( source, threshold, output );
+		( this as IUnitBufferFilterOperators ).GateHigh( source, threshold, output );
 		return output;
 	}
 
@@ -60,7 +61,7 @@ internal class FloatBufferFilterOperators : IFloatBufferFilterOperators {
 		float threshold
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferFilterOperators ).GateLow( source, threshold, output );
+		( this as IUnitBufferFilterOperators ).GateLow( source, threshold, output );
 		return output;
 	}
 
@@ -82,7 +83,7 @@ internal class FloatBufferFilterOperators : IFloatBufferFilterOperators {
 		IBuffer<float> source
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferFilterOperators ).Invert( source, output );
+		( this as IUnitBufferFilterOperators ).Invert( source, output );
 		return output;
 	}
 
@@ -113,7 +114,7 @@ internal class FloatBufferFilterOperators : IFloatBufferFilterOperators {
 		float[] ranges
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( source.Size );
-		( this as IFloatBufferFilterOperators ).Quantize( source, ranges, output );
+		( this as IUnitBufferFilterOperators ).Quantize( source, ranges, output );
 		return output;
 	}
 

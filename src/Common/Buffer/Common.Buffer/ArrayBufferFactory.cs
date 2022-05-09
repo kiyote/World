@@ -1,5 +1,6 @@
 ﻿namespace Common.Buffer;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class ArrayBufferFactory : IBufferFactory {
 	IBuffer<T> IBufferFactory.Create<T>( Size size ) {
 		return new ArrayBuffer<T>( size );

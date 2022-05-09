@@ -17,7 +17,7 @@ public class OpenSimplexNoiseIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		var services = new ServiceCollection();
-		services.AddArrayBuffer();
+		services.AddArrayBufferFactory();
 		_provider = services.BuildServiceProvider();
 	}
 

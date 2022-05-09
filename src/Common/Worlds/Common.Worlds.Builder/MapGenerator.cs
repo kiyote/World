@@ -1,5 +1,5 @@
 ﻿using Common.Buffer;
-using Common.Buffer.FloatingPoint;
+using Common.Buffer.Unit;
 using Common.Worlds.Builder.Noises;
 
 namespace Common.Worlds.Builder;

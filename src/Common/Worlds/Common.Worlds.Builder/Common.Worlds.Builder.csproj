@@ -4,7 +4,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer\Common.Buffer.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer.Unit\Common.Buffer.Unit.csproj" />
 	</ItemGroup>
 </Project>

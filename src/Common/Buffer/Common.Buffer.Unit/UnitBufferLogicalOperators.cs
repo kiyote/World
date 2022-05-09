@@ -1,10 +1,11 @@
-﻿namespace Common.Buffer.FloatingPoint;
+﻿namespace Common.Buffer.Unit;
 
-internal sealed class FloatBufferLogicalOperators: IFloatBufferLogicalOperators {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class UnitBufferLogicalOperators: IUnitBufferLogicalOperators {
 
 	private readonly IBufferFactory _bufferFactory;
 
-	public FloatBufferLogicalOperators(
+	public UnitBufferLogicalOperators(
 		IBufferFactory bufferFactory
 	) {
 		_bufferFactory = bufferFactory;
@@ -37,7 +38,7 @@ internal sealed class FloatBufferLogicalOperators: IFloatBufferLogicalOperators 
 		float thresholdB
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( a.Size );
-		( this as IFloatBufferLogicalOperators ).And( a, thresholdA, b, thresholdB, output );
+		( this as IUnitBufferLogicalOperators ).And( a, thresholdA, b, thresholdB, output );
 		return output;
 	}
 
@@ -68,7 +69,7 @@ internal sealed class FloatBufferLogicalOperators: IFloatBufferLogicalOperators 
 		float thresholdB
 	) {
 		IBuffer<float> output = _bufferFactory.Create<float>( a.Size );
-		( this as IFloatBufferLogicalOperators ).Or( a, thresholdA, b, thresholdB, output );
+		( this as IUnitBufferLogicalOperators ).Or( a, thresholdA, b, thresholdB, output );
 		return output;
 	}
 
