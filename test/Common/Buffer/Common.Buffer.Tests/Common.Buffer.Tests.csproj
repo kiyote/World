@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter" />
+		<PackageReference Include="coverlet.collector">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer\Common.Buffer.csproj" />
+	</ItemGroup>
+</Project>

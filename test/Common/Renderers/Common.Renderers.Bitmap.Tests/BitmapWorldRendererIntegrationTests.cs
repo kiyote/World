@@ -22,7 +22,7 @@ public class BitmapWorldRendererIntegrationTests {
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
-		services.AddArrayBufferFactory();
+		services.AddArrayBuffer();
 		services.AddResourceFileManager();
 		services.AddDiskFileManager( _folder );
 		services.AddBitmapRenderer();
@@ -58,7 +58,7 @@ public class BitmapWorldRendererIntegrationTests {
 
 		for( int r = 0; r < tileTerrain.Size.Rows; r++ ) {
 			for( int c = 0; c < tileTerrain.Size.Columns; c++ ) {
-				tileTerrain[r][c] = TileTerrain.Grass;
+				tileTerrain[c, r] = TileTerrain.Grass;
 			}
 		}
 

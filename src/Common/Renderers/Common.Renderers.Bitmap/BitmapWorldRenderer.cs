@@ -37,7 +37,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
 
-				if (terrain[r][c] == terrainToRender) {
+				if (terrain[c, r] == terrainToRender) {
 					map[c, r] = new L8( 255 );
 				} else {
 					map[c, r] = new L8( 0 );
@@ -74,7 +74,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 				int x = 53 * c;
 				int y = ( 64 * r ) + ( 32 * ( x & 1 ) );
 
-				switch( terrain[r][c] ) {
+				switch( terrain[c, r] ) {
 					case TileTerrain.Mountain:
 						img.Mutate( i => i.DrawImage( mountain, new Point( x, y ), 1.0f ) );
 						break;

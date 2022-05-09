@@ -1,5 +1,4 @@
 ﻿using Common.Buffer;
-using Common.Buffer.Unit;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
@@ -7,8 +6,9 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Common.Worlds.Builder.Noises.Test;
 
-public class SimpleNoiseThresholderIntegrationTests {
 
+public class SimpleNoiseThresholderIntegrationTests {
+/*
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
 
@@ -106,4 +106,5 @@ public class SimpleNoiseThresholderIntegrationTests {
 		}
 		thr.SaveAsBmp( @"c:\temp\noise_threshold_threshold.bmp" );
 	}
+*/
 }

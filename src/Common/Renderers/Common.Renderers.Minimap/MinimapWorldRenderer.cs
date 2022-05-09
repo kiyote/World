@@ -41,7 +41,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 				int x = 2 * c;
 				int y = ( 2 * r ) + ( 1 * ( c & 1 ) );
 
-				switch( terrain[r][c] ) {
+				switch( terrain[c, r] ) {
 					case TileTerrain.Mountain:
 						img[x + 0, y + 0] = mountain;
 						img[x + 1, y + 0] = mountain;
@@ -112,7 +112,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
 
-				if( terrain[r][c] == terrainToRender ) {
+				if( terrain[c, r] == terrainToRender ) {
 					map[c, r] = new L8( 255 );
 				} else {
 					map[c, r] = new L8( 0 );

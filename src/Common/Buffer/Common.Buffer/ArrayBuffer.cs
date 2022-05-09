@@ -21,37 +21,12 @@ internal sealed class ArrayBuffer<T>: IBuffer<T> {
 
 	public Size Size => _size;
 
-	public T[] this[int row] {
+	public T this[int column, int row] {
 		get {
-			return _buffer[row];
+			return _buffer[row][column];
 		}
-	}
-
-	public void Apply(
-		Func<T, T> action
-	) {
-		if (action is null) {
-			throw new ArgumentNullException( nameof( action ) );
-		}
-
-		for (int r = 0; r < _size.Rows; r++) {
-			for (int c = 0; c < _size.Columns; c++) {
-				_buffer[r][c] = action( _buffer[r][c] );
-			}
-		}
-	}
-
-	public void CopyFrom(
-		IBuffer<T> source
-	) {
-		if( source is null ) {
-			throw new ArgumentNullException( nameof( source ) );
-		}
-
-		for( int r = 0; r < _size.Rows; r++ ) {
-			for( int c = 0; c < _size.Columns; c++ ) {
-				_buffer[r][c] = source[r][c];
-			}
+		set {
+			_buffer[row][column] = value;
 		}
 	}
 }

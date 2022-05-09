@@ -1,5 +1,5 @@
 ﻿using Common.Buffer;
-using Common.Buffer.Unit;
+using Common.Buffer.Float;
 using Common.Worlds.Builder.DelaunayVoronoi;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -25,7 +25,8 @@ internal sealed class IslandLandformGeneratorIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
-		services.AddArrayBufferFactory();
+		services.AddFloatBufferOperators();
+		services.AddArrayBuffer();
 		services.AddWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -44,8 +45,8 @@ internal sealed class IslandLandformGeneratorIntegrationTests {
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IVoronoiFactory>(),
-			_scope.ServiceProvider.GetRequiredService<IUnitBufferClippingOperators>(),
-			_scope.ServiceProvider.GetRequiredService<IBufferFactory>()
+			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
+			_scope.ServiceProvider.GetRequiredService<IFloatBufferOperators>()
 		);
 	}
 
@@ -81,7 +82,7 @@ internal sealed class IslandLandformGeneratorIntegrationTests {
 
 		for( int row = 0; row < size.Rows; row++) {
 			for (int column = 0; column < size.Columns; column++) {
-				float height = Math.Min( terrain[row][column], 1.0f );
+				float height = Math.Min( terrain[column, row], 1.0f );
 
 				int index = (int)(NonLinearQuantizer( height ) * (colours.Length - 1));
 				//int index = (int)( height * ( colours.Length - 1 ) );
