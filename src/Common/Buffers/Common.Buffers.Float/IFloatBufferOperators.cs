@@ -1,4 +1,4 @@
-﻿namespace Common.Buffer.Float;
+﻿namespace Common.Buffers.Float;
 
 public interface IFloatBufferOperators {
 

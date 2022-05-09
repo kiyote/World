@@ -2,7 +2,7 @@
  * Ported from https://gist.github.com/KdotJPG/b1270127455a94ac5d19
  * and heavily refactored to improve performance. */
 
-using Common.Buffer;
+using Common.Buffers;
 using System.Runtime.CompilerServices;
 
 namespace Common.Worlds.Builder.Noises;

@@ -1,6 +1,6 @@
 ﻿using Common.Worlds.Builder.DelaunayVoronoi;
-using Common.Buffer;
-using Common.Buffer.Float;
+using Common.Buffers;
+using Common.Buffers.Float;
 
 namespace Common.Worlds.Builder;
 

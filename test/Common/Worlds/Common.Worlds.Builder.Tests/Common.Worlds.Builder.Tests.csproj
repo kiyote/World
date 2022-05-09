@@ -24,7 +24,7 @@
 		<ProjectReference Include="$(SolutionDir)src\Common\Renderers\Common.Renderers.Bitmap\Common.Renderers.Bitmap.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer\Common.Buffer.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffer\Common.Buffer.Float\Common.Buffer.Float.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
 	</ItemGroup>
 </Project>

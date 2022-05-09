@@ -1,4 +1,4 @@
-﻿namespace Common.Buffer;
+﻿namespace Common.Buffers;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class BufferOperator : IBufferOperator {

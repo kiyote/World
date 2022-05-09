@@ -1,4 +1,4 @@
-﻿namespace Common.Buffer;
+﻿namespace Common.Buffers;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Naming", "CA1716:Identifiers should not match keywords", Justification = "These are simple logical operators and these are the best names." )]
 public interface IBufferLogicalOperators<T> {

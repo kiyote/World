@@ -1,4 +1,4 @@
-﻿using Common.Buffer;
+﻿using Common.Buffers;
 
 namespace Common.Worlds.Builder;
 

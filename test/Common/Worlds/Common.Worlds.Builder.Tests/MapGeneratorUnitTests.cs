@@ -1,4 +1,4 @@
-﻿using Common.Buffer;
+﻿using Common.Buffers;
 using Common.Worlds.Builder.Noises;
 using Moq;
 using NUnit.Framework;
