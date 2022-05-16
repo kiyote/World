@@ -37,4 +37,19 @@ internal sealed class BufferOperator : IBufferOperator {
 			}
 		}
 	}
+
+	void IBufferOperator.Perform<T>(
+		IBuffer<T> source,
+		Func<int, int, IBuffer<T>, T, T> op,
+		IBuffer<T> output
+	) {
+		int rows = source.Size.Rows;
+		int columns = source.Size.Columns;
+
+		for( int r = 0; r < rows; r++ ) {
+			for( int c = 0; c < columns; c++ ) {
+				output[c, r] = op( c, r, source, source[c, r] );
+			}
+		}
+	}
 }

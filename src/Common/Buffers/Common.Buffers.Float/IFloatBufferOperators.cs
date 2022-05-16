@@ -126,4 +126,9 @@ public interface IFloatBufferOperators {
 	/// <param name="amounts">The source of the amount to multiply by.</param>
 	/// <param name="output">The buffer to receive the new values.</param>
 	void Multiply( IBuffer<float> input, IBuffer<float> amounts, IBuffer<float> output );
+
+	void HorizonalBlur( IBuffer<float> input, int amount, IBuffer<float> output );
+	void VerticalBlur( IBuffer<float> input, int amount, IBuffer<float> output );
+
+	void Invert( IBuffer<float> input, IBuffer<float> output );
 }

@@ -1,3 +1,4 @@
+using Common.Files;
 using Common.Files.Manager.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -14,8 +15,8 @@ public class DiskFileRepositoryIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		string root = Path.GetTempPath();
-		_testFolder = Path.Combine( root, Guid.NewGuid().ToString( "N" ) );
+		string root = Path.Combine( Path.GetTempPath(), "world" );
+		_testFolder = Path.Combine( root, nameof( DiskFileRepositoryIntegrationTests ) );
 		Directory.CreateDirectory( _testFolder );
 
 		var services = new ServiceCollection();
@@ -44,7 +45,7 @@ public class DiskFileRepositoryIntegrationTests {
 	public void PutMetadataAsync_ValidMetadata_NoExceptionsThrown() {
 		IMutableFileMetadataRepository repo = _diskRepository;
 
-		Id<FileMetadata> fileId = new Id<FileMetadata>(Guid.NewGuid());
+		Id<FileMetadata> fileId = new Id<FileMetadata>( Guid.NewGuid() );
 		FileMetadata fileMetadata = new FileMetadata( fileId, "name", "mime type", 1234L, DateTime.UtcNow );
 
 		Assert.DoesNotThrowAsync( async () => { await repo.PutMetadataAsync( fileMetadata, CancellationToken.None ); } );

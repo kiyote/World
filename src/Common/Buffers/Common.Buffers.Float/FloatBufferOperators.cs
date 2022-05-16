@@ -54,6 +54,46 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 		);
 	}
 
+	void IFloatBufferOperators.HorizonalBlur(
+		IBuffer<float> input,
+		int amount,
+		IBuffer<float> output
+	) {
+		if( amount == 0 ) {
+			throw new InvalidOperationException( "Why blur with zero effect?" );
+		}
+
+		for( int r = 0; r < input.Size.Rows; r++ ) {
+			float sum = input[0, r] * amount;
+			for( int c = 0; c < input.Size.Columns; c++ ) {
+				int x = Math.Max( 0, c - amount );
+				sum += input[c, r];
+				sum -= input[x, r];
+				output[c, r] = sum / amount;
+			}
+		}
+	}
+
+	void IFloatBufferOperators.VerticalBlur(
+		IBuffer<float> input,
+		int amount,
+		IBuffer<float> output
+	) {
+		if( amount == 0 ) {
+			throw new InvalidOperationException( "Why blur with zero effect?" );
+		}
+
+		for( int c = 0; c < input.Size.Columns; c++ ) {
+			float sum = input[c, 0] * amount;
+			for( int r = 0; r < input.Size.Columns; r++ ) {
+				int y = Math.Max( 0, r - amount );
+				sum += input[c, r];
+				sum -= input[c, y];
+				output[c, r] = sum / amount;
+			}
+		}
+	}
+
 	void IFloatBufferOperators.Multiply(
 		IBuffer<float> buffer,
 		float amount
@@ -128,15 +168,15 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 			}
 		}
 
-		float actualRange = maxValue - minValue;
+		float actualRange = Math.Abs( maxValue - minValue );
 		float scale = 1.0f / actualRange;
-		_bufferOperator.Perform( 
+		_bufferOperator.Perform(
 			input,
 			( float value ) => {
-				float result = value + Math.Abs( minValue );
-				value *= scale; // Value will now be between 0..1
+				float result = value - minValue;
+				result *= scale; // Value will now be between 0..1
 
-				return value * desiredRange;
+				return result * desiredRange;
 			},
 			output
 		);
@@ -181,6 +221,19 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 			amounts,
 			( float value, float amount ) => {
 				return value - amount;
+			},
+			output
+		);
+	}
+
+	void IFloatBufferOperators.Invert(
+		IBuffer<float> input,
+		IBuffer<float> output
+	) {
+		_bufferOperator.Perform(
+			input,
+			( float value ) => {
+				return 1.0f - value;
 			},
 			output
 		);

@@ -38,7 +38,8 @@ namespace Common.Core;
 /// 
 /// </summary>
 #pragma warning disable IDE0047 // Remove unnecessary parentheses
-public class FastRandom : IRandom {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class FastRandom : IRandom {
 	// The +1 ensures NextDouble doesn't generate 1.0
 	private const double REAL_UNIT_INT = 1.0 / ( (double)int.MaxValue + 1.0 );
 	private const double REAL_UNIT_UINT = 1.0 / ( (double)uint.MaxValue + 1.0 );
@@ -100,17 +101,6 @@ public class FastRandom : IRandom {
 	#endregion
 
 	#region Public Methods [Next* methods]
-
-	public int NextNormalInt( int upperBound ) {
-		int value;
-		do {
-			double u1 = this.NextDouble();
-			double u2 = this.NextDouble();
-			double randStdNormal = Math.Sqrt( -2.0 * Math.Log( u1 ) ) * Math.Sin( 2.0 * Math.PI * u2 );
-			value = (int)( upperBound * randStdNormal );
-		} while( value < 0 || value >= upperBound );
-		return value;
-	}
 
 	/// <summary>
 	/// Generates a uint. Values returned are over the full range of a uint, 

@@ -18,7 +18,9 @@ public class BitmapWorldRendererIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		_folder = Path.Combine( Path.GetTempPath(), Guid.NewGuid().ToString( "N" ) );
+		string root = Path.Combine( Path.GetTempPath(), "world" );
+		Directory.CreateDirectory( root );
+		_folder = Path.Combine( root, nameof( BitmapWorldRendererIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
@@ -49,7 +51,7 @@ public class BitmapWorldRendererIntegrationTests {
 
 	[Test]
 	[Ignore("Used to generate visual output for inspection.")]
-	public async Task RenderTerrain() {
+	public async Task Visualize() {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		IBufferFactory bufferFactory = _provider.GetRequiredService<IBufferFactory>();
 
