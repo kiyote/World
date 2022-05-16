@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="SixLabors.ImageSharp" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
+	</ItemGroup>
+
+</Project>

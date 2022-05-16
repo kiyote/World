@@ -8,8 +8,11 @@ public interface IBufferOperator {
 	/// </summary>
 	/// <typeparam name="T">The type of each value in the buffer.</typeparam>
 	/// <param name="source">The buffer to be operated upon.</param>
-	/// <param name="op">A function that takes the value from the buffer and returns the desired value.</param>
+	/// <param name="op">The function to be called to transform each value.</param>
 	/// <param name="output">The buffer to receive the resulting value.</param>
+	/// <remarks>
+	/// <paramref name="op" /> is a function that takes the value from the buffer and returns the desired value.
+	/// </remarks>
 	void Perform<T>(
 		IBuffer<T> source,
 		Func<T, T> op,
@@ -24,12 +27,34 @@ public interface IBufferOperator {
 	/// <typeparam name="T">The type of each value in the buffer.</typeparam>
 	/// <param name="source1">Supplies the first value to the <paramref name="op"/> function.</param>
 	/// <param name="source2">Supplies the second value to the <paramref name="op"/> function.</param>
-	/// <param name="op">A function that takes a value from each source buffer and returns the desired value.</param>
 	/// <param name="output">The buffer to receive the resulting value.</param>
+	/// <remarks>
+	/// <paramref name="op" /> is function that takes a value from each source buffer and returns the desired value.
+	/// </remarks>
 	void Perform<T>(
 		IBuffer<T> source1,
 		IBuffer<T> source2,
 		Func<T, T, T> op,
+		IBuffer<T> output
+	);
+
+	/// <summary>
+	/// Performs the supplied <paramref name="op"/> on the values contained
+	/// in <paramref name="source"/>, storing the result in <paramref name="output"/>.
+	/// </summary>
+	/// <typeparam name="T">The type of each value in the buffer.</typeparam>
+	/// <param name="source">The buffer to be operated upon.</param>
+	/// <param name="op">The function to be called to transform each value.</param>
+	/// <param name="output">The buffer to receive the resulting value.</param>
+	/// <remarks>
+	/// <paramref name="op"/> is a function that receives the column and row of the value being
+	/// operated upon, the buffer from which that value came and the value itself
+	/// that is being operated upon, and returns the new value for that column
+	/// and row pair.
+	/// </remarks>
+	void Perform<T>(
+		IBuffer<T> source,
+		Func<int, int, IBuffer<T>, T, T> op,
 		IBuffer<T> output
 	);
 }

@@ -13,7 +13,9 @@ public sealed class WorldBuilderIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		_folder = Path.Combine( Path.GetTempPath(), Guid.NewGuid().ToString( "N" ) );
+		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
+		Directory.CreateDirectory( rootPath );
+		_folder = Path.Combine( rootPath, nameof( WorldBuilderIntegrationTests ) );
 		var services = new ServiceCollection();
 		services.AddWorldBuilder();
 

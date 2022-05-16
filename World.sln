@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		forceclean.bat = forceclean.bat
 		forceclean.ps1 = forceclean.ps1
 		LICENSE = LICENSE
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core", "src\Common\Core\Common.Core\Common.Core.csproj", "{A6E254E3-DBC5-4109-B417-B8B20A4C1B1E}"
@@ -85,9 +86,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prod", "prod", "{9A3371BE-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{4954E5CF-4144-4AF8-BEF4-5800886C62A7}"
 	ProjectSection(SolutionItems) = preProject
-		terraform\common\_inputs.tf = terraform\common\_inputs.tf
 		terraform\common\files-manager.tf = terraform\common\files-manager.tf
 		terraform\common\shared.tf = terraform\common\shared.tf
+		terraform\common\_inputs.tf = terraform\common\_inputs.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Players", "Players", "{4FB19705-8CD9-4D4B-BBF6-E99AE248A0BD}"
@@ -142,16 +143,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Files.Manager.Disk.T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files-manager", "files-manager", "{85986A69-7DF1-4D06-B827-B87E074B1095}"
 	ProjectSection(SolutionItems) = preProject
+		terraform\modules\files-manager\bucket_files.tf = terraform\modules\files-manager\bucket_files.tf
 		terraform\modules\files-manager\_inputs.tf = terraform\modules\files-manager\_inputs.tf
 		terraform\modules\files-manager\_outputs.tf = terraform\modules\files-manager\_outputs.tf
-		terraform\modules\files-manager\bucket_files.tf = terraform\modules\files-manager\bucket_files.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{A753DD61-5704-4BD7-AFC8-359D8E425B99}"
 	ProjectSection(SolutionItems) = preProject
+		terraform\modules\shared\shared_dynamodb_table.tf = terraform\modules\shared\shared_dynamodb_table.tf
 		terraform\modules\shared\_inputs.tf = terraform\modules\shared\_inputs.tf
 		terraform\modules\shared\_outputs.tf = terraform\modules\shared\_outputs.tf
-		terraform\modules\shared\shared_dynamodb_table.tf = terraform\modules\shared\shared_dynamodb_table.tf
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B82E4C47-040A-4748-BDAC-3104C67BA6CB}"
@@ -288,6 +289,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Buffers", "Buffers", "{32453C30-328C-4402-BD18-F111587F495F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Buffers.Tests", "test\Common\Buffers\Common.Buffers.Tests\Common.Buffers.Tests.csproj", "{C26A875D-734C-448D-A9AD-1D909A6E58D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelpers", "test\TestHelpers\TestHelpers.csproj", "{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Buffers.Float.Tests", "test\Common\Buffers\Common.Buffers.Float.Tests\Common.Buffers.Float.Tests.csproj", "{F475386F-BBBD-4E78-B969-9921A44AE4BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{6C901783-FA07-49AA-9AB4-9AD6370EB029}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry", "src\Common\Geometry\Common.Geometry\Common.Geometry.csproj", "{0054F0FD-E135-444B-9B9D-C757AE718CD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{4CC1F77A-1D60-4825-9E8D-72724DD3F05F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Tests", "test\Common\Geometry\Common.Geometry.Tests\Common.Geometry.Tests.csproj", "{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -439,6 +452,22 @@ Global
 		{C26A875D-734C-448D-A9AD-1D909A6E58D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26A875D-734C-448D-A9AD-1D909A6E58D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26A875D-734C-448D-A9AD-1D909A6E58D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -554,6 +583,12 @@ Global
 		{A1B88156-88C8-40B5-8729-E20B6A25A342} = {95ADFEA4-8FEA-4283-AAF8-5CD97C926CE9}
 		{32453C30-328C-4402-BD18-F111587F495F} = {ADEAED9A-1D29-425A-A364-AD6D4F9AC9E4}
 		{C26A875D-734C-448D-A9AD-1D909A6E58D1} = {32453C30-328C-4402-BD18-F111587F495F}
+		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629} = {A1769682-C0E8-400C-8E0F-FB6BA4B7A2CB}
+		{F475386F-BBBD-4E78-B969-9921A44AE4BF} = {32453C30-328C-4402-BD18-F111587F495F}
+		{6C901783-FA07-49AA-9AB4-9AD6370EB029} = {8D332E78-B3F7-4CF6-8179-1F136C596CE0}
+		{0054F0FD-E135-444B-9B9D-C757AE718CD1} = {6C901783-FA07-49AA-9AB4-9AD6370EB029}
+		{4CC1F77A-1D60-4825-9E8D-72724DD3F05F} = {ADEAED9A-1D29-425A-A364-AD6D4F9AC9E4}
+		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}

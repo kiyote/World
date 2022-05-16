@@ -13,6 +13,4 @@ public interface IRandom {
 	double NextDouble();
 	uint NextUInt();
 	void Reinitialise( int seed );
-
-	int NextNormalInt( int upperBound );
 }

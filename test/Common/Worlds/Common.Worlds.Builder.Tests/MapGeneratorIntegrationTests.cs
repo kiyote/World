@@ -12,7 +12,8 @@ namespace Common.Worlds.Builder.Tests;
 [TestFixture]
 public sealed class MapGeneratorIntegrationTests {
 
-	private IMapGenerator _mapGenerator;
+	/*
+	private ITerrainMapGenerator _mapGenerator;
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
 	private string _folder;
@@ -40,7 +41,7 @@ public sealed class MapGeneratorIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_mapGenerator = _scope.ServiceProvider.GetRequiredService<IMapGenerator>();
+		_mapGenerator = _scope.ServiceProvider.GetRequiredService<ITerrainMapGenerator>();
 	}
 
 	[TearDown]
@@ -52,7 +53,7 @@ public sealed class MapGeneratorIntegrationTests {
 	[Ignore("Used to generate visual output for inspection.")]
 	public void GenerateImage() {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( "terrain.png" );
-		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( DateTime.UtcNow.ToFileTime()/*"test"*/, new Size( 100, 100 ) );
+		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( DateTime.UtcNow.ToFileTime() new Size( 100, 100 ) );
 		IWorldRenderer worldRenderer = _provider.GetRequiredService<IWorldRenderer>();
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
 		worldRenderer.RenderAtlasToAsync(
@@ -110,5 +111,6 @@ public sealed class MapGeneratorIntegrationTests {
 			CancellationToken.None
 		);
 	}
+*/
 }
 

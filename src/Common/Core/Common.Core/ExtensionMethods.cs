@@ -8,7 +8,7 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 	
-		services.AddSingleton<IRandom, FastRandom>();
+		services.AddSingleton<IRandom, SystemRandom>();
 
 		return services;
 	}

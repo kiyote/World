@@ -11,6 +11,7 @@ namespace Common.Renderers.Minimap.Tests;
 
 [TestFixture]
 public class MinimapWorldRendererIntegrationTests {
+	/*
 
 	private IServiceScope _scope;
 	private IServiceProvider _provider;
@@ -56,7 +57,7 @@ public class MinimapWorldRendererIntegrationTests {
 	[Ignore( "Used to generate visual output for inspection." )]
 	public async Task RenderTerrain() {
 		IDiskFileManager diskFileManager = _provider.GetRequiredService<IDiskFileManager>();
-		IMapGenerator mapGenerator = _provider.GetRequiredService<IMapGenerator>();
+		ITerrainMapGenerator mapGenerator = _provider.GetRequiredService<ITerrainMapGenerator>();
 		Size size = new Size( 1000, 1000 );
 		IBuffer<TileTerrain> tileTerrain = mapGenerator.GenerateTerrain( Hash.GetLong( "test" ), size );
 
@@ -69,4 +70,5 @@ public class MinimapWorldRendererIntegrationTests {
 			CancellationToken.None
 		).ConfigureAwait( false );
 	}
+	*/
 }
