@@ -4,7 +4,7 @@ public interface IMutableFileContentRepository: IImmutableFileContentRepository 
 
 	Task PutContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler asyncWriter,
+		Func<Stream, Task> asyncWriter,
 		CancellationToken cancellationToken
 	);
 }

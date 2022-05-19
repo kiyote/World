@@ -1,4 +1,3 @@
-using NUnit.Framework;
 
 namespace Common.Files.Manager.Resource.Tests;
 

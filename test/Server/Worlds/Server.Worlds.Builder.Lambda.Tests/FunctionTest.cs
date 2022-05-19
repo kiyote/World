@@ -1,6 +1,5 @@
 using Amazon.Lambda.SNSEvents;
 using Amazon.Lambda.TestUtilities;
-using NUnit.Framework;
 
 namespace Server.Worlds.Builder.Lambda.Tests;
 

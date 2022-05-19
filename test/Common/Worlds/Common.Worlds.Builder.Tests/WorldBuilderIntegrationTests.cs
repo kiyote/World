@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-
-namespace Common.Worlds.Builder.Tests;
+﻿namespace Common.Worlds.Builder.Tests;
 
 [TestFixture]
 public sealed class WorldBuilderIntegrationTests {

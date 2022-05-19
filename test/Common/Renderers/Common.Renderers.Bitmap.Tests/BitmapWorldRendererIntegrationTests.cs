@@ -2,8 +2,6 @@ using Common.Buffers;
 using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Server.Files.Manager.Disk;
 
 namespace Common.Renderers.Bitmap.Tests;

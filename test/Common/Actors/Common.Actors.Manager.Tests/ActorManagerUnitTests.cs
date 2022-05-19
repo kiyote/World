@@ -1,7 +1,5 @@
 using Common.Actors.Manager.Repositories;
 using Common.Worlds;
-using Moq;
-using NUnit.Framework;
 
 namespace Common.Actors.Manager.Tests;
 

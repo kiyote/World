@@ -21,7 +21,7 @@ public abstract class ImmutableFileManager<TFileContentRepository, TFileMetadata
 
 	public Task<bool> TryGetContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler contentReader,
+		Func<Stream, Task> contentReader,
 		CancellationToken cancellationToken
 	) {
 		return _fileContentRepository.TryGetContentAsync( fileId, contentReader, cancellationToken );

@@ -1,8 +1,6 @@
 ﻿using System.IO.Abstractions;
 using Common.Files;
 using Common.Files.Manager.Repositories;
-using Moq;
-using NUnit.Framework;
 
 namespace Server.Files.Manager.Disk.Tests;
 

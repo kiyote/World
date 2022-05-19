@@ -3,7 +3,7 @@
 public interface IImmutableFileContentRepository {
 	Task<bool> TryGetContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler contentReader,
+		Func<Stream, Task> contentReader,
 		CancellationToken cancellationToken
 	);
 }

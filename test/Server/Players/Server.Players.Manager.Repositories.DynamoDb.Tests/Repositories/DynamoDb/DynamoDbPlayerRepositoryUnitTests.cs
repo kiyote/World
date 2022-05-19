@@ -1,7 +1,5 @@
 using Common.Players;
 using Common.Players.Manager.Repositories;
-using Moq;
-using NUnit.Framework;
 using Server.Core.DynamoDb;
 
 namespace Server.Players.Manager.Repositories.DynamoDb.Tests;

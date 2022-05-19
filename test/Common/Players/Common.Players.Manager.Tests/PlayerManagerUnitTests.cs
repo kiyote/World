@@ -1,6 +1,4 @@
 using Common.Players.Manager.Repositories;
-using Moq;
-using NUnit.Framework;
 
 namespace Common.Players.Manager.Tests;
 

@@ -1,7 +1,4 @@
 using Common.Buffers;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using TestHelpers;
 
 namespace Common.Geometry.Tests;
 
