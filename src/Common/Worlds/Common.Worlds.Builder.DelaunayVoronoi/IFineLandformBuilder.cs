@@ -1,13 +1,13 @@
 ﻿using Common.Geometry.DelaunayVoronoi;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal interface IFineLandformBuilder {
 	Voronoi Create(
 		Size size,
 		int pointCount,
 		List<Cell> roughLandforms,
-		out List<Cell> fineLandforms
+		out HashSet<Cell> fineLandforms
 	);
 }
 

@@ -1,7 +1,7 @@
 ﻿using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class VoronoiBuilder : IVoronoiBuilder {
 

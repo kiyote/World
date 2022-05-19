@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class FineLandformBuilder : IFineLandformBuilder {
 
@@ -25,11 +25,11 @@ internal sealed class FineLandformBuilder : IFineLandformBuilder {
 		Size size,
 		int pointCount,
 		List<Cell> roughLandforms,
-		out List<Cell> fineLandforms
+		out HashSet<Cell> fineLandforms
 	) {
 		Voronoi voronoi = _voronoiBuilder.Create( size, pointCount );
 
-		fineLandforms = new List<Cell>();
+		fineLandforms = new HashSet<Cell>();
 		foreach( Cell fineCell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			foreach( Cell roughCell in roughLandforms ) {
 				if( _geometry.PointInPolygon( roughCell.Points, fineCell.Center ) ) {

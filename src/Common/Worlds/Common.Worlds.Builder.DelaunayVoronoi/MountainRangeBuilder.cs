@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 
@@ -22,25 +22,30 @@ internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 	}
 
 
-	List<Cell> IMountainRangeBuilder.BuildRanges(
+	HashSet<Cell> IMountainRangeBuilder.BuildRanges(
 		Size size,
 		Voronoi fineVoronoi,
-		List<Cell> fineLandforms
+		HashSet<Cell> fineLandforms
 	) {
-		List<Cell> result = new List<Cell>();
+		HashSet<Cell> result = new HashSet<Cell>();
 		do {
 			List<Edge> lines = GetMountainLines( size, size.Columns / 100 );
-			result.AddRange( BuildRanges( fineVoronoi, fineLandforms, lines ) );
-		} while( result.Count < size.Columns / 10 );
-		return result.Distinct().ToList();
+			List<Cell> rangeCells = BuildRanges( fineVoronoi, size, fineLandforms, lines );
+			foreach (Cell cell in rangeCells) {
+				result.Add( cell );
+			};
+		} while( result.Count < size.Columns / 12 );
+		return result;
 	}
 
 	internal List<Cell> BuildRanges(
 		Voronoi fineVoronoi,
-		List<Cell> fineLandforms,
+		Size size,
+		HashSet<Cell> fineLandforms,
 		List<Edge> lines
 	) {
 		List<Cell> result = new List<Cell>();
+		lines = lines.OrderBy( l => _random.NextInt() ).Take( (int)(lines.Count * 0.75) ).ToList();
 		foreach (Edge edge in lines) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				foreach( Cell fineCell in fineLandforms ) {
@@ -94,30 +99,6 @@ internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 			direction += (_random.NextInt( 30 ) - 15);
 
 		} while( result.Count < count );
-
-		/*
-		for (int i = 0; i < count; i++ ) {
-			Point p1;
-			Point p2;
-			do {
-				p1 = new Point(
-					_random.NextInt( size.Columns ),
-					_random.NextInt( size.Rows )
-				);
-
-				p2 = new Point(
-					_random.NextInt( size.Columns ),
-					_random.NextInt( size.Rows )
-				);
-
-			} while(
-				( _geometry.LineLength( p1, p2 ) > ( size.Columns / 2 ) )
-				|| ( _geometry.LineLength( p1, p2 ) < ( size.Columns / 12 ) )
-			);
-
-			result.Add( new Edge( p1, p2 ) );
-		}
-		*/
 
 		return result;
 	}

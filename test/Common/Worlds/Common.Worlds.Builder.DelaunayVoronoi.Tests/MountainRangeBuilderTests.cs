@@ -1,11 +1,8 @@
 ﻿using Common.Buffers;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using TestHelpers;
 
-namespace Common.Worlds.Builder.Tests;
+namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
 internal sealed class MountainRangeBuilderTests {
@@ -69,12 +66,12 @@ internal sealed class MountainRangeBuilderTests {
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		Voronoi roughVoronoi = _roughLandformBuilder.Create( size, 0.3f, out List<Cell> roughLandforms );
-		Voronoi fineVoronoi = _fineLandformBuilder.Create( size, 5000, roughLandforms, out List<Cell> fineLandforms );
+		Voronoi fineVoronoi = _fineLandformBuilder.Create( size, 5000, roughLandforms, out HashSet<Cell> fineLandforms );
 
 		List<Cell> mountains = new List<Cell>();
 		do {
 			List<Edge> lines = _builder.GetMountainLines( size, size.Columns / 100 );
-			mountains.AddRange( _builder.BuildRanges( fineVoronoi, fineLandforms, lines ) );
+			mountains.AddRange( _builder.BuildRanges( fineVoronoi, size, fineLandforms, lines ) );
 		} while( mountains.Count < ( size.Rows / 10 ) );
 		mountains = mountains.Distinct().ToList();
 
