@@ -1,12 +1,12 @@
 ﻿using Common.Geometry.DelaunayVoronoi;
 
-namespace Common.Worlds.Builder;
+namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal interface IMountainRangeBuilder {
 
-	List<Cell> BuildRanges(
+	HashSet<Cell> BuildRanges(
 		Size size,
 		Voronoi fineVoronoi,
-		List<Cell> fineLandforms
+		HashSet<Cell> fineLandforms
 	);
 }

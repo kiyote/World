@@ -12,13 +12,8 @@ public static class ExtensionMethods {
 		services.AddGeometry();
 		services.TryAddSingleton<INeighbourLocator, HexNeighbourLocator>();
 		services.TryAddSingleton<IWorldBuilder, WorldBuilder>();
-		services.TryAddSingleton<ILandformMapGenerator, VoronoiLandformMapGenerator>();
 		services.TryAddSingleton<ITemperatureMapGenerator, TemperatureMapGenerator>();
 		services.TryAddSingleton<IAirFlowMapGenerator, AirFlowMapGenerator>();
-		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
-		services.TryAddSingleton<IRoughLandformBuilder, RoughLandformBuilder>();
-		services.TryAddSingleton<IFineLandformBuilder, FineLandformBuilder>();
-		services.TryAddSingleton<IMountainRangeBuilder, MountainRangeBuilder>();
 
 		return services;
 	}

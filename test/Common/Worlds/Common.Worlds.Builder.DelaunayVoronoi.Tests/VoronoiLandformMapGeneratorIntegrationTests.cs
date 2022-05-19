@@ -2,18 +2,17 @@
 using Common.Buffers.Float;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using TestHelpers;
 using Size = Common.Core.Size;
 
-namespace Common.Worlds.Builder.Tests;
+namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 #pragma warning disable CA1812
 [TestFixture]
 internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 
 	private IRandom _random;
+	private INeighbourLocator _neighbourLocator;
+
 	private ILandformMapGenerator _generator;
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -26,10 +25,9 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
-		services.AddGeometry();
 		services.AddFloatBufferOperators();
 		services.AddArrayBuffer();
-		services.AddWorldBuilder();
+		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
 
@@ -45,7 +43,9 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		_scope = _provider.CreateScope();
 
 		_random = _provider.GetRequiredService<IRandom>();
-		_generator = new VoronoiLandformMapGenerator(
+		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
+
+		_generator = new LandformMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IVoronoiFactory>(),
@@ -67,7 +67,7 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		IBuffer<float> landform = _generator.Create(
 			_random.NextInt( int.MaxValue ),
 			size,
-			new HexNeighbourLocator()
+			_neighbourLocator
 		);
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "heightmap.png" ) );
