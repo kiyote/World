@@ -10,9 +10,8 @@ public static class ExtensionMethods {
 		this IServiceCollection services,
 		string diskFolder
 	) {
-		FileFolderProvider fileFolderProvider = new FileFolderProvider( diskFolder );
 		services.TryAddSingleton<IFileSystem, FileSystem>();
-		services.AddSingleton<IFileFolderProvider>( fileFolderProvider );
+		services.AddSingleton<IFileFolderProvider>( ( _ ) => new FileFolderProvider( diskFolder ) );
 		services.AddSingleton<IDiskFileRepository, DiskFileRepository>();
 		services.AddSingleton<IDiskFileManager, DiskFileManager>();
 

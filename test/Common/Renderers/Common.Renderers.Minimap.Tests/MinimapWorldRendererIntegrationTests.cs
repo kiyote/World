@@ -3,8 +3,6 @@ using Common.Files;
 using Common.Files.Manager.Resource;
 using Common.Worlds;
 using Common.Worlds.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Server.Files.Manager.Disk;
 
 namespace Common.Renderers.Minimap.Tests;

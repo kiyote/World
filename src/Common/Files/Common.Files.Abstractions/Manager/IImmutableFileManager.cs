@@ -4,7 +4,7 @@ public interface IImmutableFileManager {
 
 	Task<bool> TryGetContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler contentReader,
+		Func<Stream, Task> contentReader,
 		CancellationToken cancellationToken
 	);
 

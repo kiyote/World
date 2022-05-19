@@ -30,7 +30,7 @@ public abstract class MutableFileManager<TFileContentRepository, TFileMetadataRe
 
 	public Task PutContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler asyncWriter,
+		Func<Stream, Task> asyncWriter,
 		CancellationToken cancellationToken
 	) {
 		return _fileContentRepository.PutContentAsync( fileId, asyncWriter, cancellationToken );

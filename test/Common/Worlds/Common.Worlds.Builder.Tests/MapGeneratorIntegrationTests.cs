@@ -1,13 +1,4 @@
-﻿using Common.Buffers;
-using Common.Files;
-using Common.Files.Manager.Resource;
-using Common.Renderers;
-using Common.Renderers.Bitmap;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using Server.Files.Manager.Disk;
-
-namespace Common.Worlds.Builder.Tests;
+﻿namespace Common.Worlds.Builder.Tests;
 
 [TestFixture]
 public sealed class MapGeneratorIntegrationTests {

@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-
 namespace Common.Buffers.Float.Tests;
 
 public class FloatBufferOperatorsIntegrationTests {

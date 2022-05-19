@@ -31,7 +31,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 
 	async Task<bool> IImmutableFileContentRepository.TryGetContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler contentReader,
+		Func<Stream, Task> contentReader,
 		CancellationToken cancellationToken
 	) {
 		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value );
@@ -55,7 +55,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 
 	async Task IMutableFileContentRepository.PutContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler asyncWriter,
+		Func<Stream, Task> asyncWriter,
 		CancellationToken cancellationToken
 	) {
 		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value );

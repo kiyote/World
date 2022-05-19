@@ -1,7 +1,5 @@
 using Common.Files;
 using Common.Files.Manager.Repositories;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 
 namespace Server.Files.Manager.Disk.Tests;
 

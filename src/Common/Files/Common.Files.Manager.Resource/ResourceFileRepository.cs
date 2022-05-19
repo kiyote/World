@@ -16,7 +16,7 @@ internal sealed class ResourceFileRepository : IResourceFileRepository {
 
 	async Task<bool> IImmutableFileContentRepository.TryGetContentAsync(
 		Id<FileMetadata> fileId,
-		AsyncStreamHandler contentReader,
+		Func<Stream, Task> contentReader,
 		CancellationToken cancellationToken
 	) {
 		Stream? resource = _assembly.GetManifestResourceStream( ResourceRoot + fileId.Value );

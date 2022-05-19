@@ -1,7 +1,5 @@
 using Common.Worlds;
 using Common.Worlds.Manager.Repositories;
-using Moq;
-using NUnit.Framework;
 using Server.Core.DynamoDb;
 
 namespace Server.Worlds.Manager.Repositories.DynamoDb.Tests;
