@@ -22,7 +22,7 @@ public class BitmapWorldRendererIntegrationTests {
 		Directory.CreateDirectory( _folder );
 
 		var services = new ServiceCollection();
-		services.AddArrayBuffer();
+		services.AddBuffers();
 		services.AddResourceFileManager();
 		services.AddDiskFileManager( _folder );
 		services.AddBitmapRenderer();

@@ -19,7 +19,7 @@ public class GeometryIntegrationTests {
 		var services = new ServiceCollection();
 		services.AddCore();
 		services.AddGeometry();
-		services.AddArrayBuffer();
+		services.AddBuffers();
 
 		_provider = services.BuildServiceProvider();
 	}

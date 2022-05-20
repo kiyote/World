@@ -2,9 +2,8 @@
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface IMountainRangeBuilder {
-
-	HashSet<Cell> BuildRanges(
+internal interface ISaltwaterBuilder {
+	HashSet<Cell> Create(
 		Size size,
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms

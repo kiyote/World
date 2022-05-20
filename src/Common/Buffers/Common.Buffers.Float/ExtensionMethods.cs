@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Common.Buffers.Float;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddFloatBufferOperators(
+	public static IServiceCollection AddFloatBuffers(
 		this IServiceCollection services
 	) {
-		services.AddSingleton<IFloatBufferOperators, FloatBufferOperators>();
+		services.TryAddSingleton<IFloatBufferOperators, FloatBufferOperators>();
 		return services;
 	}
 

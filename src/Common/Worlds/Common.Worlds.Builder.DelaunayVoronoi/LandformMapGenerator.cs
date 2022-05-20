@@ -7,30 +7,36 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class LandformMapGenerator : ILandformMapGenerator {
 
-	private readonly IDelaunatorFactory _delaunatorFactory;
-	private readonly IVoronoiFactory _voronoiFactory;
 	private readonly IRandom _random;
 	private readonly IBufferFactory _bufferFactory;
 	private readonly IGeometry _geometry;
-	private readonly IMountainRangeBuilder _mountainRangeBuilder;
+	private readonly IMountainsBuilder _mountainRangeBuilder;
+	private readonly IVoronoiBuilder _voronoiBuilder;
+	private readonly IHillsBuilder _hillsBuilder;
+	private readonly ISaltwaterBuilder _saltwaterBuilder;
+	private readonly IFreshwaterBuilder _freshwaterBuilder;
 
 	public LandformMapGenerator(
 		IRandom random,
-		IDelaunatorFactory delaunatorFactory,
-		IVoronoiFactory voronoiFactory,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
-		IMountainRangeBuilder mountainRangeBuilder
+		IMountainsBuilder mountainRangeBuilder,
+		IVoronoiBuilder voronoiBuilder,
+		IHillsBuilder hillsBuilder,
+		ISaltwaterBuilder saltwaterBuilder,
+		IFreshwaterBuilder freshwaterBuilder
 	) {
 		_random = random;
-		_delaunatorFactory = delaunatorFactory;
-		_voronoiFactory = voronoiFactory;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
 		_mountainRangeBuilder = mountainRangeBuilder;
+		_voronoiBuilder = voronoiBuilder;
+		_hillsBuilder = hillsBuilder;
+		_saltwaterBuilder = saltwaterBuilder;
+		_freshwaterBuilder = freshwaterBuilder;
 	}
 
-	IBuffer<float> ILandformMapGenerator.Create(
+	LandformMaps ILandformMapGenerator.Create(
 		long seed,
 		Size size,
 		INeighbourLocator neighbourLocator
@@ -41,48 +47,46 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		// Generate finer detail of the rough landform
 		Voronoi fineVoronoi = GenerateFineLandforms( landforms, size, out HashSet<Cell> fineLandforms );
 
-		// Sprinkle some mountains in
-		AddMountains( fineLandforms, size, fineVoronoi, out HashSet<Cell> mountains );
+		HashSet<Cell> mountains = _mountainRangeBuilder.Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
+		HashSet<Cell> ocean = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, ocean );
 
-		// Fringe the mountains with hills
-		AddHills( fineVoronoi, fineLandforms, mountains, out HashSet<Cell> hills );
-
-		// Fringe the landform with coast, detect ocean
-		AddSaltwater( size, fineVoronoi, fineLandforms, out HashSet<Cell> coast, out HashSet<Cell> ocean );
-
-		// Finally, figure out what's left as lakes
-		AddLakes( fineVoronoi, fineLandforms, coast, ocean, out HashSet<Cell> lakes );
-
-
+		IBuffer<bool> saltwater = _bufferFactory.Create( size, true );
 		IBuffer<float> heightmap = _bufferFactory.Create<float>( size );
 		foreach( Cell cell in fineLandforms ) {
 			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
 					heightmap[x, y] = 0.5f;
+					saltwater[x, y] = false;
 				}
 			} );
 		}
 
 		foreach( Cell cell in ocean ) {
+			// If it's coast, we raise it up a bit
+			float height = 0.0f;
+			foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
+				if( fineLandforms.Contains( neighbour ) ) {
+					height = 0.25f;
+					break;
+				}
+			}
+
 			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
-					heightmap[x, y] = 0.15f;
+					heightmap[x, y] = height;
 				}
 			} );
 		}
 
-		foreach( Cell cell in coast ) {
-			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
-					heightmap[x, y] = 0.20f;
-				}
-			} );
-		}
-
+		IBuffer<bool> freshwater = _bufferFactory.Create<bool>( size );
 		foreach( Cell cell in lakes ) {
 			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
-					heightmap[x, y] = 0.3f;
+					heightmap[x, y] = 0.25f;
+					freshwater[x, y] = true;
+					saltwater[x, y] = false;
 				}
 			} );
 		}
@@ -103,34 +107,27 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 			} );
 		}
 
-		return heightmap;
-	}
+		/* Box-blur the landform to smooth out the voronoi shapes
+		IBuffer<float> blur = _bufferFactory.Create<float>( size );
+		_floatBufferOperators.HorizonalBlur( heightmap, 15, blur );
+		_floatBufferOperators.VerticalBlur( blur, 15, heightmap );
+		*/
 
-	private Voronoi GenerateVoronoi(
-		Size size,
-		int pointCount
-	) {
-		List<Point> points = new List<Point>();
-		while( points.Count < pointCount ) {
-			Point newPoint = new Point(
-				_random.NextInt( size.Columns ),
-				_random.NextInt( size.Rows )
-			);
-			if( !points.Any( p => Math.Abs( p.X - newPoint.X ) <= 1 && Math.Abs( p.Y - newPoint.Y ) <= 1 ) ) {
-				points.Add( newPoint );
-			};
-		}
-		Delaunator delaunator = _delaunatorFactory.Create( points );
-		Voronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
+		IBuffer<float> temperature = _bufferFactory.Create<float>( size ); //**** Update this
 
-		return voronoi;
+		return new LandformMaps(
+			heightmap,
+			saltwater,
+			freshwater,
+			temperature
+		);
 	}
 
 	private Voronoi FindRoughLandforms(
 		Size size,
 		out HashSet<Cell> roughLandforms
 	) {
-		Voronoi voronoi = GenerateVoronoi( size, 100 );
+		Voronoi voronoi = _voronoiBuilder.Create( size, 100 );
 
 		// Get the seeds of the landforms
 		List<Cell> cells = voronoi.Cells.Where( c => !c.IsOpen ).ToList();
@@ -161,7 +158,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		out HashSet<Cell> fineLandforms
 	) {
 		int fineCount = size.Columns * size.Rows / 200;
-		Voronoi voronoi = GenerateVoronoi( size, fineCount );
+		Voronoi voronoi = _voronoiBuilder.Create( size, fineCount );
 
 		fineLandforms = new HashSet<Cell>();
 		foreach( Cell fineCell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
@@ -174,102 +171,4 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 
 		return voronoi;
 	}
-
-	private void AddMountains(
-		HashSet<Cell> fineLandforms,
-		Size size,
-		Voronoi fineVoronoi,
-		out HashSet<Cell> mountains
-	) {
-		mountains = _mountainRangeBuilder.BuildRanges( size, fineVoronoi, fineLandforms );
-	}
-
-	private static void AddHills(
-		Voronoi fineVoronoi,
-		HashSet<Cell> fineLandforms,
-		HashSet<Cell> mountains,
-		out HashSet<Cell> hills
-	) {
-		hills = new HashSet<Cell>();
-		foreach( Cell mountain in mountains ) {
-			foreach( Cell neighbour in fineVoronoi.Neighbours[mountain] ) {
-				if( !mountains.Contains( neighbour ) && fineLandforms.Contains( neighbour ) ) {
-					hills.Add( neighbour );
-				}
-			}
-		}
-	}
-
-	private void AddSaltwater(
-		Size size,
-		Voronoi fineVoronoi,
-		HashSet<Cell> fineLandforms,
-		out HashSet<Cell> coast,
-		out HashSet<Cell> ocean
-	) {
-		Cell start = fineVoronoi.Cells[0];
-		for( int i = 0; i < size.Columns; i += 10 ) {
-			foreach( Cell cell in fineVoronoi.Cells ) {
-				if( _geometry.PointInPolygon( cell.Points, i, 0 ) ) {
-					if (!fineLandforms.Contains(cell)) {
-						start = cell;
-					}
-					break;
-				}
-			}
-		}
-
-		Queue<Cell> queue = new Queue<Cell>();
-		queue.Enqueue( start );
-
-		List<Cell> visited = new List<Cell>();
-		coast = new HashSet<Cell>();
-		ocean = new HashSet<Cell>();
-		while( queue.Any() ) {
-			Cell cell = queue.Dequeue();
-			if( !visited.Contains( cell ) ) {
-				visited.Add( cell );
-
-				foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
-					if( !fineLandforms.Contains( neighbour ) ) {
-						queue.Enqueue( neighbour );
-					}
-				}
-				if( !coast.Contains( cell ) ) {
-					bool isCoast = false;
-					foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
-						if( fineLandforms.Contains( neighbour ) ) {
-							isCoast = true;
-							break;
-						}
-					}
-					if (isCoast) {
-						coast.Add( cell );
-					} else {
-						ocean.Add( cell );
-					}
-				}
-			}
-		}
-	}
-
-	private static void AddLakes(
-		Voronoi fineVoronoi,
-		HashSet<Cell> fineLandforms,
-		HashSet<Cell> ocean,
-		HashSet<Cell> coast,
-		out HashSet<Cell> lakes
-	) {
-		lakes = new HashSet<Cell>();
-		foreach (Cell cell in fineVoronoi.Cells) {
-			if (!fineLandforms.Contains(cell)) {
-				if (!ocean.Contains(cell)
-					&& !coast.Contains(cell)
-				) {
-					lakes.Add( cell );
-				}
-			}
-		}
-	}
-
 }

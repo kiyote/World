@@ -8,12 +8,12 @@ using Common.Geometry.DelaunayVoronoi;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
+internal sealed class MountainsBuilder : IMountainsBuilder {
 
 	private readonly IRandom _random;
 	private readonly IGeometry _geometry;
 
-	public MountainRangeBuilder(
+	public MountainsBuilder(
 		IRandom random,
 		IGeometry geometry
 	) {
@@ -22,7 +22,7 @@ internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 	}
 
 
-	HashSet<Cell> IMountainRangeBuilder.BuildRanges(
+	HashSet<Cell> IMountainsBuilder.Create(
 		Size size,
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms
@@ -45,7 +45,11 @@ internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 		List<Edge> lines
 	) {
 		List<Cell> result = new List<Cell>();
+		// We select 3/4 of the lines at random in order to possibly have
+		// gaps in the mountain range
 		lines = lines.OrderBy( l => _random.NextInt() ).Take( (int)(lines.Count * 0.75) ).ToList();
+
+		// Check to see if the line crosses a cell, if it does, mark it as a mountain
 		foreach (Edge edge in lines) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				foreach( Cell fineCell in fineLandforms ) {
@@ -96,7 +100,8 @@ internal sealed class MountainRangeBuilder : IMountainRangeBuilder {
 			);
 			result.Add( new Edge( start, next ) );
 			start = next;
-			direction += (_random.NextInt( 30 ) - 15);
+			// This allows the mountain range to be jagged
+			direction += (_random.NextInt( 60 ) - 30);
 
 		} while( result.Count < count );
 
