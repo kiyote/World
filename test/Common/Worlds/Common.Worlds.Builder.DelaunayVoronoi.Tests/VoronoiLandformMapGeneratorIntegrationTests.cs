@@ -6,7 +6,6 @@ using Size = Common.Core.Size;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
-#pragma warning disable CA1812
 [TestFixture]
 internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 
@@ -25,8 +24,8 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
-		services.AddFloatBufferOperators();
-		services.AddArrayBuffer();
+		services.AddBuffers();
+		services.AddFloatBuffers();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -47,11 +46,13 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 
 		_generator = new LandformMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
-			_scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>(),
-			_scope.ServiceProvider.GetRequiredService<IVoronoiFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
-			_scope.ServiceProvider.GetRequiredService<IMountainRangeBuilder>()
+			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IHillsBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>()
 		);
 	}
 
@@ -64,14 +65,13 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 	[Ignore("Used to visualize output for inspection.")]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		IBuffer<float> landform = _generator.Create(
+		LandformMaps landformMaps = _generator.Create(
 			_random.NextInt( int.MaxValue ),
 			size,
 			_neighbourLocator
 		);
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "heightmap.png" ) );
-		await writer.WriteAsync( landform );
+		await writer.WriteAsync( landformMaps.Height );
 	}
 }
-#pragma warning restore CA1812

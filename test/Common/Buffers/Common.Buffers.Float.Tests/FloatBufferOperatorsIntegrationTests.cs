@@ -11,7 +11,7 @@ public class FloatBufferOperatorsIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		var services = new ServiceCollection();
-		services.AddArrayBuffer();
+		services.AddBuffers();
 
 		_provider = services.BuildServiceProvider();
 	}

@@ -1,19 +1,22 @@
-﻿using Common.Buffers;
-using Common.Worlds.Manager;
+﻿using Common.Worlds.Manager;
 
 namespace Common.Worlds.Builder;
 
 internal sealed class WorldBuilder : IWorldBuilder {
 
+	private readonly ILandformMapGenerator _landformMapGenerator;
 	private readonly IWorldManager _worldManager;
-	private readonly ITerrainMapGenerator _mapGenerator;
+	private readonly INeighbourLocator _neighbourLocator;
 
 	public WorldBuilder(
 		IWorldManager worldManager,
-		ITerrainMapGenerator mapGenerator
+		ILandformMapGenerator landformMapGenerator,
+		INeighbourLocator neighbourLocator
 	) {
 		_worldManager = worldManager;
-		_mapGenerator = mapGenerator;
+		_landformMapGenerator = landformMapGenerator;
+		_neighbourLocator = neighbourLocator;
+
 	}
 
 	Task<Id<World>> IWorldBuilder.BuildAsync(
@@ -23,6 +26,13 @@ internal sealed class WorldBuilder : IWorldBuilder {
 		CancellationToken cancellationToken
 	) {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
+
+		LandformMaps maps = _landformMapGenerator.Create(
+			Hash.GetLong( seed ),
+			size,
+			_neighbourLocator
+		);
+
 		/*
 		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( seed, size );
 
@@ -36,6 +46,6 @@ internal sealed class WorldBuilder : IWorldBuilder {
 		).ConfigureAwait( false );
 		*/
 
-		return Task.FromResult(worldId);
+		return Task.FromResult( worldId );
 	}
 }

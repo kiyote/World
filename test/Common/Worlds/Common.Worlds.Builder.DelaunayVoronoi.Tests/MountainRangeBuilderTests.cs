@@ -14,7 +14,7 @@ internal sealed class MountainRangeBuilderTests {
 	private IGeometry _geometry;
 	private IDelaunatorFactory _delaunatorFactory;
 	private IVoronoiFactory _voronoiFactory;
-	private MountainRangeBuilder _builder;
+	private MountainsBuilder _builder;
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
 	private string _folder;
@@ -26,7 +26,7 @@ internal sealed class MountainRangeBuilderTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
-		services.AddArrayBuffer();
+		services.AddBuffers();
 		services.AddGeometry();
 		services.AddWorldBuilder();
 
@@ -50,7 +50,7 @@ internal sealed class MountainRangeBuilderTests {
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
 		_delaunatorFactory = _scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>();
 		_voronoiFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiFactory>();
-		_builder = new MountainRangeBuilder(
+		_builder = new MountainsBuilder(
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>()
 		);
