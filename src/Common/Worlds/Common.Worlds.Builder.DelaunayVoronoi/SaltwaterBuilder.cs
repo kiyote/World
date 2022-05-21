@@ -2,6 +2,7 @@
 using Common.Geometry.DelaunayVoronoi;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
+
 internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
 	private readonly IGeometry _geometry;

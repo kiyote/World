@@ -13,8 +13,7 @@ public static class ExtensionMethods {
 		services.AddWorldBuilder();
 		services.TryAddSingleton<ILandformMapGenerator, LandformMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
-		services.TryAddSingleton<IRoughLandformBuilder, RoughLandformBuilder>();
-		services.TryAddSingleton<IFineLandformBuilder, FineLandformBuilder>();
+		services.TryAddSingleton<ILandformBuilder, LandformBuilder>();
 		services.TryAddSingleton<IMountainsBuilder, MountainsBuilder>();
 		services.TryAddSingleton<IHillsBuilder, HillsBuilder>();
 		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();

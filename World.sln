@@ -308,6 +308,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DelaunayVoronoi", "Delaunay
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DelaunayVoronoi", "DelaunayVoronoi", "{3565778A-3FD9-4C0B-8246-42D589DF047D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds.Builder.DelaunayVoronoi.Benchmarks", "test\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi.Benchmarks\Common.Worlds.Builder.DelaunayVoronoi.Benchmarks.csproj", "{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Geometry.Benchmarks", "test\Common\Geometry\Common.Geometry.Benchmarks\Common.Geometry.Benchmarks.csproj", "{689C3866-B8DB-41EC-B378-6CABBC87722E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Geometry.Analyses", "test\Common\Geometry\Common.Geometry.Analyses\Common.Geometry.Analyses.csproj", "{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -482,6 +488,18 @@ Global
 		{354C3A6C-7019-49A3-AFB0-E117DE0F6580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{354C3A6C-7019-49A3-AFB0-E117DE0F6580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{354C3A6C-7019-49A3-AFB0-E117DE0F6580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -606,6 +624,9 @@ Global
 		{E2ED0DA1-0430-4F81-B2FB-AD4B60B7EA55} = {B030DBBB-812D-4407-94DA-DF0F9524A2C8}
 		{138E1C0B-2097-4629-A8A2-54B9A8224FD7} = {5B1ABF59-69B6-486F-8A00-6E8F99175316}
 		{3565778A-3FD9-4C0B-8246-42D589DF047D} = {C9655001-CA81-49AB-A5E6-84CAA0F5A9C2}
+		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B} = {3565778A-3FD9-4C0B-8246-42D589DF047D}
+		{689C3866-B8DB-41EC-B378-6CABBC87722E} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
+		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}

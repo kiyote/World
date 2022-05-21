@@ -45,11 +45,10 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
 		_generator = new LandformMapGenerator(
-			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
 			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<ILandformBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IHillsBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>()

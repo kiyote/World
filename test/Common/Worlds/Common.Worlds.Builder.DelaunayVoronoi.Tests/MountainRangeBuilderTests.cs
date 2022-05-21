@@ -7,8 +7,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class MountainRangeBuilderTests {
 
-	private IRoughLandformBuilder _roughLandformBuilder;
-	private IFineLandformBuilder _fineLandformBuilder;
+	private ILandformBuilder _landformBuilder;
 	private IRandom _random;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
@@ -43,8 +42,7 @@ internal sealed class MountainRangeBuilderTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_roughLandformBuilder = _scope.ServiceProvider.GetRequiredService<IRoughLandformBuilder>();
-		_fineLandformBuilder = _scope.ServiceProvider.GetRequiredService<IFineLandformBuilder>();
+		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_random = _scope.ServiceProvider.GetRequiredService<IRandom>();
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
@@ -65,8 +63,7 @@ internal sealed class MountainRangeBuilderTests {
 	[Ignore("Used to visualize output for inspection.")]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		Voronoi roughVoronoi = _roughLandformBuilder.Create( size, 0.3f, out List<Cell> roughLandforms );
-		Voronoi fineVoronoi = _fineLandformBuilder.Create( size, 5000, roughLandforms, out HashSet<Cell> fineLandforms );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
 
 		List<Cell> mountains = new List<Cell>();
 		do {

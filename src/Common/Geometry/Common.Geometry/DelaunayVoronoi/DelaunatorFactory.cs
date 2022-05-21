@@ -11,10 +11,10 @@ internal sealed class DelaunatorFactory : IDelaunatorFactory {
 	) {
 		int[] edgeStack = new int[512];
 
-		IEnumerable<IPoint> distinctInput = input.Distinct();
-		double[] coords = new double[distinctInput.Count() * 2];
-		for( int i = 0; i < distinctInput.Count(); i++ ) {
-			IPoint point = input.ElementAt( i );
+		List<IPoint> distinctInput = input.Distinct().ToList();
+		double[] coords = new double[distinctInput.Count * 2];
+		for( int i = 0; i < distinctInput.Count; i++ ) {
+			IPoint point = distinctInput[ i ];
 			coords[2 * i] = point.X;
 			coords[( 2 * i ) + 1] = point.Y;
 		}
