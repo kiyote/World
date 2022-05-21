@@ -13,6 +13,7 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IDelaunatorFactory, DelaunatorFactory>();
 		services.TryAddSingleton<IDelaunayFactory, DelaunayFactory>();
 		services.TryAddSingleton<IVoronoiFactory, VoronoiFactory>();
+		services.TryAddSingleton<IPointFactory, PointFactory>();
 
 		return services;
 	}

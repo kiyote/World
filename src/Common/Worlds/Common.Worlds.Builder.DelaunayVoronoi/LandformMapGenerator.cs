@@ -1,5 +1,4 @@
 ﻿using Common.Buffers;
-using Common.Buffers.Float;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 
@@ -7,30 +6,27 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class LandformMapGenerator : ILandformMapGenerator {
 
-	private readonly IRandom _random;
 	private readonly IBufferFactory _bufferFactory;
 	private readonly IGeometry _geometry;
-	private readonly IMountainsBuilder _mountainRangeBuilder;
-	private readonly IVoronoiBuilder _voronoiBuilder;
+	private readonly IMountainsBuilder _mountainsBuilder;
+	private readonly ILandformBuilder _landformBuilder;
 	private readonly IHillsBuilder _hillsBuilder;
 	private readonly ISaltwaterBuilder _saltwaterBuilder;
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
 
 	public LandformMapGenerator(
-		IRandom random,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
-		IMountainsBuilder mountainRangeBuilder,
-		IVoronoiBuilder voronoiBuilder,
+		IMountainsBuilder mountainsBuilder,
+		ILandformBuilder landformBuilder,
 		IHillsBuilder hillsBuilder,
 		ISaltwaterBuilder saltwaterBuilder,
 		IFreshwaterBuilder freshwaterBuilder
 	) {
-		_random = random;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
-		_mountainRangeBuilder = mountainRangeBuilder;
-		_voronoiBuilder = voronoiBuilder;
+		_landformBuilder = landformBuilder;
+		_mountainsBuilder = mountainsBuilder;
 		_hillsBuilder = hillsBuilder;
 		_saltwaterBuilder = saltwaterBuilder;
 		_freshwaterBuilder = freshwaterBuilder;
@@ -41,13 +37,9 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		Size size,
 		INeighbourLocator neighbourLocator
 	) {
-		// Get the rough outline of the land
-		Voronoi roughVoronoi = FindRoughLandforms( size, out HashSet<Cell> landforms );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
 
-		// Generate finer detail of the rough landform
-		Voronoi fineVoronoi = GenerateFineLandforms( landforms, size, out HashSet<Cell> fineLandforms );
-
-		HashSet<Cell> mountains = _mountainRangeBuilder.Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
 		HashSet<Cell> ocean = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, ocean );
@@ -121,54 +113,5 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 			freshwater,
 			temperature
 		);
-	}
-
-	private Voronoi FindRoughLandforms(
-		Size size,
-		out HashSet<Cell> roughLandforms
-	) {
-		Voronoi voronoi = _voronoiBuilder.Create( size, 100 );
-
-		// Get the seeds of the landforms
-		List<Cell> cells = voronoi.Cells.Where( c => !c.IsOpen ).ToList();
-		int desiredCount = (int)( cells.Count * 0.3 );
-		roughLandforms = new HashSet<Cell>();
-		do {
-			Cell cell = cells[_random.NextInt( cells.Count )];
-			roughLandforms.Add( cell );
-			cells.Remove( cell );
-		} while( roughLandforms.Count < desiredCount );
-
-		// Add the landforms neighbours to beef the shape up
-		HashSet<Cell> result = new HashSet<Cell>();
-		foreach( Cell seedCell in roughLandforms ) {
-			result.Add( seedCell );
-			foreach( Cell neighbourCell in voronoi.Neighbours[seedCell].Where( c => !c.IsOpen ) ) {
-				result.Add( neighbourCell );
-			}
-		}
-		roughLandforms = result;
-
-		return voronoi;
-	}
-
-	private Voronoi GenerateFineLandforms(
-		HashSet<Cell> roughLandforms,
-		Size size,
-		out HashSet<Cell> fineLandforms
-	) {
-		int fineCount = size.Columns * size.Rows / 200;
-		Voronoi voronoi = _voronoiBuilder.Create( size, fineCount );
-
-		fineLandforms = new HashSet<Cell>();
-		foreach( Cell fineCell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
-			foreach( Cell roughCell in roughLandforms ) {
-				if( _geometry.PointInPolygon( roughCell.Points, fineCell.Center ) ) {
-					fineLandforms.Add( fineCell );
-				}
-			}
-		}
-
-		return voronoi;
 	}
 }
