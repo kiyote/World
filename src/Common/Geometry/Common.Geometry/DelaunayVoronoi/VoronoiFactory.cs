@@ -22,7 +22,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 		List<Edge> edges = MakeEdges( delaunator, circumcenters );
 		int[] inedges = MakeInedges( delaunator, points );
 		Cell[] cells = MakeCells( delaunator, points, inedges, circumcenters, width, height );
-		Dictionary<Cell, IReadOnlyList<Cell>> cellNeighbours = ConstructNeighbours( delaunator, points, inedges, cells );
+		Dictionary<Cell, IReadOnlyList<Cell>> cellNeighbours = MakeNeighbours( delaunator, points, inedges, cells );
 
 		return new Voronoi( edges, cells, cellNeighbours );
 	}
@@ -156,7 +156,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 		return edges.Distinct().ToList();
 	}
 
-	private static Dictionary<Cell, IReadOnlyList<Cell>> ConstructNeighbours(
+	private static Dictionary<Cell, IReadOnlyList<Cell>> MakeNeighbours(
 		Delaunator delaunator,
 		Point[] points,
 		int[] inedges,

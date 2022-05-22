@@ -7,7 +7,7 @@ using Size = Common.Core.Size;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
+internal sealed class LandformMapGeneratorIntegrationTests {
 
 	private IRandom _random;
 	private INeighbourLocator _neighbourLocator;
@@ -20,7 +20,7 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( VoronoiLandformMapGeneratorIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( LandformMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
@@ -45,6 +45,7 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
 		_generator = new LandformMapGenerator(
+			_scope.ServiceProvider.GetRequiredService<IFloatBufferOperators>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
 			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
@@ -61,7 +62,7 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	[Ignore("Used to visualize output for inspection.")]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		LandformMaps landformMaps = _generator.Create(
@@ -70,7 +71,16 @@ internal sealed class VoronoiLandformMapGeneratorIntegrationTests {
 			_neighbourLocator
 		);
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "heightmap.png" ) );
-		await writer.WriteAsync( landformMaps.Height );
+		IBufferWriter<float> floatWriter = new ImageBufferWriter( Path.Combine( _folder, "height.png" ) );
+		await floatWriter.WriteAsync( landformMaps.Height );
+
+		floatWriter = new ImageBufferWriter( Path.Combine( _folder, "temperature.png" ) );
+		await floatWriter.WriteAsync( landformMaps.Temperature );
+
+		IBufferWriter<bool> boolWriter = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
+		await boolWriter.WriteAsync( landformMaps.FreshWater );
+
+		boolWriter = new ImageBufferWriter( Path.Combine( _folder, "saltwater.png" ) );
+		await boolWriter.WriteAsync( landformMaps.SaltWater );
 	}
 }
