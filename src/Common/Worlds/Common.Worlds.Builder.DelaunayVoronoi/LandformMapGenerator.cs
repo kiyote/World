@@ -1,4 +1,5 @@
 ﻿using Common.Buffers;
+using Common.Buffers.Float;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 
@@ -13,8 +14,10 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 	private readonly IHillsBuilder _hillsBuilder;
 	private readonly ISaltwaterBuilder _saltwaterBuilder;
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
+	private readonly IFloatBufferOperators _floatBufferOperators;
 
 	public LandformMapGenerator(
+		IFloatBufferOperators floatBufferOperators,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
 		IMountainsBuilder mountainsBuilder,
@@ -23,6 +26,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		ISaltwaterBuilder saltwaterBuilder,
 		IFreshwaterBuilder freshwaterBuilder
 	) {
+		_floatBufferOperators = floatBufferOperators;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
 		_landformBuilder = landformBuilder;
@@ -99,13 +103,22 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 			} );
 		}
 
-		/* Box-blur the landform to smooth out the voronoi shapes
-		IBuffer<float> blur = _bufferFactory.Create<float>( size );
-		_floatBufferOperators.HorizonalBlur( heightmap, 15, blur );
-		_floatBufferOperators.VerticalBlur( blur, 15, heightmap );
-		*/
+		IBuffer<float> temperature = _bufferFactory.Create<float>( size );
+		for( int r = 0; r < size.Rows; r++) {
+			float temp = (size.Rows / 2) - Math.Abs( r - ( size.Rows / 2 ) );
+			for (int c = 0; c < size.Columns; c++) {
+				temperature[c, r] = temp;
+			}
+		}
 
-		IBuffer<float> temperature = _bufferFactory.Create<float>( size ); //**** Update this
+		IBuffer<float> tempBuffer = _bufferFactory.Create<float>( size );
+		_floatBufferOperators.Invert( heightmap, tempBuffer );
+
+		_floatBufferOperators.Normalize( temperature, 0.0f, 1.0f, temperature );
+		_floatBufferOperators.Multiply( temperature, tempBuffer, temperature );
+
+		_floatBufferOperators.HorizonalBlur( temperature, 15, tempBuffer );
+		_floatBufferOperators.VerticalBlur( tempBuffer, 15, temperature );
 
 		return new LandformMaps(
 			heightmap,

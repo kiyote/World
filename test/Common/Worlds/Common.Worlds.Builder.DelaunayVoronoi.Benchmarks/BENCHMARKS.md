@@ -1,24 +1,9 @@
-﻿|            Method |     Mean |    Error |   StdDev | Allocated |
-|------------------ |---------:|---------:|---------:|----------:|
-| DelaunatorFactory | 38.50 ms | 0.166 ms | 0.138 ms |     70 MB |
-|    VoronoiBuilder | 46.40 ms | 0.154 ms | 0.144 ms |     71 MB |
-
-Add IPointFactory to VoronoiBuilder
-|            Method |     Mean |    Error |   StdDev | Allocated |
-|------------------ |---------:|---------:|---------:|----------:|
-| DelaunatorFactory | 38.87 ms | 0.632 ms | 0.591 ms |     70 MB |
-|    VoronoiBuilder | 41.55 ms | 0.606 ms | 0.567 ms |     71 MB |
-
-With fixed DelaunatorFactory
-|            Method |       Mean |    Error |   StdDev | Allocated |
-|------------------ |-----------:|---------:|---------:|----------:|
-| DelaunatorFactory |   336.5 us |  0.55 us |  0.49 us |    214 KB |
-|    VoronoiBuilder | 2,897.2 us | 27.55 us | 25.77 us |  1,389 KB |
-
-Measure LandformBuilder
-|            Method |        Mean |    Error |   StdDev | Allocated |
-|------------------ |------------:|---------:|---------:|----------:|
-| DelaunatorFactory |    338.2 us |  6.58 us |  6.16 us |    214 KB |
-|    VoronoiBuilder |  2,884.2 us |  8.88 us |  7.87 us |  1,389 KB |
-|   LandformBuilder | 11,069.3 us | 70.90 us | 62.86 us |  1,856 KB |
-
+﻿|            Method |         Mean |      Error |       StdDev | Allocated |
+|------------------ |-------------:|-----------:|-------------:|----------:|
+| DelaunatorFactory |    343.74 us |   6.773 us |     7.247 us |    214 KB |
+|    VoronoiBuilder |  2,609.45 us |  48.854 us |    40.795 us |    941 KB |
+|   LandformBuilder | 10,663.24 us |  92.380 us |    86.412 us |  1,252 KB |
+|  MountainsBuilder | 49,210.43 us | 967.721 us | 2,318.598 us |     15 KB |
+|      HillsBuilder |     29.83 us |   0.087 us |     0.073 us |      9 KB |
+|  SaltwaterBuilder | 12,482.89 us |  39.426 us |    32.923 us |     81 KB |
+| FreshwaterBuilder |     61.46 us |   0.249 us |     0.233 us |      2 KB |

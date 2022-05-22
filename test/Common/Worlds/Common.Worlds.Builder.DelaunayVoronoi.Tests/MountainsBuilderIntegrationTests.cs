@@ -68,7 +68,7 @@ internal sealed class MountainRangeBuilderTests {
 		List<Cell> mountains = new List<Cell>();
 		do {
 			List<Edge> lines = _builder.GetMountainLines( size, size.Columns / 100 );
-			mountains.AddRange( _builder.BuildRanges( fineVoronoi, size, fineLandforms, lines ) );
+			mountains.AddRange( _builder.BuildRanges( fineVoronoi, fineLandforms, lines ) );
 		} while( mountains.Count < ( size.Rows / 10 ) );
 		mountains = mountains.Distinct().ToList();
 

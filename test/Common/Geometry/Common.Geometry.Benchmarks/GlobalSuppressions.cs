@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage( "Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "module" )]
+[assembly: SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI.", Scope = "module" )]
