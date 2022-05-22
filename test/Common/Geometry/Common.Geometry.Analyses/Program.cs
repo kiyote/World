@@ -1,28 +1,28 @@
 ﻿using Common.Core;
-using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
 using Microsoft.Extensions.DependencyInjection;
 
-ServiceCollection services = new ServiceCollection();
-services.AddCore();
-services.AddGeometry();
-ServiceProvider provider = services.BuildServiceProvider();
-IPointFactory pointFactory = provider.GetRequiredService<IPointFactory>();
-IDelaunatorFactory delaunatorFactory = provider.GetRequiredService<IDelaunatorFactory>();
+namespace Common.Geometry.Analyses;
 
-int pointCount = 100;
-Size size = new Size( 500, 500 );
-IReadOnlyList<IPoint> points = pointFactory.Random( pointCount, size, 1 );
+public static class Program {
+	public static void Main( string[] args ) {
+		ServiceCollection services = new ServiceCollection();
+		services.AddCore();
+		services.AddGeometry();
+		ServiceProvider provider = services.BuildServiceProvider();
+		IPointFactory pointFactory = provider.GetRequiredService<IPointFactory>();
+		IDelaunatorFactory delaunatorFactory = provider.GetRequiredService<IDelaunatorFactory>();
+		IVoronoiFactory voronoiFactory = provider.GetRequiredService<IVoronoiFactory>();
 
-Console.WriteLine( "Ready to run, press any key." );
-Console.ReadKey();
+		Console.WriteLine( "Ready to run, press any key." );
+		Console.ReadKey();
 
-Delaunator delaunator = delaunatorFactory.Create( points );
+		//PointFactoryAnalyzer.Analyze( pointFactory );
+		//DelaunatorFactoryAnalyzer.Analyze( pointFactory, delaunatorFactory );
+		VoronoiFactoryAnalyzer.Analyze( pointFactory, delaunatorFactory, voronoiFactory );
 
-Console.WriteLine( $"Coords size: {delaunator.Coords.Count}" );
-Console.WriteLine( $"Half-Edges size: {delaunator.HalfEdges.Count}" );
-Console.WriteLine( $"Hull size: {delaunator.Hull.Count}" );
-Console.WriteLine( $"Triangles size: {delaunator.Triangles.Count}" );
+		Console.WriteLine( "Execution completed, press any key." );
+		Console.ReadKey();
+	}
+}
 
-Console.WriteLine( "Execution completed, press any key." );
-Console.ReadKey();
