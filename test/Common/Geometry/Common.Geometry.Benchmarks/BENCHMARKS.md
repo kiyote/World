@@ -56,3 +56,11 @@ Merging MakeNeighbourMap and MakeNeighbours
 |   DelaunatorFactory |   332.2 us | 0.72 us | 0.64 us | 219,288 B |
 |      VoronoiFactory |   647.2 us | 3.31 us | 2.77 us | 712,313 B |
 |      PointInPolygon |   110.9 us | 0.36 us | 0.32 us |         - |
+
+Circmcenters as array
+|              Method |       Mean |   Error |  StdDev | Allocated |
+|-------------------- |-----------:|--------:|--------:|----------:|
+| PointFactory_Random | 1,581.7 us | 1.91 us | 1.70 us |  32,057 B |
+|   DelaunatorFactory |   329.5 us | 0.56 us | 0.47 us | 219,248 B |
+|      VoronoiFactory |   631.2 us | 3.02 us | 2.52 us | 712,985 B |
+|      PointInPolygon |   110.6 us | 0.19 us | 0.16 us |         - |

@@ -18,7 +18,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 		int height
 	) {
 		Point[] points = MakePoints( delaunator );
-		List<Point> circumcenters = MakeCircumcenters( delaunator, points );
+		Point[] circumcenters = MakeCircumcenters( delaunator, points );
 		List<Edge> edges = MakeEdges( delaunator, circumcenters );
 		int[] inedges = MakeInedges( delaunator, points );
 		Cell[] cells = MakeCells( delaunator, points, inedges, circumcenters, width, height );
@@ -27,12 +27,12 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 		return new Voronoi( edges, cells, cellNeighbours );
 	}
 
-	private static List<Point> MakeCircumcenters(
+	private static Point[] MakeCircumcenters(
 		Delaunator delaunator,
 		Point[] points
 	) {
 		int n = delaunator.Triangles.Count / 3;
-		List<Point> circumcenters = new List<Point>( n );
+		Point[] circumcenters = new Point[n];
 		for( int i = 0; i < n; i++ ) {
 			Point p1 = points[delaunator.Triangles[( i * 3 )]];
 			Point p2 = points[delaunator.Triangles[( i * 3 ) + 1]];
@@ -41,18 +41,17 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 			Delaunator.Circumcenter( p1.X, p1.Y, p2.X, p2.Y, p3.X, p3.Y, out double cx, out double cy );
 			int ix = (int)cx;
 			int iy = (int)cy;
-			circumcenters.Add( new Point( ix, iy ) );
+			circumcenters[i] = new Point( ix, iy );
 		}
 
 		return circumcenters;
 	}
 
-	// **** Hot path
 	private static Cell[] MakeCells(
 		Delaunator delaunator,
 		Point[] points,
 		int[] inedges,
-		List<Point> circumcenters,
+		Point[] circumcenters,
 		int width,
 		int height
 	) {
@@ -139,7 +138,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 
 	private static List<Edge> MakeEdges(
 		Delaunator delaunator,
-		List<Point> circumcenters
+		Point[] circumcenters
 	) {
 		List<Edge> edges = new List<Edge>();
 		for( int i = 0; i < delaunator.Triangles.Count; i++ ) {
