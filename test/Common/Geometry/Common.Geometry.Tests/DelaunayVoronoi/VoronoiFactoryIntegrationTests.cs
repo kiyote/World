@@ -2,14 +2,14 @@
 
 namespace Common.Geometry.DelaunayVoronoi.Tests;
 
-internal class DelaunayIntegrationTests {
+internal class VoronoiIntegrationTests {
 
 	private IRandom _random;
 	private IGeometry _geometry;
-	private IPointFactory _pointFactory;
 	private IBufferFactory _bufferFactory;
+	private IPointFactory _pointFactory;
 	private IDelaunatorFactory _delaunatorFactory;
-	private IDelaunayFactory _delaunayFactory;
+	private IVoronoiFactory _voronoiFactory;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -18,7 +18,7 @@ internal class DelaunayIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( DelaunayIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( VoronoiIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
@@ -37,7 +37,7 @@ internal class DelaunayIntegrationTests {
 		_pointFactory = _scope.ServiceProvider.GetRequiredService<IPointFactory>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_delaunatorFactory = _scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>();
-		_delaunayFactory = _scope.ServiceProvider.GetRequiredService<IDelaunayFactory>();
+		_voronoiFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiFactory>();
 	}
 
 	[TearDown]
@@ -59,18 +59,42 @@ internal class DelaunayIntegrationTests {
 		IReadOnlyList<IPoint> points = _pointFactory.Random( 1000, size, 1 );
 
 		Delaunator delaunator = _delaunatorFactory.Create( points );
-		Delaunay delaunay = _delaunayFactory.Create( delaunator );
+		Voronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
 
-		foreach (Triangle triangle in delaunay.Triangles) {
+		foreach( Cell cell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			_geometry.RasterizePolygon(
-				new Point[] { triangle.P1, triangle.P2, triangle.P3 },
+				cell.Points,
 				( int x, int y ) => {
 					result[x, y] = 0.5f;
 				}
 			);
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "delauanay.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "voronoi.png" ) );
+		await writer.WriteAsync( result );
+
+		result = _bufferFactory.Create<float>( size.Columns, size.Rows );
+		Cell start = voronoi.Cells.Where( c => !c.IsOpen ).First();
+		Queue<Cell> queue = new Queue<Cell>();
+		HashSet<Cell> visited = new HashSet<Cell>();
+		queue.Enqueue( start );
+		while( queue.Any() ) {
+			Cell cell = queue.Dequeue();
+			visited.Add( cell );
+			foreach( Cell neighbour in voronoi.Neighbours[cell].Where( c => !c.IsOpen ) ) {
+				if( !visited.Contains( neighbour ) && !queue.Contains( neighbour ) ) {
+					queue.Enqueue( neighbour );
+				}
+			}
+			_geometry.RasterizePolygon(
+				cell.Points,
+				( int x, int y ) => {
+					result[x, y] = 0.5f;
+				}
+			);
+
+		}
+		writer = new ImageBufferWriter( Path.Combine( _folder, "voronoi_neighbours.png" ) );
 		await writer.WriteAsync( result );
 	}
 }
