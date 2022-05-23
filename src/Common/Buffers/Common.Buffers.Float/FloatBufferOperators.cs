@@ -238,4 +238,22 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 			output
 		);
 	}
+
+	void IFloatBufferOperators.Quantize(
+		IBuffer<float> input,
+		IReadOnlyList<float> ranges,
+		IBuffer<float> output
+	) {
+		_bufferOperator.Perform(
+			input,
+			( float value ) => {
+				int index = 0;
+				while( value > ranges[index] ) {
+					index++;
+				}
+				return index;
+			},
+			output
+		);
+	}
 }

@@ -6,12 +6,13 @@ namespace Common.Worlds.Builder;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddWorldBuilder(
+	public static IServiceCollection AddCoreWorldBuilder(
 		this IServiceCollection services
 	) {
 		services.AddGeometry();
 		services.TryAddSingleton<INeighbourLocator, HexNeighbourLocator>();
 		services.TryAddSingleton<IWorldBuilder, WorldBuilder>();
+		services.TryAddSingleton<IMapGenerator, MapGenerator>();
 
 		return services;
 	}

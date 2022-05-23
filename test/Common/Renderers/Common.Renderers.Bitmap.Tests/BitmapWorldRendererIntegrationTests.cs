@@ -6,6 +6,7 @@ using Server.Files.Manager.Disk;
 
 namespace Common.Renderers.Bitmap.Tests;
 
+/*
 [TestFixture]
 public class BitmapWorldRendererIntegrationTests {
 
@@ -70,3 +71,4 @@ public class BitmapWorldRendererIntegrationTests {
 		).ConfigureAwait( false );
 	}
 }
+*/

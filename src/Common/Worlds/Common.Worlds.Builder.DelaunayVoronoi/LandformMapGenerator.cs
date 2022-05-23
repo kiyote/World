@@ -8,6 +8,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 internal sealed class LandformMapGenerator : ILandformMapGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
+	private readonly IBufferOperator _bufferOperator;
 	private readonly IGeometry _geometry;
 	private readonly IMountainsBuilder _mountainsBuilder;
 	private readonly ILandformBuilder _landformBuilder;
@@ -17,6 +18,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 	private readonly IFloatBufferOperators _floatBufferOperators;
 
 	public LandformMapGenerator(
+		IBufferOperator bufferOperator,
 		IFloatBufferOperators floatBufferOperators,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
@@ -26,6 +28,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		ISaltwaterBuilder saltwaterBuilder,
 		IFreshwaterBuilder freshwaterBuilder
 	) {
+		_bufferOperator = bufferOperator;
 		_floatBufferOperators = floatBufferOperators;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
@@ -120,11 +123,34 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		_floatBufferOperators.HorizonalBlur( temperature, 15, tempBuffer );
 		_floatBufferOperators.VerticalBlur( tempBuffer, 15, temperature );
 
+		IBuffer<float> moisture = _bufferFactory.Create<float>( size );
+		_bufferOperator.Perform(
+			moisture,
+			( int x, int y, IBuffer<float> moisture, float value ) => {
+				if( saltwater[x, y] || freshwater[x, y] ) {
+					return 1.0f;
+				}
+				return value;
+			},
+			moisture
+		);
+
+		_floatBufferOperators.Add( moisture, temperature, moisture );
+		_floatBufferOperators.Normalize( moisture, 0.0f, 1.0f, moisture );
+		_floatBufferOperators.HorizonalBlur( moisture, 25, tempBuffer );
+		_floatBufferOperators.VerticalBlur( tempBuffer, 25, moisture );
+
+		
+		_floatBufferOperators.HorizonalBlur( heightmap, 5, tempBuffer );
+		_floatBufferOperators.VerticalBlur( tempBuffer, 5, heightmap );
+		
+
 		return new LandformMaps(
 			heightmap,
 			saltwater,
 			freshwater,
-			temperature
+			temperature,
+			moisture
 		);
 	}
 }

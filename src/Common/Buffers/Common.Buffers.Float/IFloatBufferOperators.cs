@@ -131,4 +131,6 @@ public interface IFloatBufferOperators {
 	void VerticalBlur( IBuffer<float> input, int amount, IBuffer<float> output );
 
 	void Invert( IBuffer<float> input, IBuffer<float> output );
+
+	void Quantize( IBuffer<float> input, IReadOnlyList<float> ranges, IBuffer<float> output );
 }

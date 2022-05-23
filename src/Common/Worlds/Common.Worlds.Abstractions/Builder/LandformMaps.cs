@@ -6,5 +6,6 @@ public sealed record LandformMaps(
 	IBuffer<float> Height,
 	IBuffer<bool> SaltWater,
 	IBuffer<bool> FreshWater,
-	IBuffer<float> Temperature
+	IBuffer<float> Temperature,
+	IBuffer<float> Moisture
 );

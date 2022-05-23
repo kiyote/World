@@ -54,6 +54,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 						img[x + 0, y + 1] = hill;
 						img[x + 1, y + 1] = hill;
 						break;
+						/*
 					case TileTerrain.Forest:
 						img[x + 0, y + 0] = forest;
 						img[x + 1, y + 0] = forest;
@@ -72,6 +73,7 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 						img[x + 0, y + 1] = coast;
 						img[x + 1, y + 1] = coast;
 						break;
+						*/
 					case TileTerrain.Ocean:
 						img[x + 0, y + 0] = ocean;
 						img[x + 1, y + 0] = ocean;

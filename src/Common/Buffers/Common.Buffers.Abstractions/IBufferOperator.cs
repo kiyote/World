@@ -57,4 +57,24 @@ public interface IBufferOperator {
 		Func<int, int, IBuffer<T>, T, T> op,
 		IBuffer<T> output
 	);
+
+	/// <summary>
+	/// Performs the supplied <paramref name="op"/> on the values contained
+	/// in <paramref name="source"/>, storing the result in <paramref name="output"/>.
+	/// </summary>
+	/// <typeparam name="TSource">The type of each value in the source buffer.</typeparam>
+	/// <typeparam name="TOutput">The type of each value in the output buffer.</typeparam>
+	/// <param name="source">The buffer to be operated upon.</param>
+	/// <param name="op">The function to be called for each value in the buffer.</param>
+	/// <param name="output">The buffer to receive the resulting value.</param>
+	/// <remarks>
+	/// <paramref name="op"/> is a function that receives the column and row of
+	/// the value, as well as the value at that location for each point in the buffer
+	/// and returns the new value to be stored at that location in the output.
+	/// </remarks>
+	void Perform<TSource, TOutput>(
+		IBuffer<TSource> source,
+		Func<int, int, TSource, TOutput> op,
+		IBuffer<TOutput> output
+	);
 }
