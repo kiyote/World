@@ -26,6 +26,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 		services.AddCore();
 		services.AddBuffers();
 		services.AddFloatBuffers();
+		services.AddCoreWorldBuilder();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -63,7 +64,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		LandformMaps landformMaps = _generator.Create(
