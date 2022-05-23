@@ -1,15 +1,13 @@
 ﻿namespace Common.Worlds;
 
-public enum TileTerrain {
-	Unknown,
-	Mountain,
-	Hill,
-	Grassland,
-	Coast,
-	Desert,
-	Ocean,
+public enum TileTerrain: int {
+	None = 0,
 
-	Grass,
-	Forest
+	Mountain = 1,
+	Hill = 2,
+	Plain = 3,
+	Lake = 4,
+	Coast = 5,
+	Ocean = 6,
 }
 

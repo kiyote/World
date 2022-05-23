@@ -1,7 +1,8 @@
 ﻿namespace Common.Worlds;
 
+[Flags]
 public enum TileFeature: int {
-	Unknown = 0,
-	Forest = 1,
-	Water = 2
+	None = 0,
+
+	Forest = 1
 }

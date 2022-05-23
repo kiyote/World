@@ -81,6 +81,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 					case TileTerrain.Hill:
 						img.Mutate( i => i.DrawImage( hill, new Point( x, y ), 1.0f ) );
 						break;
+						/*
 					case TileTerrain.Forest:
 						img.Mutate( i => i.DrawImage( forest, new Point( x, y ), 1.0f ) );
 						break;
@@ -90,6 +91,7 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 					case TileTerrain.Coast:
 						img.Mutate( i => i.DrawImage( coast, new Point( x, y ), 1.0f ) );
 						break;
+						*/
 					case TileTerrain.Ocean:
 						img.Mutate( i => i.DrawImage( ocean, new Point( x, y ), 1.0f ) );
 						break;

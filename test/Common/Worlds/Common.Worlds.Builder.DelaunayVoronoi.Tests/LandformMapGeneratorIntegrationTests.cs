@@ -26,6 +26,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 		services.AddCore();
 		services.AddBuffers();
 		services.AddFloatBuffers();
+		services.AddCoreWorldBuilder();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -45,6 +46,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
 		_generator = new LandformMapGenerator(
+			_scope.ServiceProvider.GetRequiredService<IBufferOperator>(),
 			_scope.ServiceProvider.GetRequiredService<IFloatBufferOperators>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
@@ -76,6 +78,9 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 
 		floatWriter = new ImageBufferWriter( Path.Combine( _folder, "temperature.png" ) );
 		await floatWriter.WriteAsync( landformMaps.Temperature );
+
+		floatWriter = new ImageBufferWriter( Path.Combine( _folder, "moisture.png" ) );
+		await floatWriter.WriteAsync( landformMaps.Moisture );
 
 		IBufferWriter<bool> boolWriter = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
 		await boolWriter.WriteAsync( landformMaps.FreshWater );

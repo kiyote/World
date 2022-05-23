@@ -42,7 +42,7 @@ public class LambdaFunction {
 		var services = new ServiceCollection();
 
 		services.AddCore();
-		services.AddWorldBuilder();
+		services.AddCoreWorldBuilder();
 
 		return services.BuildServiceProvider();
 	}

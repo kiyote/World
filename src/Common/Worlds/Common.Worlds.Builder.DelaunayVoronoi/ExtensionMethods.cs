@@ -10,7 +10,6 @@ public static class ExtensionMethods {
 		this IServiceCollection services
 	) {
 		services.AddGeometry();
-		services.AddWorldBuilder();
 		services.TryAddSingleton<ILandformMapGenerator, LandformMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
 		services.TryAddSingleton<ILandformBuilder, LandformBuilder>();
