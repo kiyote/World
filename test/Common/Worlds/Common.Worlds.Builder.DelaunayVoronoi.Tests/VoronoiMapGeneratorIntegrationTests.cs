@@ -28,7 +28,7 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 		services.AddCore();
 		services.AddBuffers();
 		services.AddFloatBuffers();
-		services.AddCoreWorldBuilder();
+		services.AddWorlds();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();

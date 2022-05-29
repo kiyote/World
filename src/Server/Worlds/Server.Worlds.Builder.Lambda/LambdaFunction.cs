@@ -1,7 +1,6 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SNSEvents;
 using Microsoft.Extensions.DependencyInjection;
-using Common.Worlds.Builder;
 
 namespace Server.Worlds.Builder.Lambda;
 
@@ -42,7 +41,7 @@ public class LambdaFunction {
 		var services = new ServiceCollection();
 
 		services.AddCore();
-		services.AddCoreWorldBuilder();
+		services.AddWorlds();
 
 		return services.BuildServiceProvider();
 	}
