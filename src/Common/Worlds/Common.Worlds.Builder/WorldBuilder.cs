@@ -4,17 +4,17 @@ namespace Common.Worlds.Builder;
 
 internal sealed class WorldBuilder : IWorldBuilder {
 
-	private readonly ILandformMapGenerator _landformMapGenerator;
+	private readonly IWorldMapGenerator _worldMapGenerator;
 	private readonly IWorldManager _worldManager;
 	private readonly INeighbourLocator _neighbourLocator;
 
 	public WorldBuilder(
 		IWorldManager worldManager,
-		ILandformMapGenerator landformMapGenerator,
+		IWorldMapGenerator landformMapGenerator,
 		INeighbourLocator neighbourLocator
 	) {
 		_worldManager = worldManager;
-		_landformMapGenerator = landformMapGenerator;
+		_worldMapGenerator = landformMapGenerator;
 		_neighbourLocator = neighbourLocator;
 
 	}
@@ -27,7 +27,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 	) {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 
-		LandformMaps maps = _landformMapGenerator.Create(
+		WorldMaps maps = _worldMapGenerator.Create(
 			Hash.GetLong( seed ),
 			size,
 			_neighbourLocator

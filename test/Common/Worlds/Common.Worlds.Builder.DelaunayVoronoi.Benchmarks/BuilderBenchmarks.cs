@@ -40,6 +40,8 @@ public class BuilderBenchmarks {
 		_size = new Size( 500, 500 );
 
 		IPointFactory pointsFactory = provider.GetRequiredService<IPointFactory>();
+		IRandom random = provider.GetRequiredService<IRandom>();
+		random.Reinitialise( 0x78901234 );
 		_points = pointsFactory.Random( 1000, _size, 1 );
 		_fineLandforms = _landformBuilder.Create( _size, out _voronoi );
 		_mountains = _mountainsBuilder.Create( _size, _voronoi, _fineLandforms );

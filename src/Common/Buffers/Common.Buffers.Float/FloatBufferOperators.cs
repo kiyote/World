@@ -54,7 +54,7 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 		);
 	}
 
-	void IFloatBufferOperators.HorizonalBlur(
+	void IFloatBufferOperators.HorizontalBlur(
 		IBuffer<float> input,
 		int amount,
 		IBuffer<float> output
@@ -85,7 +85,7 @@ internal sealed class FloatBufferOperators : IFloatBufferOperators {
 
 		for( int c = 0; c < input.Size.Columns; c++ ) {
 			float sum = input[c, 0] * amount;
-			for( int r = 0; r < input.Size.Columns; r++ ) {
+			for( int r = 0; r < input.Size.Rows; r++ ) {
 				int y = Math.Max( 0, r - amount );
 				sum += input[c, r];
 				sum -= input[c, y];

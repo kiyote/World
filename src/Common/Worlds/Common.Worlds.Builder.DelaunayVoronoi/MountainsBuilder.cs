@@ -45,7 +45,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		int widthRange = size.Columns / 2;
 		Point start = new Point(
 			_random.NextInt( widthRange ) + ( widthRange / 2 ),
-			_random.NextInt( size.Rows / 4 )
+			_random.NextInt( size.Rows )
 		);
 		int segmentRange = ( size.Columns / 12 );
 

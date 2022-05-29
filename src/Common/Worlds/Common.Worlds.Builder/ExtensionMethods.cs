@@ -12,7 +12,6 @@ public static class ExtensionMethods {
 		services.AddGeometry();
 		services.TryAddSingleton<INeighbourLocator, HexNeighbourLocator>();
 		services.TryAddSingleton<IWorldBuilder, WorldBuilder>();
-		services.TryAddSingleton<IMapGenerator, MapGenerator>();
 
 		return services;
 	}

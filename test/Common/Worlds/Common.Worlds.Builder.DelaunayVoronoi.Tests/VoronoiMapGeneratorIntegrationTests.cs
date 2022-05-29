@@ -2,17 +2,19 @@
 using Common.Buffers.Float;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Size = Common.Core.Size;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class LandformMapGeneratorIntegrationTests {
+internal sealed class VoronoiMapGeneratorIntegrationTests {
 
 	private IRandom _random;
 	private INeighbourLocator _neighbourLocator;
+	private IWorldMapGenerator _worldMapGenerator;
 
-	private ILandformMapGenerator _generator;
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
 	private string _folder;
@@ -20,7 +22,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( LandformMapGeneratorIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( VoronoiMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCore();
@@ -45,7 +47,7 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 		_random = _provider.GetRequiredService<IRandom>();
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
-		_generator = new LandformMapGenerator(
+		_worldMapGenerator = new VoronoiWorldMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IBufferOperator>(),
 			_scope.ServiceProvider.GetRequiredService<IFloatBufferOperators>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
@@ -65,27 +67,39 @@ internal sealed class LandformMapGeneratorIntegrationTests {
 
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
-	public async Task Visualize() {
+	public void Visualize() {
+		long seed = (long)(_random.NextInt() << 32) | (long)_random.NextInt();
 		Size size = new Size( 1000, 1000 );
-		LandformMaps landformMaps = _generator.Create(
-			_random.NextInt( int.MaxValue ),
+		WorldMaps worldMaps = _worldMapGenerator.Create(
+			seed,
 			size,
 			_neighbourLocator
 		);
 
-		IBufferWriter<float> floatWriter = new ImageBufferWriter( Path.Combine( _folder, "height.png" ) );
-		await floatWriter.WriteAsync( landformMaps.Height );
+		using Image<Rgba32> image = new Image<Rgba32>( size.Columns, size.Rows );
 
-		floatWriter = new ImageBufferWriter( Path.Combine( _folder, "temperature.png" ) );
-		await floatWriter.WriteAsync( landformMaps.Temperature );
+		for (int r = 0; r < size.Rows; r++) {
+			for (int c = 0; c < size.Columns; c++) {
+				image[c, r] = worldMaps.Terrain[c, r] switch {
+					TileTerrain.Mountain => new Rgba32( 0xF7, 0xF7, 0xF7 ),
+					TileTerrain.Hill => new Rgba32( 0xDC, 0xDD, 0xBE ),
+					TileTerrain.Plain => new Rgba32( 0xB7, 0xC1, 0x8C ),
+					TileTerrain.Lake => new Rgba32( 0x6E, 0xBA, 0xE7 ),
+					TileTerrain.Coast => new Rgba32( 0x6E, 0xBA, 0xE7 ),
+					TileTerrain.Ocean => new Rgba32( 0x1C, 0x86, 0xEE ),
+					_ => Color.Black
+				};
+			}
+		}
 
-		floatWriter = new ImageBufferWriter( Path.Combine( _folder, "moisture.png" ) );
-		await floatWriter.WriteAsync( landformMaps.Moisture );
+		for (int r = 0; r < size.Rows; r++) {
+			for (int c = 0; c < size.Columns; c++) {
+				if( (worldMaps.Feature[c, r] & TileFeature.Forest) == TileFeature.Forest ) {
+					image[c, r] = new Rgba32( 0x39, 0xB5, 0x4A );
+				}
+			}
+		}
 
-		IBufferWriter<bool> boolWriter = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
-		await boolWriter.WriteAsync( landformMaps.FreshWater );
-
-		boolWriter = new ImageBufferWriter( Path.Combine( _folder, "saltwater.png" ) );
-		await boolWriter.WriteAsync( landformMaps.SaltWater );
+		image.Save( Path.Combine( _folder, "terrain.png" ) );
 	}
 }
