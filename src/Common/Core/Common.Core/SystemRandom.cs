@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.Core;
+﻿namespace Common.Core;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Security", "CA5394:Do not use insecure randomness", Justification = "It's a game." )]

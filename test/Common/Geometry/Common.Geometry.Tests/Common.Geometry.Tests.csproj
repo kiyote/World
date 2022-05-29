@@ -22,6 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)\src\Common\Core\Common.Core\Common.Core.csproj" />
 		<ProjectReference Include="$(SolutionDir)\src\Common\Geometry\Common.Geometry\Common.Geometry.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
 	</ItemGroup>

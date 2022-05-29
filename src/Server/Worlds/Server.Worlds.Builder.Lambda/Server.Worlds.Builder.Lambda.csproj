@@ -12,6 +12,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder\Common.Worlds.Builder.csproj" />
 	</ItemGroup>
 </Project>

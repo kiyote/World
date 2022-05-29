@@ -314,7 +314,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Benchmarks"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Analyses", "test\Common\Geometry\Common.Geometry.Analyses\Common.Geometry.Analyses.csproj", "{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Geometry.Abstractions", "src\Common\Geometry\Common.Geometry.Abstractions\Common.Geometry.Abstractions.csproj", "{FE9C2854-580E-44AA-A612-15377A882AC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Abstractions", "src\Common\Geometry\Common.Geometry.Abstractions\Common.Geometry.Abstractions.csproj", "{FE9C2854-580E-44AA-A612-15377A882AC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Core.Abstractions", "src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj", "{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -506,6 +508,10 @@ Global
 		{FE9C2854-580E-44AA-A612-15377A882AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE9C2854-580E-44AA-A612-15377A882AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE9C2854-580E-44AA-A612-15377A882AC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -634,6 +640,7 @@ Global
 		{689C3866-B8DB-41EC-B378-6CABBC87722E} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
 		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
 		{FE9C2854-580E-44AA-A612-15377A882AC1} = {6C901783-FA07-49AA-9AB4-9AD6370EB029}
+		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB} = {4DB4965B-653E-4B56-A7C7-449B481B1E2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0890CED-9ABB-4958-8A0E-76E2D8126043}
