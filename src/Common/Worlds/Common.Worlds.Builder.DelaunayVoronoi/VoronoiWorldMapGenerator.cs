@@ -5,7 +5,7 @@ using Common.Geometry.DelaunayVoronoi;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal sealed class LandformMapGenerator : ILandformMapGenerator {
+internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
 	private readonly IBufferOperator _bufferOperator;
@@ -17,7 +17,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
 	private readonly IFloatBufferOperators _floatBufferOperators;
 
-	public LandformMapGenerator(
+	public VoronoiWorldMapGenerator(
 		IBufferOperator bufferOperator,
 		IFloatBufferOperators floatBufferOperators,
 		IBufferFactory bufferFactory,
@@ -39,7 +39,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		_freshwaterBuilder = freshwaterBuilder;
 	}
 
-	LandformMaps ILandformMapGenerator.Create(
+	WorldMaps IWorldMapGenerator.Create(
 		long seed,
 		Size size,
 		INeighbourLocator neighbourLocator
@@ -120,7 +120,7 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 		_floatBufferOperators.Normalize( temperature, 0.0f, 1.0f, temperature );
 		_floatBufferOperators.Multiply( temperature, tempBuffer, temperature );
 
-		_floatBufferOperators.HorizonalBlur( temperature, 15, tempBuffer );
+		_floatBufferOperators.HorizontalBlur( temperature, 15, tempBuffer );
 		_floatBufferOperators.VerticalBlur( tempBuffer, 15, temperature );
 
 		IBuffer<float> moisture = _bufferFactory.Create<float>( size );
@@ -137,20 +137,50 @@ internal sealed class LandformMapGenerator : ILandformMapGenerator {
 
 		_floatBufferOperators.Add( moisture, temperature, moisture );
 		_floatBufferOperators.Normalize( moisture, 0.0f, 1.0f, moisture );
-		_floatBufferOperators.HorizonalBlur( moisture, 25, tempBuffer );
+		_floatBufferOperators.HorizontalBlur( moisture, 25, tempBuffer );
 		_floatBufferOperators.VerticalBlur( tempBuffer, 25, moisture );
 
 		
-		_floatBufferOperators.HorizonalBlur( heightmap, 5, tempBuffer );
-		_floatBufferOperators.VerticalBlur( tempBuffer, 5, heightmap );
-		
+		_floatBufferOperators.VerticalBlur( heightmap, 5, tempBuffer );
+		_floatBufferOperators.HorizontalBlur( tempBuffer, 5, heightmap );
 
-		return new LandformMaps(
-			heightmap,
-			saltwater,
-			freshwater,
-			temperature,
-			moisture
+
+
+		float[] ranges = new float[] { 0.0f, 0.25f, 0.6f, 0.9f, float.MaxValue };
+
+		IBuffer<float> quantized = _bufferFactory.Create<float>( size );
+		_floatBufferOperators.Quantize( heightmap, ranges, quantized );
+		IBuffer<TileTerrain> terrain = _bufferFactory.Create<TileTerrain>( size );
+		_bufferOperator.Perform(
+			quantized,
+			( int c, int r, float floatValue ) => {
+				if( freshwater[c, r] ) {
+					return TileTerrain.Lake;
+				}
+
+				int value = (int)floatValue;
+				if( value == 0 ) {
+					return TileTerrain.Ocean;
+				} else if( value == 1 ) {
+					return TileTerrain.Coast;
+				} else if( value == 2 ) {
+					return TileTerrain.Plain;
+				} else if( value == 3 ) {
+					return TileTerrain.Hill;
+				} else if( value == 4 ) {
+					return TileTerrain.Mountain;
+				} else {
+					throw new InvalidOperationException();
+				}
+			},
+			terrain
+		);
+
+		IBuffer<TileFeature> feature = _bufferFactory.Create<TileFeature>( size );
+
+		return new WorldMaps(
+			terrain,
+			feature
 		);
 	}
 }
