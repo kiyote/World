@@ -5,15 +5,13 @@ using Common.Geometry.DelaunayVoronoi;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class MountainsBuilderIntegrationTests {
+internal sealed class HillsBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
-	private IRandom _random;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
-	private IDelaunatorFactory _delaunatorFactory;
-	private IVoronoiFactory _voronoiFactory;
-	private MountainsBuilder _builder;
+	private HillsBuilder _builder;
+	private IMountainsBuilder _mountainsBuilder;
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
 	private string _folder;
@@ -21,7 +19,7 @@ internal sealed class MountainsBuilderIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( MountainsBuilderIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( HillsBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCommonCore();
@@ -44,16 +42,12 @@ internal sealed class MountainsBuilderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_random = _scope.ServiceProvider.GetRequiredService<IRandom>();
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
-		_delaunatorFactory = _scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>();
-		_voronoiFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiFactory>();
-		_builder = new MountainsBuilder(
-			_scope.ServiceProvider.GetRequiredService<IRandom>(),
-			_scope.ServiceProvider.GetRequiredService<IGeometry>()
-		);
+		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
+		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
+
+		_builder = new HillsBuilder();
 	}
 
 	[TearDown]
@@ -62,17 +56,12 @@ internal sealed class MountainsBuilderIntegrationTests {
 	}
 
 	[Test]
-	[Ignore("Used to visualize output for inspection.")]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-
-		List<Cell> mountains = new List<Cell>();
-		do {
-			List<Edge> lines = _builder.GetMountainLines( size, size.Columns / 100 );
-			mountains.AddRange( _builder.BuildRanges( fineVoronoi, fineLandforms, lines ) );
-		} while( mountains.Count < ( size.Rows / 10 ) );
-		mountains = mountains.Distinct().ToList();
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> hills =  (_builder as IHillsBuilder).Create( fineVoronoi, fineLandforms, mountains );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
@@ -87,7 +76,13 @@ internal sealed class MountainsBuilderIntegrationTests {
 
 		foreach( Cell mountain in mountains ) {
 			_geometry.RasterizePolygon( mountain.Points, ( int x, int y ) => {
-				buffer[x, y] = 0.6f;
+				buffer[x, y] = 0.75f;
+			} );
+		}
+
+		foreach( Cell hill in hills ) {
+			_geometry.RasterizePolygon( hill.Points, ( int x, int y ) => {
+				buffer[x, y] = 1.0f;
 			} );
 		}
 
@@ -99,24 +94,7 @@ internal sealed class MountainsBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "mountains.png" ) );
-		await writer.WriteAsync( buffer );
-	}
-
-	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
-	public async Task Visualize_GetMountainLines() {
-		Size size = new Size( 1000, 1000 );
-		List<Edge> lines = _builder.GetMountainLines( size, 10 );
-
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
-		foreach( Edge edge in lines ) {
-			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
-				buffer[x, y] = 1.0f;
-			} );
-		}
-
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "lines.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "hills.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

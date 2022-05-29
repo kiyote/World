@@ -67,7 +67,7 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)(_random.NextInt() << 32) | (long)_random.NextInt();
 		Size size = new Size( 1000, 1000 );

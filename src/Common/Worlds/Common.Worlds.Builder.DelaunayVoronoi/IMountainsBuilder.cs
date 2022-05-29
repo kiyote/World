@@ -1,6 +1,4 @@
-﻿using Common.Geometry.DelaunayVoronoi;
-
-namespace Common.Worlds.Builder.DelaunayVoronoi;
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal interface IMountainsBuilder {
 
