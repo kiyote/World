@@ -1,7 +1,6 @@
 ﻿using Common.Buffers;
 using Common.Buffers.Float;
 using Common.Geometry;
-using Common.Geometry.DelaunayVoronoi;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
@@ -48,8 +47,11 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
-		HashSet<Cell> ocean = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, ocean );
+		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );
+
+
+		// RASTERIZING CODE BELOW TO BE EXCISED
 
 		IBuffer<bool> saltwater = _bufferFactory.Create( size, true );
 		IBuffer<float> heightmap = _bufferFactory.Create<float>( size );
@@ -62,7 +64,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 			} );
 		}
 
-		foreach( Cell cell in ocean ) {
+		foreach( Cell cell in oceans ) {
 			// If it's coast, we raise it up a bit
 			float height = 0.0f;
 			foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
