@@ -4,4 +4,8 @@
 		<PackageReference Include="MimeTypeMapOfficial" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
+	</ItemGroup>
+
 </Project>
