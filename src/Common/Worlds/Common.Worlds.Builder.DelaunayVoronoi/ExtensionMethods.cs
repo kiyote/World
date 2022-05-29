@@ -1,5 +1,4 @@
-﻿using Common.Geometry;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
@@ -9,7 +8,6 @@ public static class ExtensionMethods {
 	public static IServiceCollection AddDelaunayVoronoiWorldBuilder(
 		this IServiceCollection services
 	) {
-		services.AddGeometry();
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
 		services.TryAddSingleton<ILandformBuilder, LandformBuilder>();

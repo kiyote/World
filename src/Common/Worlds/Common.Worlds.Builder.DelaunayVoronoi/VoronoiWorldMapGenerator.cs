@@ -127,7 +127,9 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_bufferOperator.Perform(
 			moisture,
 			( int x, int y, IBuffer<float> moisture, float value ) => {
-				if( saltwater[x, y] || freshwater[x, y] ) {
+				if( saltwater[x, y]
+					|| freshwater[x, y]
+				) {
 					return 1.0f;
 				}
 				return value;
@@ -137,14 +139,12 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 		_floatBufferOperators.Add( moisture, temperature, moisture );
 		_floatBufferOperators.Normalize( moisture, 0.0f, 1.0f, moisture );
-		_floatBufferOperators.HorizontalBlur( moisture, 25, tempBuffer );
-		_floatBufferOperators.VerticalBlur( tempBuffer, 25, moisture );
 
+		//_floatBufferOperators.HorizontalBlur( moisture, 25, tempBuffer );
+		//_floatBufferOperators.VerticalBlur( tempBuffer, 25, moisture );
 		
-		_floatBufferOperators.VerticalBlur( heightmap, 5, tempBuffer );
-		_floatBufferOperators.HorizontalBlur( tempBuffer, 5, heightmap );
-
-
+		//_floatBufferOperators.VerticalBlur( heightmap, 5, tempBuffer );
+		//_floatBufferOperators.HorizontalBlur( tempBuffer, 5, heightmap );
 
 		float[] ranges = new float[] { 0.0f, 0.25f, 0.6f, 0.9f, float.MaxValue };
 
