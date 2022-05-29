@@ -8,9 +8,9 @@ public sealed record Delaunator(
 ) {
 	// Provides a loop around the edges.  If this is the third edge, it turns
 	// the first edge, otherwise returns the next edge.
-	internal static int NextHalfedge( int e ) => ( e % 3 == 2 ) ? e - 2 : e + 1;
+	public static int NextHalfedge( int e ) => ( e % 3 == 2 ) ? e - 2 : e + 1;
 
-	internal static void Circumcenter(
+	public static void Circumcenter(
 		double ax,
 		double ay,
 		double bx,

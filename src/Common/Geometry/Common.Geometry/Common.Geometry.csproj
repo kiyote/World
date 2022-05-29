@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Geometry\Common.Geometry.Abstractions\Common.Geometry.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

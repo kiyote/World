@@ -6,6 +6,6 @@
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Geometry\Common.Geometry\Common.Geometry.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Geometry\Common.Geometry.Abstractions\Common.Geometry.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

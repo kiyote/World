@@ -31,5 +31,6 @@
 		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
 		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Common\Geometry\Common.Geometry\Common.Geometry.csproj" />
 	</ItemGroup>
 </Project>
