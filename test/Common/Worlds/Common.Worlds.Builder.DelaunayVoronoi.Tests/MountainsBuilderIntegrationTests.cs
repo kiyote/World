@@ -27,7 +27,7 @@ internal sealed class MountainRangeBuilderTests {
 		services.AddCore();
 		services.AddBuffers();
 		services.AddGeometry();
-		services.AddCoreWorldBuilder();
+		services.AddWorlds();
 
 		_provider = services.BuildServiceProvider();
 
