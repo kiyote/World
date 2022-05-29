@@ -69,7 +69,14 @@ internal sealed class LandformBuilder : ILandformBuilder {
 		foreach( Cell fineCell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			foreach( Cell roughCell in roughLandforms ) {
 				if( _geometry.PointInPolygon( roughCell.Points, fineCell.Center ) ) {
-					fineLandforms.Add( fineCell );
+					// Only make this land if all of its neighbours are closed,
+					// otherwise you'll have land with an Open water neighbour
+					// which leads to weird degenerate cases when trying to
+					// render the coast.
+					bool openNeighbours = voronoi.Neighbours[fineCell].Any( c => c.IsOpen );
+					if( !openNeighbours ) {
+						fineLandforms.Add( fineCell );
+					}
 				}
 			}
 		}
