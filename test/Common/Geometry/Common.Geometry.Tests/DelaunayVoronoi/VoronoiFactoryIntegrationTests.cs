@@ -21,9 +21,9 @@ internal class VoronoiIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( VoronoiIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddGeometry();
-		services.AddBuffers();
+		services.AddCommonCore();
+		services.AddCommonGeometry();
+		services.AddCommonBuffers();
 
 		_provider = services.BuildServiceProvider();
 	}

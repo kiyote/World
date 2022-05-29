@@ -6,7 +6,7 @@ namespace Common.Worlds;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddWorlds(
+	public static IServiceCollection AddCommonWorlds(
 		this IServiceCollection services
 	) {
 		services.TryAddSingleton<INeighbourLocator, HexNeighbourLocator>();

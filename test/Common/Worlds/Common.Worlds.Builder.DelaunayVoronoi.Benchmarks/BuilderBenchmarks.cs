@@ -26,8 +26,8 @@ public class BuilderBenchmarks {
 
 	public BuilderBenchmarks() {
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddDelaunayVoronoiWorldBuilder();
+		services.AddCommonCore();
+		services.AddCommonWorldsBuilderDelaunayVoronoi();
 		ServiceProvider provider = services.BuildServiceProvider();
 		_landformBuilder = provider.GetRequiredService<ILandformBuilder>();
 		_voronoiBuilder = provider.GetRequiredService<IVoronoiBuilder>();

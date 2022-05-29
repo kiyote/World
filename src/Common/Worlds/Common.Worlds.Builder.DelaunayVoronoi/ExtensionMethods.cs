@@ -5,7 +5,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddDelaunayVoronoiWorldBuilder(
+	public static IServiceCollection AddCommonWorldsBuilderDelaunayVoronoi(
 		this IServiceCollection services
 	) {
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();

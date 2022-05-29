@@ -5,7 +5,7 @@ namespace Common.Buffers.Float;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddFloatBuffers(
+	public static IServiceCollection AddCommonBuffersFloat(
 		this IServiceCollection services
 	) {
 		services.TryAddSingleton<IFloatBufferOperators, FloatBufferOperators>();

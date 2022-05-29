@@ -40,8 +40,8 @@ public class LambdaFunction {
 	private static IServiceProvider ConfigureServices() {
 		var services = new ServiceCollection();
 
-		services.AddCore();
-		services.AddWorlds();
+		services.AddCommonCore();
+		services.AddCommonWorlds();
 
 		return services.BuildServiceProvider();
 	}
