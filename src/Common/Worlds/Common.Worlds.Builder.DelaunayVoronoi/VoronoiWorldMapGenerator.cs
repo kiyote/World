@@ -72,11 +72,15 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 				}
 			}
 
-			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
-					heightmap[x, y] = height;
-				}
-			} );
+			// Ocean cells are frequently on the edge of the map so we make
+			// sure we don't try to rasterize degenerate polygons
+			if (!cell.IsOpen) {
+				_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
+					if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+						heightmap[x, y] = height;
+					}
+				} );
+			}
 		}
 
 		IBuffer<bool> freshwater = _bufferFactory.Create<bool>( size );
