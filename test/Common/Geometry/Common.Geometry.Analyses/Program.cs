@@ -7,8 +7,8 @@ namespace Common.Geometry.Analyses;
 public static class Program {
 	public static void Main( string[] args ) {
 		ServiceCollection services = new ServiceCollection();
-		services.AddCore();
-		services.AddGeometry();
+		services.AddCommonCore();
+		services.AddCommonGeometry();
 		ServiceProvider provider = services.BuildServiceProvider();
 		IPointFactory pointFactory = provider.GetRequiredService<IPointFactory>();
 		IDelaunatorFactory delaunatorFactory = provider.GetRequiredService<IDelaunatorFactory>();

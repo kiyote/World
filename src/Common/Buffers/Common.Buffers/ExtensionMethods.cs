@@ -5,7 +5,7 @@ namespace Common.Buffers;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddBuffers(
+	public static IServiceCollection AddCommonBuffers(
 		this IServiceCollection services
 	) {
 		services.TryAddSingleton<IBufferOperator, BufferOperator>();

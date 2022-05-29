@@ -1,7 +1,6 @@
 ﻿using Common.Buffers;
 using Common.Buffers.Float;
 using Common.Geometry;
-using Common.Geometry.DelaunayVoronoi;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Size = Common.Core.Size;
@@ -25,11 +24,13 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( VoronoiMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddBuffers();
-		services.AddFloatBuffers();
-		services.AddWorlds();
-		services.AddDelaunayVoronoiWorldBuilder();
+		services.AddCommonCore();
+		services.AddCommonGeometry();
+		services.AddCommonBuffers();
+		services.AddCommonWorlds();
+
+		services.AddCommonBuffersFloat();
+		services.AddCommonWorldsBuilderDelaunayVoronoi();
 
 		_provider = services.BuildServiceProvider();
 
@@ -66,7 +67,7 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)(_random.NextInt() << 32) | (long)_random.NextInt();
 		Size size = new Size( 1000, 1000 );

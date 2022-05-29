@@ -6,7 +6,7 @@ namespace Common.Geometry;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddGeometry(
+	public static IServiceCollection AddCommonGeometry(
 		this IServiceCollection services
 	) {
 		services.TryAddSingleton<IGeometry, Geometry>();

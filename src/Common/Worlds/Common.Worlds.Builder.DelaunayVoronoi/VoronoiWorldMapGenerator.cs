@@ -120,8 +120,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_floatBufferOperators.Normalize( temperature, 0.0f, 1.0f, temperature );
 		_floatBufferOperators.Multiply( temperature, tempBuffer, temperature );
 
-		_floatBufferOperators.HorizontalBlur( temperature, 15, tempBuffer );
-		_floatBufferOperators.VerticalBlur( tempBuffer, 15, temperature );
+		//_floatBufferOperators.HorizontalBlur( temperature, 15, tempBuffer );
+		//_floatBufferOperators.VerticalBlur( tempBuffer, 15, temperature );
 
 		IBuffer<float> moisture = _bufferFactory.Create<float>( size );
 		_bufferOperator.Perform(

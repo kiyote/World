@@ -21,8 +21,8 @@ public class GeometryBenchmarks {
 
 	public GeometryBenchmarks() {
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddGeometry();
+		services.AddCommonCore();
+		services.AddCommonGeometry();
 		ServiceProvider provider = services.BuildServiceProvider();
 		_pointFactory = provider.GetRequiredService<IPointFactory>();
 		_delaunatorFactory = provider.GetRequiredService<IDelaunatorFactory>();

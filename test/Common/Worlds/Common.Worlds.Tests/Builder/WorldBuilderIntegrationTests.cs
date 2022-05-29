@@ -14,7 +14,7 @@ public sealed class WorldBuilderIntegrationTests {
 		Directory.CreateDirectory( rootPath );
 		_folder = Path.Combine( rootPath, nameof( WorldBuilderIntegrationTests ) );
 		var services = new ServiceCollection();
-		services.AddWorlds();
+		services.AddCommonWorlds();
 
 		_provider = services.BuildServiceProvider();
 	}

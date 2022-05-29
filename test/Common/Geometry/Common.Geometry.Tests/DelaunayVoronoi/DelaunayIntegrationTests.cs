@@ -21,9 +21,9 @@ internal class DelaunayIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( DelaunayIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddGeometry();
-		services.AddBuffers();
+		services.AddCommonCore();
+		services.AddCommonGeometry();
+		services.AddCommonBuffers();
 
 		_provider = services.BuildServiceProvider();
 	}

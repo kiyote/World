@@ -24,10 +24,10 @@ internal sealed class MountainRangeBuilderTests {
 		_folder = Path.Combine( rootPath, nameof( MountainRangeBuilderTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCore();
-		services.AddBuffers();
-		services.AddGeometry();
-		services.AddWorlds();
+		services.AddCommonCore();
+		services.AddCommonBuffers();
+		services.AddCommonGeometry();
+		services.AddCommonWorlds();
 
 		_provider = services.BuildServiceProvider();
 
