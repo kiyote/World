@@ -12,7 +12,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		_geometry = geometry;
 	}
 
-	Dictionary<Cell, int> ITemperatureBuilder.Create(
+	Dictionary<Cell, float> ITemperatureBuilder.Create(
 		Size size,
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
@@ -24,22 +24,25 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		int midLine = size.Rows / 2;
 
 		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
-		foreach( Cell cell in fineVoronoi.Cells ) {
-			result[cell] = 0;
+		foreach( Cell cell in fineVoronoi.Cells.Where( c => !c.IsOpen ) ) {
+			result[cell] = int.MaxValue;
 		}
 
-		int maxValue = 0;
-		List<Cell> current = RenderEquator( midLine, size, fineVoronoi, result );
+		int heat = 1;
+		HashSet<Cell> current = RenderEquator( midLine, size, fineVoronoi, result );
 		do {
-			current = HeatNeighbours( fineVoronoi, current, result, ref maxValue );
+			current = HeatNeighbours( fineVoronoi, current, result, heat );
 		} while( current.Count > 0 );
 
+		int maxValue = result.Values.Max();
+		int minValue = result.Values.Min();
+		int range = maxValue - minValue;
 		foreach( KeyValuePair<Cell, int> entry in result ) {
-			result[entry.Key] = maxValue - entry.Value;
+			result[entry.Key] = entry.Value - minValue;
 		}
 
 		foreach( Cell land in fineLandforms ) {
-			result[land] = result[land] + (maxValue / 5);
+			result[land] = result[land] + ( result[land] / 10 );
 		}
 
 		foreach( Cell mountain in mountains ) {
@@ -50,25 +53,43 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 			result[hill] = result[hill] / 3;
 		}
 
-		return result;
+		// Levelize the result
+		bool tempMissing;
+		do {
+			tempMissing = false;
+			foreach( Cell cell in fineVoronoi.Cells.Where( c => c.IsOpen ) ) {
+				IEnumerable<Cell> neighbours = fineVoronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) );
+				if( neighbours.Any() ) {
+					result[cell] = (int)neighbours.Average( n => result[n] );
+				} else {
+					tempMissing = true;
+				}
+			}
+
+		} while( tempMissing );
+
+		minValue = result.Values.Min();
+		maxValue = result.Values.Max();
+		foreach( KeyValuePair<Cell, int> pair in result ) {
+			result[pair.Key] -= minValue;
+		}
+		return result.ToDictionary( r => r.Key, r => (float)( (float)r.Value / (float)maxValue ) );
 	}
 
-	private List<Cell> RenderEquator(
+	private HashSet<Cell> RenderEquator(
 		int midLine,
 		Size size,
 		Voronoi voronoi,
 		Dictionary<Cell, int> temperatureMap
 	) {
-		List<Cell> result = new List<Cell>();
+		HashSet<Cell> result = new HashSet<Cell>();
 		_geometry.RasterizeLine(
 			new Point( 0, midLine ),
 			new Point( size.Columns, midLine ),
 			( int x, int y ) => {
 				Cell? cell = FindCell( voronoi, x, y );
-				if( cell is not null
-					&& temperatureMap[cell] == 0
-				) {
-					temperatureMap[cell] = 1;
+				if( cell is not null ) {
+					temperatureMap[cell] = int.MaxValue - 1;
 					result.Add( cell );
 				}
 			}
@@ -76,24 +97,20 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		return result;
 	}
 
-	private static List<Cell> HeatNeighbours(
+	private static HashSet<Cell> HeatNeighbours(
 		Voronoi fineVoronoi,
-		List<Cell> current,
+		HashSet<Cell> current,
 		Dictionary<Cell, int> result,
-		ref int maxValue
+		int heat
 	) {
-		List<Cell> neighbours = new List<Cell>();
+		HashSet<Cell> neighbours = new HashSet<Cell>();
 		foreach( Cell source in current ) {
 			foreach( Cell neighbour in fineVoronoi.Neighbours[source].Where( c => !c.IsOpen ) ) {
-				if( result[neighbour] == 0 ) {
+				if( result[neighbour] == int.MaxValue ) {
 					if( neighbour.Center.Y < source.Center.Y
 						|| neighbour.Center.Y > source.Center.Y
 					) {
-						result[neighbour] = result[source] + 1;
-
-						if( result[neighbour] > maxValue ) {
-							maxValue = result[neighbour];
-						}
+						result[neighbour] = result[source] - heat;
 
 					} else {
 						result[neighbour] = result[source];

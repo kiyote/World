@@ -5,16 +5,17 @@ using Common.Geometry.DelaunayVoronoi;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class TemperatureBuilderIntegrationTests {
+internal sealed class AirflowBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
+	private IVoronoiEdgeDetector _voronoiEdgeDetector;
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private IFreshwaterBuilder _freshwaterBuilder;
 	private IMountainsBuilder _mountainsBuilder;
 	private IHillsBuilder _hillsBuilder;
-	private TemperatureBuilder _builder;
+	private AirflowBuilder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -23,7 +24,7 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( TemperatureBuilderIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( AirflowBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCommonCore();
@@ -46,16 +47,17 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
+		_geometry = _scope.ServiceProvider.GetService<IGeometry>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
+		_voronoiEdgeDetector = _scope.ServiceProvider.GetRequiredService<IVoronoiEdgeDetector>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
 		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
 
-		_builder = new TemperatureBuilder(
-			_geometry
+		_builder = new AirflowBuilder(
+			_voronoiEdgeDetector
 		);
 	}
 
@@ -71,25 +73,21 @@ internal sealed class TemperatureBuilderIntegrationTests {
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
 		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );
-		Dictionary<Cell, float> temperatures = ( _builder as ITemperatureBuilder ).Create(
+		Dictionary<Cell, float> airflows = ( _builder as IAirflowBuilder ).Create(
 			size,
 			fineVoronoi,
 			fineLandforms,
 			mountains,
-			hills,
-			oceans,
-			lakes
+			hills
 		);
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
-		foreach( Cell cell in temperatures.Keys ) {
-			float temp = (float)temperatures[cell] ;
+		foreach( Cell cell in airflows.Keys ) {
+			float flow = airflows[cell];
 			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
-					buffer[x, y] = temp;
+					buffer[x, y] = flow;
 				}
 			} );
 		}
@@ -102,7 +100,7 @@ internal sealed class TemperatureBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "temperature.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "airflow.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

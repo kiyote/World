@@ -14,6 +14,7 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IDelaunayFactory, DelaunayFactory>();
 		services.TryAddSingleton<IVoronoiFactory, VoronoiFactory>();
 		services.TryAddSingleton<IPointFactory, PointFactory>();
+		services.TryAddSingleton<IVoronoiEdgeDetector, VoronoiEdgeDetector>();
 
 		return services;
 	}

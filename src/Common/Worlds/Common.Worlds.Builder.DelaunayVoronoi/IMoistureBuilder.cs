@@ -2,12 +2,13 @@
 
 internal interface IMoistureBuilder {
 
-	Dictionary<Cell, int> Create(
+	Dictionary<Cell, float> Create(
+		Size size,
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
-		HashSet<Cell> mountains,
-		HashSet<Cell> hills,
 		HashSet<Cell> saltwater,
-		HashSet<Cell> freshwater
+		HashSet<Cell> freshwater,
+		Dictionary<Cell, float> temperature,
+		Dictionary<Cell, float> airflow
 	);
 }

@@ -95,7 +95,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 				new Cell(
 					points[i],
 					boundaryPoints,
-					isOpen
+					isOpen || (boundaryPoints.Count <= 2)
 				);
 			boundary.Clear();
 		}
