@@ -22,7 +22,7 @@ internal sealed class VoronoiBuilder : IVoronoiBuilder {
 		Size size,
 		int pointCount
 	) {
-		IReadOnlyList<IPoint> points = _pointFactory.Random( pointCount, size, 1 );
+		IReadOnlyList<IPoint> points = _pointFactory.Random( pointCount, size, 5 );
 		Delaunator delaunator = _delaunatorFactory.Create( points );
 		Voronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
 

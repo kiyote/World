@@ -15,6 +15,9 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IHillsBuilder, HillsBuilder>();
 		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();
 		services.TryAddSingleton<IFreshwaterBuilder, FreshwaterBuilder>();
+		services.TryAddSingleton<IAirflowBuilder, AirflowBuilder>();
+		services.TryAddSingleton<IMoistureBuilder, MoistureBuilder>();
+		services.TryAddSingleton<ITemperatureBuilder, TemperatureBuilder>();
 
 		return services;
 	}
