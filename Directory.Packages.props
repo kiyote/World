@@ -16,7 +16,7 @@
 		<PackageVersion Include="NUnit3TestAdapter" Version="4.2.1" />
 		<PackageVersion Include="SixLabors.ImageSharp" Version="2.1.2" />
 		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta14" />
-		<PackageVersion Include="System.IO.Abstractions" Version="17.0.15" />
+		<PackageVersion Include="System.IO.Abstractions" Version="17.0.18" />
 		<PackageVersion Include="BenchmarkDotNet" Version="0.13.1" />
 	</ItemGroup>
 </Project>
