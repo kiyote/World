@@ -8,7 +8,7 @@ using Size = Common.Core.Size;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class VoronoiMapGeneratorIntegrationTests {
+internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
 	private IRandom _random;
 	private INeighbourLocator _neighbourLocator;
@@ -21,7 +21,7 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( VoronoiMapGeneratorIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( VoronoiWorldMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCommonCore();
@@ -57,7 +57,12 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 			_scope.ServiceProvider.GetRequiredService<ILandformBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IHillsBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>()
+			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<ITemperatureBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IAirflowBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IMoistureBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IForestBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IDesertBuilder>()
 		);
 	}
 
@@ -69,7 +74,7 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
-		long seed = (long)(_random.NextInt() << 32) | (long)_random.NextInt();
+		long seed = (long)( _random.NextInt() << 32 ) | (long)_random.NextInt();
 		Size size = new Size( 1000, 1000 );
 		WorldMaps worldMaps = _worldMapGenerator.Create(
 			seed,
@@ -79,28 +84,34 @@ internal sealed class VoronoiMapGeneratorIntegrationTests {
 
 		using Image<Rgba32> image = new Image<Rgba32>( size.Columns, size.Rows );
 
-		for (int r = 0; r < size.Rows; r++) {
-			for (int c = 0; c < size.Columns; c++) {
-				image[c, r] = worldMaps.Terrain[c, r] switch {
-					TileTerrain.Mountain => new Rgba32( 0xF7, 0xF7, 0xF7 ),
-					TileTerrain.Hill => new Rgba32( 0xDC, 0xDD, 0xBE ),
-					TileTerrain.Plain => new Rgba32( 0xB7, 0xC1, 0x8C ),
-					TileTerrain.Lake => new Rgba32( 0x6E, 0xBA, 0xE7 ),
-					TileTerrain.Coast => new Rgba32( 0x6E, 0xBA, 0xE7 ),
-					TileTerrain.Ocean => new Rgba32( 0x1C, 0x86, 0xEE ),
-					_ => Color.Black
-				};
-			}
-		}
+		Dictionary<TileTerrain, Rgba32> terrainColours = new Dictionary<TileTerrain, Rgba32> {
+			{ TileTerrain.Mountain, new Rgba32( 0xF7, 0xF7, 0xF7 ) },
+			{ TileTerrain.Hill, new Rgba32( 0xDC, 0xDD, 0xBE ) },
+			{ TileTerrain.Lake, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
+			{ TileTerrain.Plain, new Rgba32( 0xB7, 0xC1, 0x8C ) },
+			{ TileTerrain.Coast, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
+			{ TileTerrain.Ocean, new Rgba32( 0x1C, 0x86, 0xEE ) }
+		};
 
-		for (int r = 0; r < size.Rows; r++) {
-			for (int c = 0; c < size.Columns; c++) {
-				if( (worldMaps.Feature[c, r] & TileFeature.Forest) == TileFeature.Forest ) {
-					image[c, r] = new Rgba32( 0x39, 0xB5, 0x4A );
+		Dictionary<TileFeature, Rgba32> featureColours = new Dictionary<TileFeature, Rgba32> {
+			{ TileFeature.Tundra, new Rgba32( 0xE0, 0xE0, 0xE0 ) },
+			{ TileFeature.RockyDesert, new Rgba32( 0xC6, 0xCC, 0xAD ) },
+			{ TileFeature.SandyDesert, new Rgba32( 0xFC, 0xE7, 0x92 ) },
+			{ TileFeature.BorealForest, new Rgba32( 0x6C, 0xB2, 0x76 ) },
+			{ TileFeature.TemperateForest, new Rgba32( 0x39, 0xB5, 0x4A ) },
+			{ TileFeature.TropicalForest, new Rgba32( 0x0E, 0xAF, 0x20 ) }
+		};
+
+		for( int r = 0; r < size.Rows; r++ ) {
+			for( int c = 0; c < size.Columns; c++ ) {
+				Rgba32 colour = terrainColours[worldMaps.Terrain[c, r]];
+				if( worldMaps.Feature[c, r] != TileFeature.None ) {
+					colour = featureColours[worldMaps.Feature[c, r]];
 				}
+				image[c, r] = colour;
 			}
 		}
 
-		image.Save( Path.Combine( _folder, "terrain.png" ) );
+		image.Save( Path.Combine( _folder, "worldmap.png" ) );
 	}
 }
