@@ -8,6 +8,8 @@ public sealed class Rect : IRect {
 	) {
 		TopLeft = topLeft;
 		BottomRight = bottomRight;
+		Width = bottomRight.X - topLeft.X;
+		Height = bottomRight.Y - topLeft.Y;
 	}
 
 	public Rect(
@@ -15,18 +17,16 @@ public sealed class Rect : IRect {
 		int topY,
 		int bottomX,
 		int bottomY
-	) {
-		TopLeft = new Point( topX, topY );
-		BottomRight = new Point( bottomX, bottomY );
+	) : this( new Point( topX, topY ), new Point( bottomX, bottomY ) ) {
 	}
 
 	public IPoint TopLeft { get; init; }
 
 	public IPoint BottomRight { get; init; }
 
-	IPoint IRect.TopLeft => TopLeft;
+	public int Width { get; init; }
 
-	IPoint IRect.BottomRight => BottomRight;
+	public int Height { get; init; }
 
 	public bool Equals(
 		IPoint topLeft,
@@ -59,11 +59,11 @@ public sealed class Rect : IRect {
 		return HashCode.Combine( TopLeft, BottomRight );
 	}
 
-	bool IRect.Contains(
+	public bool Contains(
 		int x,
 		int y
 	) {
-		if (x >= TopLeft.X
+		if( x >= TopLeft.X
 			&& x <= BottomRight.X
 			&& y >= TopLeft.Y
 			&& y <= BottomRight.Y
@@ -72,6 +72,24 @@ public sealed class Rect : IRect {
 		}
 
 		return false;
+	}
+
+	public bool Intersects(
+		IRect rect
+	) {
+		return TopLeft.X + Width >= rect.TopLeft.X
+			 && TopLeft.X <= rect.TopLeft.X + rect.Width
+			 && TopLeft.Y + Height >= rect.TopLeft.Y
+			 && TopLeft.Y <= rect.TopLeft.Y + rect.Height;
+	}
+
+	public bool Contains(
+		IRect rect
+	) {
+		return TopLeft.X <= rect.TopLeft.X
+			&& TopLeft.Y <= rect.TopLeft.Y
+			&& BottomRight.X >= rect.BottomRight.X
+			&& BottomRight.Y >= rect.BottomRight.Y;
 	}
 }
 
