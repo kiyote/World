@@ -12,4 +12,6 @@ public interface IGeometry {
 	void RasterizePolygon( IReadOnlyList<IPoint> polygon, Action<int, int> callback );
 
 	void RasterizeLine( IPoint p1, IPoint p2, Action<int, int> callback );
+
+	IRect PolyBox( IReadOnlyList<IPoint> polygon );
 }

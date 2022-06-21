@@ -24,7 +24,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		HashSet<Cell> result = new HashSet<Cell>();
 		do {
 			List<Edge> lines = GetMountainLines( size, size.Columns / 100 );
-			List<Cell> rangeCells = BuildRanges( fineVoronoi, fineLandforms, lines );
+			HashSet<Cell> rangeCells = BuildRanges( fineVoronoi, fineLandforms, lines );
 			foreach( Cell cell in rangeCells ) {
 				result.Add( cell );
 			};
@@ -64,12 +64,12 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		return result;
 	}
 
-	public List<Cell> BuildRanges(
+	public HashSet<Cell> BuildRanges(
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		List<Edge> lines
 	) {
-		List<Cell> result = new List<Cell>();
+		HashSet<Cell> result = new HashSet<Cell>();
 		// We select 3/4 of the lines at random in order to possibly have
 		// gaps in the mountain range
 		lines = lines
@@ -79,14 +79,25 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 
 		// Check to see if the line crosses a cell, if it does, mark it as a mountain
 		foreach( Edge edge in lines ) {
+			Cell? current = null;
 			_geometry.RasterizeLine(
 				edge.A,
 				edge.B,
 				( int x, int y ) => {
-					foreach( Cell fineCell in fineLandforms ) {
-						if( _geometry.PointInPolygon( fineCell.Points, x, y ) ) {
-							if( !result.Contains( fineCell ) ) {
+					if ( current is null) {
+						foreach( Cell fineCell in fineLandforms ) {
+							if( _geometry.PointInPolygon( fineCell.Points, x, y ) ) {
 								result.Add( fineCell );
+								current = fineCell;
+								break;
+							}
+						}
+					} else {
+						foreach (Cell fineCell in fineVoronoi.Neighbours[current]) {
+							if( _geometry.PointInPolygon( fineCell.Points, x, y ) ) {
+								result.Add( fineCell );
+								current = fineCell;
+								break;
 							}
 						}
 					}
@@ -103,7 +114,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 				}
 			}
 			return allowed;
-		} ).ToList();
+		} ).ToHashSet();
 
 		return result;
 	}

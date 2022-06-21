@@ -38,7 +38,7 @@ public sealed class Point : IPoint {
 			return false;
 		}
 
-		return Equals( obj as Point );
+		return Equals( obj as IPoint );
 	}
 
 	public override int GetHashCode() {

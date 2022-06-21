@@ -60,6 +60,32 @@ internal sealed class Geometry : IGeometry {
 
 	}
 
+	IRect IGeometry.PolyBox(
+		IReadOnlyList<IPoint> polygon
+	) {
+		int minX = int.MaxValue;
+		int maxX = int.MinValue;
+		int minY = int.MaxValue;
+		int maxY = int.MinValue;
+		for (int i = 0; i < polygon.Count; i++) {
+			IPoint point = polygon[i];
+			if (point.X < minX) {
+				minX = point.X;
+			}
+			if (point.X > maxX) {
+				maxX = point.X;
+			}
+			if (point.Y < minY) {
+				minY = point.Y;
+			}
+			if (point.Y > maxY) {
+				maxY = point.Y;
+			}
+		}
+
+		return new Rect( minX, minY, maxX, maxY );
+	}
+
 	void IGeometry.RasterizeLine(
 		IPoint p1,
 		IPoint p2,
