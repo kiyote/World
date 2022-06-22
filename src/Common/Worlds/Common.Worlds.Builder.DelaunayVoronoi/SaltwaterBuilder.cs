@@ -14,7 +14,7 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
 	HashSet<Cell> ISaltwaterBuilder.Create(
 		Size size,
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms
 	) {
 		// Find a cell along the top of the map that isn't land

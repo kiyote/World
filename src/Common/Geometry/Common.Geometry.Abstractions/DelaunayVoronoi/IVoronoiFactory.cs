@@ -2,7 +2,7 @@
 
 public interface IVoronoiFactory {
 
-	Voronoi Create(
+	IVoronoi Create(
 		Delaunator delaunator,
 		int width,
 		int height

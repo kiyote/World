@@ -7,7 +7,6 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class MoistureBuilderIntegrationTests {
 
-	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
@@ -16,7 +15,6 @@ internal sealed class MoistureBuilderIntegrationTests {
 	private IAirflowBuilder _airflowBuilder;
 	private IMountainsBuilder _mountainsBuilder;
 	private IHillsBuilder _hillsBuilder;
-	private IVoronoiEdgeDetector _voronoiEdgeDetector;
 	private ITemperatureBuilder _temperatureBuilder;
 	private MoistureBuilder _builder;
 
@@ -50,7 +48,6 @@ internal sealed class MoistureBuilderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_voronoiEdgeDetector = _scope.ServiceProvider.GetRequiredService<IVoronoiEdgeDetector>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
@@ -60,11 +57,8 @@ internal sealed class MoistureBuilderIntegrationTests {
 		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
 		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_temperatureBuilder = _scope.ServiceProvider.GetRequiredService<ITemperatureBuilder>();
-		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
-		_builder = new MoistureBuilder(
-			_voronoiEdgeDetector
-		);
+		_builder = new MoistureBuilder();
 	}
 
 	[TearDown]
@@ -76,17 +70,16 @@ internal sealed class MoistureBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );
-		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
-		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, fineVoronoi, fineLandforms, mountains, hills, oceans, lakes );
-		Dictionary<Cell, float> winds = _airflowBuilder.Create( size, fineVoronoi, fineLandforms, mountains, hills );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( voronoi, fineLandforms, oceans );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
+		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, voronoi, fineLandforms, mountains, hills, oceans, lakes );
+		Dictionary<Cell, float> winds = _airflowBuilder.Create( size, voronoi, fineLandforms, mountains, hills );
 		Dictionary<Cell, float> rains = ( _builder as IMoistureBuilder ).Create(
 			size,
-			fineVoronoi,
+			voronoi,
 			fineLandforms,
 			oceans,
 			lakes,
@@ -105,7 +98,7 @@ internal sealed class MoistureBuilderIntegrationTests {
 			} );
 		}
 
-		foreach( Edge edge in fineVoronoi.Edges ) {
+		foreach( Edge edge in voronoi.Edges ) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
 					buffer[x, y] = 0.2f;

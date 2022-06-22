@@ -60,8 +60,8 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		HashSet<Cell> oceans = ( _builder as ISaltwaterBuilder ).Create( size, fineVoronoi, fineLandforms );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		HashSet<Cell> oceans = ( _builder as ISaltwaterBuilder ).Create( size, voronoi, fineLandforms );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
@@ -82,7 +82,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 			}
 		}
 
-		foreach( Edge edge in fineVoronoi.Edges ) {
+		foreach( Edge edge in voronoi.Edges ) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
 					buffer[x, y] = 0.2f;

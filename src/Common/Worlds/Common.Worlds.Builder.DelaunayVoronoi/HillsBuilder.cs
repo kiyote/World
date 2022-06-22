@@ -3,7 +3,7 @@
 internal sealed class HillsBuilder : IHillsBuilder {
 
 	HashSet<Cell> IHillsBuilder.Create(
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains
 	) {

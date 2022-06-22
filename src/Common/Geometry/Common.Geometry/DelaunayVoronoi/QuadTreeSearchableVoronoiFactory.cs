@@ -2,21 +2,21 @@
 
 namespace Common.Geometry.DelaunayVoronoi;
 
-internal class VoronoiCellLocatorFactory : IVoronoiCellLocatorFactory {
+internal sealed class QuadTreeSearchableVoronoiFactory : ISearchableVoronoiFactory {
 
 	private readonly IQuadTreeFactory _quadTreeFactory;
 
-	public VoronoiCellLocatorFactory(
+	public QuadTreeSearchableVoronoiFactory(
 		IQuadTreeFactory quadTreeFactory
 	) {
 		_quadTreeFactory = quadTreeFactory;
 	}
 
-	IVoronoiCellLocator IVoronoiCellLocatorFactory.Create(
-		Voronoi voronoi,
+	ISearchableVoronoi ISearchableVoronoiFactory.Create(
+		IVoronoi voronoi,
 		Size size
 	) {
-		return new QuadTreeVoronoiCellLocator(
+		return new QuadTreeSearchableVoronoi(
 			_quadTreeFactory.Create<IRect>( new Rect( 0, 0, size.Columns, size.Rows ) ),
 			voronoi
 		);

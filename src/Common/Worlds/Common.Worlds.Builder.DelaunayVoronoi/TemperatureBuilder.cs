@@ -14,7 +14,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 
 	Dictionary<Cell, float> ITemperatureBuilder.Create(
 		Size size,
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills,
@@ -24,14 +24,14 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		int midLine = size.Rows / 2;
 
 		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
-		foreach( Cell cell in fineVoronoi.Cells.Where( c => !c.IsOpen ) ) {
+		foreach( Cell cell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			result[cell] = int.MaxValue;
 		}
 
 		int heat = 1;
-		HashSet<Cell> current = RenderEquator( midLine, size, fineVoronoi, result );
+		HashSet<Cell> current = RenderEquator( midLine, size, voronoi, result );
 		do {
-			current = HeatNeighbours( fineVoronoi, current, result, heat );
+			current = HeatNeighbours( voronoi, current, result, heat );
 		} while( current.Count > 0 );
 
 		int maxValue = result.Values.Max();
@@ -57,8 +57,8 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		bool tempMissing;
 		do {
 			tempMissing = false;
-			foreach( Cell cell in fineVoronoi.Cells.Where( c => c.IsOpen ) ) {
-				IEnumerable<Cell> neighbours = fineVoronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) );
+			foreach( Cell cell in voronoi.Cells.Where( c => c.IsOpen ) ) {
+				IEnumerable<Cell> neighbours = voronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) );
 				if( neighbours.Any() ) {
 					result[cell] = (int)neighbours.Average( n => result[n] );
 				} else {
@@ -76,29 +76,21 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		return result.ToDictionary( r => r.Key, r => (float)( (float)r.Value / (float)maxValue ) );
 	}
 
-	private HashSet<Cell> RenderEquator(
+	private static HashSet<Cell> RenderEquator(
 		int midLine,
 		Size size,
-		Voronoi voronoi,
+		ISearchableVoronoi voronoi,
 		Dictionary<Cell, int> temperatureMap
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
-		_geometry.RasterizeLine(
-			new Point( 0, midLine ),
-			new Point( size.Columns, midLine ),
-			( int x, int y ) => {
-				Cell? cell = FindCell( voronoi, x, y );
-				if( cell is not null ) {
-					temperatureMap[cell] = int.MaxValue - 1;
-					result.Add( cell );
-				}
-			}
-		);
-		return result;
+		IReadOnlyList<Cell> equatorCells = voronoi.Search( 0, midLine, size.Columns, 1 );
+		foreach (Cell cell in equatorCells) {
+			temperatureMap[cell] = int.MaxValue - 1;			
+		}
+		return equatorCells.ToHashSet();
 	}
 
 	private static HashSet<Cell> HeatNeighbours(
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> current,
 		Dictionary<Cell, int> result,
 		int heat
@@ -120,18 +112,5 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 			}
 		}
 		return neighbours;
-	}
-
-	private Cell? FindCell(
-		Voronoi voronoi,
-		int x,
-		int y
-	) {
-		foreach( Cell cell in voronoi.Cells ) {
-			if( _geometry.PointInPolygon( cell.Points, x, y ) ) {
-				return cell;
-			}
-		}
-		return null;
 	}
 }

@@ -2,7 +2,7 @@
 
 internal class FreshwaterBuilder : IFreshwaterBuilder {
 	HashSet<Cell> IFreshwaterBuilder.Create(
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> saltwater
 	) {

@@ -59,7 +59,7 @@ internal class VoronoiIntegrationTests {
 		IReadOnlyList<IPoint> points = _pointFactory.Random( 1000, size, 1 );
 
 		Delaunator delaunator = _delaunatorFactory.Create( points );
-		Voronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
+		IVoronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
 
 		foreach( Cell cell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			_geometry.RasterizePolygon(

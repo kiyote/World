@@ -11,7 +11,7 @@ public class BuilderBenchmarks {
 
 	private readonly Size _size;
 	private readonly IReadOnlyList<IPoint> _points;
-	private readonly Voronoi _voronoi;
+	private readonly ISearchableVoronoi _voronoi;
 	private readonly HashSet<Cell> _fineLandforms;
 	private readonly HashSet<Cell> _mountains;
 	private readonly HashSet<Cell> _hills;
@@ -31,8 +31,6 @@ public class BuilderBenchmarks {
 	private readonly ITemperatureBuilder _temperatureBuilder;
 	private readonly IAirflowBuilder _airflowBuilder;
 	private readonly IMoistureBuilder _moistureBuilder;
-	private readonly IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
-	private readonly IVoronoiCellLocator _cellLocator;
 
 	public BuilderBenchmarks() {
 		var services = new ServiceCollection();
@@ -50,7 +48,6 @@ public class BuilderBenchmarks {
 		_temperatureBuilder = provider.GetRequiredService<ITemperatureBuilder>();
 		_airflowBuilder = provider.GetRequiredService<IAirflowBuilder>();
 		_moistureBuilder = provider.GetRequiredService<IMoistureBuilder>();
-		_voronoiCellLocatorFactory = provider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
 		_size = new Size( 500, 500 );
 
@@ -59,8 +56,7 @@ public class BuilderBenchmarks {
 		random.Reinitialise( 0x78901234 );
 		_points = pointsFactory.Random( 1000, _size, 1 );
 		_fineLandforms = _landformBuilder.Create( _size, out _voronoi );
-		_cellLocator = _voronoiCellLocatorFactory.Create( _voronoi, _size );
-		_mountains = _mountainsBuilder.Create( _size, _voronoi, _cellLocator, _fineLandforms );
+		_mountains = _mountainsBuilder.Create( _size, _voronoi, _fineLandforms );
 		_hills = _hillsBuilder.Create( _voronoi, _fineLandforms, _mountains );
 		_saltwater = _saltwaterBuilder.Create( _size, _voronoi, _fineLandforms );
 		_freshwater = _freshwaterBuilder.Create( _voronoi, _fineLandforms, _saltwater );
@@ -81,12 +77,12 @@ public class BuilderBenchmarks {
 
 	[Benchmark]
 	public void LandformBuilder() {
-		_landformBuilder.Create( _size, out Voronoi _ );
+		_landformBuilder.Create( _size, out ISearchableVoronoi _ );
 	}
 
 	[Benchmark]
 	public void MountainsBuilder() {
-		_mountainsBuilder.Create( _size, _voronoi, _cellLocator, _fineLandforms );
+		_mountainsBuilder.Create( _size, _voronoi, _fineLandforms );
 	}
 
 	[Benchmark]

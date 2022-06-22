@@ -17,7 +17,7 @@ internal sealed class ForestBuilder : IForestBuilder {
 	}
 
 	HashSet<Cell> IForestBuilder.Create(
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills,

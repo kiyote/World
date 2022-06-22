@@ -1,14 +1,11 @@
 ﻿using Common.Buffers;
-using Common.Buffers.Float;
 using Common.Geometry;
-using Common.Geometry.QuadTrees;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
-	private readonly IBufferOperator _bufferOperator;
 	private readonly IGeometry _geometry;
 	private readonly IMountainsBuilder _mountainsBuilder;
 	private readonly ILandformBuilder _landformBuilder;
@@ -20,10 +17,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	private readonly IMoistureBuilder _moistureBuilder;
 	private readonly IForestBuilder _forestBuilder;
 	private readonly IDesertBuilder _desertBuilder;
-	private readonly IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
-
+	
 	public VoronoiWorldMapGenerator(
-		IBufferOperator bufferOperator,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
 		IMountainsBuilder mountainsBuilder,
@@ -35,10 +30,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IAirflowBuilder airflowBuilder,
 		IMoistureBuilder moistureBuilder,
 		IForestBuilder forestBuilder,
-		IDesertBuilder desertBuilder,
-		IVoronoiCellLocatorFactory voronoiCellLocatorFactory
+		IDesertBuilder desertBuilder
 	) {
-		_bufferOperator = bufferOperator;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
 		_landformBuilder = landformBuilder;
@@ -51,7 +44,6 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_moistureBuilder = moistureBuilder;
 		_forestBuilder = forestBuilder;
 		_desertBuilder = desertBuilder;
-		_voronoiCellLocatorFactory = voronoiCellLocatorFactory;
 	}
 
 	WorldMaps IWorldMapGenerator.Create(
@@ -59,23 +51,21 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		Size size,
 		INeighbourLocator neighbourLocator
 	) {
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 
-		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
-
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );
-		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, fineVoronoi, fineLandforms, mountains, hills, oceans, lakes );
-		Dictionary<Cell, float> airflows = _airflowBuilder.Create( size, fineVoronoi, fineLandforms, mountains, hills );
-		Dictionary<Cell, float> moistures = _moistureBuilder.Create( size, fineVoronoi, fineLandforms, oceans, lakes, temperatures, airflows );
-		HashSet<Cell> forests = _forestBuilder.Create( fineVoronoi, fineLandforms, mountains, hills, temperatures, moistures );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
+		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( voronoi, fineLandforms, oceans );
+		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, voronoi, fineLandforms, mountains, hills, oceans, lakes );
+		Dictionary<Cell, float> airflows = _airflowBuilder.Create( size, voronoi, fineLandforms, mountains, hills );
+		Dictionary<Cell, float> moistures = _moistureBuilder.Create( size, voronoi, fineLandforms, oceans, lakes, temperatures, airflows );
+		HashSet<Cell> forests = _forestBuilder.Create( voronoi, fineLandforms, mountains, hills, temperatures, moistures );
 		HashSet<Cell> deserts = _desertBuilder.Create( fineLandforms, mountains, hills, moistures );
 
 		HashSet<Cell> coast = new HashSet<Cell>();
 		foreach( Cell land in fineLandforms ) {
-			foreach( Cell neighbour in fineVoronoi.Neighbours[land] ) {
+			foreach( Cell neighbour in voronoi.Neighbours[land] ) {
 				if( oceans.Contains( neighbour ) ) {
 					coast.Add( neighbour );
 				}

@@ -7,11 +7,9 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class AirflowBuilderIntegrationTests {
 
-	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
-	private IVoronoiEdgeDetector _voronoiEdgeDetector;
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private IFreshwaterBuilder _freshwaterBuilder;
 	private IMountainsBuilder _mountainsBuilder;
@@ -50,17 +48,13 @@ internal sealed class AirflowBuilderIntegrationTests {
 
 		_geometry = _scope.ServiceProvider.GetService<IGeometry>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_voronoiEdgeDetector = _scope.ServiceProvider.GetRequiredService<IVoronoiEdgeDetector>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
 		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
-		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
-		_builder = new AirflowBuilder(
-			_voronoiEdgeDetector
-		);
+		_builder = new AirflowBuilder();
 	}
 
 	[TearDown]
@@ -72,13 +66,12 @@ internal sealed class AirflowBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
 		Dictionary<Cell, float> airflows = ( _builder as IAirflowBuilder ).Create(
 			size,
-			fineVoronoi,
+			voronoi,
 			fineLandforms,
 			mountains,
 			hills
@@ -95,7 +88,7 @@ internal sealed class AirflowBuilderIntegrationTests {
 			} );
 		}
 
-		foreach( Edge edge in fineVoronoi.Edges ) {
+		foreach( Edge edge in voronoi.Edges ) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
 					buffer[x, y] = 0.2f;

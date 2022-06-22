@@ -4,7 +4,7 @@ internal interface IMoistureBuilder {
 
 	Dictionary<Cell, float> Create(
 		Size size,
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> saltwater,
 		HashSet<Cell> freshwater,

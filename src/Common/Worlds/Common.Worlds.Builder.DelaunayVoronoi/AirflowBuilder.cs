@@ -1,48 +1,39 @@
-﻿using Common.Geometry;
-
-namespace Common.Worlds.Builder.DelaunayVoronoi;
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class AirflowBuilder : IAirflowBuilder {
 
 	private const int CapacityLimit = int.MaxValue / 2;
-	private readonly IVoronoiEdgeDetector _voronoiEdgeDetector;
-
-	public AirflowBuilder(
-		IVoronoiEdgeDetector voronoiEdgeDetector
-	) {
-		_voronoiEdgeDetector = voronoiEdgeDetector;
-	}
 
 	Dictionary<Cell, float> IAirflowBuilder.Create(
 		Size size,
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills
 	) {
 		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
 
-		List<Cell> closedCells = fineVoronoi.Cells.Where( c => !c.IsOpen ).ToList();
+		List<Cell> closedCells = voronoi.Cells.Where( c => !c.IsOpen ).ToList();
 
-		HashSet<Cell> leftEdge = _voronoiEdgeDetector.Find( size, fineVoronoi, VoronoiEdge.Left );
+		IReadOnlyList<Cell> leftEdge = voronoi.Search( 50, 0, 1, size.Rows );
 		foreach( Cell cell in leftEdge ) {
 			result[cell] = CapacityLimit;
 		}
-		HashSet<Cell> leewardEdge = GetLeewardNeighbours( fineVoronoi, leftEdge );
+		HashSet<Cell> leewardEdge = GetLeewardNeighbours( voronoi, leftEdge );
 		foreach (Cell cell in leewardEdge ) {
 			result[cell] = CapacityLimit;
 		}
-		leewardEdge = GetLeewardNeighbours( fineVoronoi, leewardEdge );
+		leewardEdge = GetLeewardNeighbours( voronoi, leewardEdge.ToList() );
 		foreach( Cell cell in leewardEdge ) {
 			result[cell] = CapacityLimit;
 		}
 
 		do {
-			leftEdge = SweepRight( leftEdge, fineVoronoi, fineLandforms, mountains, hills, result );
+			leftEdge = SweepRight( leftEdge, voronoi, fineLandforms, mountains, hills, result );
 		} while( leftEdge.Count > 0 );
 
 		// Levelize the result
-		foreach( Cell cell in fineVoronoi.Cells ) {
+		foreach( Cell cell in voronoi.Cells ) {
 			if( !result.ContainsKey( cell ) ) {
 				result[cell] = 0;
 			}
@@ -56,9 +47,9 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 		return result.ToDictionary( r => r.Key, r => (float)((float)r.Value / (float)maxValue) );
 	}
 
-	private static HashSet<Cell> SweepRight(
-		HashSet<Cell> current,
-		Voronoi fineVoronoi,
+	private static IReadOnlyList<Cell> SweepRight(
+		IReadOnlyList<Cell> current,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills,
@@ -109,12 +100,12 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 				}
 			}
 		}
-		return result;
+		return result.ToList();
 	}
 
 	private static HashSet<Cell> GetLeewardNeighbours(
-		Voronoi fineVoronoi,
-		HashSet<Cell> source
+		IVoronoi fineVoronoi,
+		IReadOnlyList<Cell> source
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
 		foreach (Cell cell in source) {

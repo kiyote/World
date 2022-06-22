@@ -4,7 +4,7 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
 internal sealed class VoronoiFactory : IVoronoiFactory {
 
-	Voronoi IVoronoiFactory.Create(
+	IVoronoi IVoronoiFactory.Create(
 		Delaunator delaunator,
 		int width,
 		int height
@@ -12,7 +12,7 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 		return DoCreate( delaunator, width, height );
 	}
 
-	private static Voronoi DoCreate(
+	private static IVoronoi DoCreate(
 		Delaunator delaunator,
 		int width,
 		int height

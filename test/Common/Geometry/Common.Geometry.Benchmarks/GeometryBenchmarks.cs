@@ -36,7 +36,7 @@ public class GeometryBenchmarks {
 
 
 		_delaunator = _delaunatorFactory.Create( _points );
-		Voronoi voronoi = _voronoiFactory.Create( _delaunator, _size.Columns, _size.Rows );
+		IVoronoi voronoi = _voronoiFactory.Create( _delaunator, _size.Columns, _size.Rows );
 		_polygons = voronoi.Cells.Select( c => c.Points ).ToList();
 	}
 
