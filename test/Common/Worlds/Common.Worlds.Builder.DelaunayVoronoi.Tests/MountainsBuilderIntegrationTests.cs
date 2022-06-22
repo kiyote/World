@@ -7,6 +7,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class MountainsBuilderIntegrationTests {
 
+	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IRandom _random;
 	private IBufferFactory _bufferFactory;
@@ -50,6 +51,7 @@ internal sealed class MountainsBuilderIntegrationTests {
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
 		_delaunatorFactory = _scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>();
 		_voronoiFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiFactory>();
+		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 		_builder = new MountainsBuilder(
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>()
@@ -66,11 +68,11 @@ internal sealed class MountainsBuilderIntegrationTests {
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-
+		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
 		List<Cell> mountains = new List<Cell>();
 		do {
 			List<Edge> lines = _builder.GetMountainLines( size, size.Columns / 100 );
-			mountains.AddRange( _builder.BuildRanges( fineVoronoi, fineLandforms, lines ) );
+			mountains.AddRange( _builder.BuildRanges( fineVoronoi, fineLandforms, cellLocator, lines ) );
 		} while( mountains.Count < ( size.Rows / 10 ) );
 		mountains = mountains.Distinct().ToList();
 

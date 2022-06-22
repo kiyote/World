@@ -7,6 +7,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class TemperatureBuilderIntegrationTests {
 
+	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
@@ -53,6 +54,7 @@ internal sealed class TemperatureBuilderIntegrationTests {
 		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
+		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
 		_builder = new TemperatureBuilder(
 			_geometry
@@ -69,7 +71,8 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
+		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
 		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );

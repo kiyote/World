@@ -130,9 +130,9 @@ public class QuadTreeNode<T> where T : IRect {
 	public void Insert( T item ) {
 		// if the item is not contained in this quad, there's a problem
 		if( !m_bounds.Contains( item ) ) {
-			throw new InvalidOperationException( "feature is out of the bounds of this quadtree node" );
+			//throw new InvalidOperationException( "feature is out of the bounds of this quadtree node" );
 			//Trace.TraceWarning( "feature is out of the bounds of this quadtree node" );
-			//return;
+			return;
 		}
 
 		// if the subnodes are null create them. may not be sucessfull: see below
@@ -158,6 +158,8 @@ public class QuadTreeNode<T> where T : IRect {
 		m_contents.Add( item );
 	}
 
+	/*
+
 	public void ForEach( Action<QuadTreeNode<T>> action ) {
 		action( this );
 
@@ -166,6 +168,7 @@ public class QuadTreeNode<T> where T : IRect {
 			node.ForEach( action );
 		}
 	}
+	*/
 
 	/// <summary>
 	/// Internal method to create the subnodes (partitions space)
