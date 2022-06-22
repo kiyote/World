@@ -3,12 +3,12 @@
 [TestFixture]
 public sealed class SimpleQuadTreeTests {
 
-	private QuadTree<Rect> _tree;
+	private SimpleQuadTree<Rect> _tree;
 
 	[SetUp]
 	public void SetUp() {
 		Rect bounds = new Rect( 0, 0, 1000, 1000 );
-		_tree = new QuadTree<Rect>( bounds );
+		_tree = new SimpleQuadTree<Rect>( bounds );
 	}
 
 	[Test]

@@ -91,12 +91,17 @@ internal sealed class VoronoiFactory : IVoronoiFactory {
 
 			//TODO: Eventually figure out a way to return these in counterclockwise order
 			List<Point> boundaryPoints = boundary.ToList();
+			int minX = boundaryPoints.Min( p => p.X );
+			int maxX = boundaryPoints.Max( p => p.X );
+			int minY = boundaryPoints.Min( p => p.Y );
+			int maxY = boundaryPoints.Max( p => p.Y );
 			cells[i] =
 				new Cell(
 					points[i],
 					boundaryPoints,
-					isOpen || (boundaryPoints.Count <= 2)
-				);
+					isOpen || ( boundaryPoints.Count <= 2 ),
+					new Rect( minX, minY, maxX, maxY )
+				); ;
 			boundary.Clear();
 		}
 

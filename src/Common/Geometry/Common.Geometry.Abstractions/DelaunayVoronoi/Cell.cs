@@ -3,5 +3,6 @@
 public sealed record Cell(
 	Point Center,
 	IReadOnlyList<Point> Points,
-	bool IsOpen
+	bool IsOpen,
+	IRect BoundingBox
 );

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Common.Geometry.QuadTrees;
 
-namespace Common.Geometry.QuadTrees;
-
-public class QuadTree<T> where T : IRect {
+[System.Diagnostics.CodeAnalysis.SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI." )]
+internal sealed class SimpleQuadTree<T> : IQuadTree<T> where T : IRect {
 	/// <summary>
 	/// The root QuadTreeNode
 	/// </summary>
@@ -21,7 +16,7 @@ public class QuadTree<T> where T : IRect {
 	/// 
 	/// </summary>
 	/// <param name="rectangle"></param>
-	public QuadTree( IRect rectangle ) {
+	public SimpleQuadTree( IRect rectangle ) {
 		m_rectangle = rectangle;
 		m_root = new QuadTreeNode<T>( m_rectangle );
 	}
@@ -48,12 +43,10 @@ public class QuadTree<T> where T : IRect {
 		return m_root.Query( area );
 	}
 
-	/// <summary>
-	/// Do the specified action for each item in the quadtree
-	/// </summary>
-	/// <param name="action"></param>
+	/*
 	public void ForEach( Action<QuadTreeNode<T>> action ) {
 		m_root.ForEach( action );
 	}
+	*/
 
 }

@@ -1,6 +1,7 @@
 ﻿using Common.Buffers;
 using Common.Buffers.Float;
 using Common.Geometry;
+using Common.Geometry.QuadTrees;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
@@ -14,16 +15,15 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	private readonly IHillsBuilder _hillsBuilder;
 	private readonly ISaltwaterBuilder _saltwaterBuilder;
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
-	private readonly IFloatBufferOperators _floatBufferOperators;
 	private readonly ITemperatureBuilder _temperatureBuilder;
 	private readonly IAirflowBuilder _airflowBuilder;
 	private readonly IMoistureBuilder _moistureBuilder;
 	private readonly IForestBuilder _forestBuilder;
 	private readonly IDesertBuilder _desertBuilder;
+	private readonly IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 
 	public VoronoiWorldMapGenerator(
 		IBufferOperator bufferOperator,
-		IFloatBufferOperators floatBufferOperators,
 		IBufferFactory bufferFactory,
 		IGeometry geometry,
 		IMountainsBuilder mountainsBuilder,
@@ -35,10 +35,10 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IAirflowBuilder airflowBuilder,
 		IMoistureBuilder moistureBuilder,
 		IForestBuilder forestBuilder,
-		IDesertBuilder desertBuilder
+		IDesertBuilder desertBuilder,
+		IVoronoiCellLocatorFactory voronoiCellLocatorFactory
 	) {
 		_bufferOperator = bufferOperator;
-		_floatBufferOperators = floatBufferOperators;
 		_bufferFactory = bufferFactory;
 		_geometry = geometry;
 		_landformBuilder = landformBuilder;
@@ -51,6 +51,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_moistureBuilder = moistureBuilder;
 		_forestBuilder = forestBuilder;
 		_desertBuilder = desertBuilder;
+		_voronoiCellLocatorFactory = voronoiCellLocatorFactory;
 	}
 
 	WorldMaps IWorldMapGenerator.Create(
@@ -60,7 +61,9 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	) {
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
 
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
+		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
+
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
 		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
 		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );

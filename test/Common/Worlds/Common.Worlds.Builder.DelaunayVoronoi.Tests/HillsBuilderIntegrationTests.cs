@@ -7,6 +7,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class HillsBuilderIntegrationTests {
 
+	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
@@ -46,6 +47,7 @@ internal sealed class HillsBuilderIntegrationTests {
 		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
+		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
 		_builder = new HillsBuilder();
 	}
@@ -60,7 +62,8 @@ internal sealed class HillsBuilderIntegrationTests {
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, fineLandforms );
+		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
 		HashSet<Cell> hills =  (_builder as IHillsBuilder).Create( fineVoronoi, fineLandforms, mountains );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );

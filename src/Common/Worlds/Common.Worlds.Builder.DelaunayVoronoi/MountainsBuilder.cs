@@ -1,4 +1,5 @@
 ﻿using Common.Geometry;
+using Common.Geometry.QuadTrees;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
@@ -19,12 +20,13 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 	HashSet<Cell> IMountainsBuilder.Create(
 		Size size,
 		Voronoi fineVoronoi,
+		IVoronoiCellLocator cellLocator,
 		HashSet<Cell> fineLandforms
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
 		do {
 			List<Edge> lines = GetMountainLines( size, size.Columns / 100 );
-			HashSet<Cell> rangeCells = BuildRanges( fineVoronoi, fineLandforms, lines );
+			HashSet<Cell> rangeCells = BuildRanges( fineVoronoi, fineLandforms, cellLocator, lines );
 			foreach( Cell cell in rangeCells ) {
 				result.Add( cell );
 			};
@@ -67,6 +69,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 	public HashSet<Cell> BuildRanges(
 		Voronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
+		IVoronoiCellLocator cellLocator,
 		List<Edge> lines
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
@@ -77,28 +80,19 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 			.Take( (int)( lines.Count * 0.75 ) ) // Take 3/4 of the list
 			.ToList();
 
+
 		// Check to see if the line crosses a cell, if it does, mark it as a mountain
 		foreach( Edge edge in lines ) {
-			Cell? current = null;
+			Rect edgeBounds = new Rect( edge.A, edge.B );
+			IReadOnlyList<Cell> targetCells = cellLocator.Locate( edgeBounds );
+			
 			_geometry.RasterizeLine(
 				edge.A,
 				edge.B,
 				( int x, int y ) => {
-					if ( current is null) {
-						foreach( Cell fineCell in fineLandforms ) {
-							if( _geometry.PointInPolygon( fineCell.Points, x, y ) ) {
-								result.Add( fineCell );
-								current = fineCell;
-								break;
-							}
-						}
-					} else {
-						foreach (Cell fineCell in fineVoronoi.Neighbours[current]) {
-							if( _geometry.PointInPolygon( fineCell.Points, x, y ) ) {
-								result.Add( fineCell );
-								current = fineCell;
-								break;
-							}
+					foreach( Cell cell in targetCells ) {
+						if( _geometry.PointInPolygon( cell.Points, x, y ) ) {
+							result.Add( cell );
 						}
 					}
 				}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Common.Geometry.DelaunayVoronoi;
+using Common.Geometry.QuadTrees;
 
 namespace Common.Geometry;
 
@@ -15,6 +16,8 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IVoronoiFactory, VoronoiFactory>();
 		services.TryAddSingleton<IPointFactory, PointFactory>();
 		services.TryAddSingleton<IVoronoiEdgeDetector, VoronoiEdgeDetector>();
+		services.TryAddSingleton<IQuadTreeFactory, SimpleQuadTreeFactory>();
+		services.TryAddSingleton<IVoronoiCellLocatorFactory, VoronoiCellLocatorFactory>();
 
 		return services;
 	}

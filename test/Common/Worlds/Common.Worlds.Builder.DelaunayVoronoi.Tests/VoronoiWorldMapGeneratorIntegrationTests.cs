@@ -1,6 +1,8 @@
 ﻿using Common.Buffers;
 using Common.Buffers.Float;
 using Common.Geometry;
+using Common.Geometry.DelaunayVoronoi;
+using Common.Geometry.QuadTrees;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Size = Common.Core.Size;
@@ -50,7 +52,6 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
 		_worldMapGenerator = new VoronoiWorldMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IBufferOperator>(),
-			_scope.ServiceProvider.GetRequiredService<IFloatBufferOperators>(),
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
 			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
@@ -62,7 +63,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			_scope.ServiceProvider.GetRequiredService<IAirflowBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IMoistureBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IForestBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IDesertBuilder>()
+			_scope.ServiceProvider.GetRequiredService<IDesertBuilder>(),
+			_scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>()
 		);
 	}
 
@@ -72,7 +74,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)( _random.NextInt() << 32 ) | (long)_random.NextInt();
 		Size size = new Size( 1600, 900 );
