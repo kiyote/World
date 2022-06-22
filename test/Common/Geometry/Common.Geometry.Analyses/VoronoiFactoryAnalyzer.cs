@@ -16,6 +16,6 @@ internal sealed class VoronoiFactoryAnalyzer {
 
 		Delaunator delaunator = delaunatorFactory.Create( points );
 
-		Voronoi voronoi = voronoiFactory.Create( delaunator, size.Columns, size.Rows );
+		IVoronoi voronoi = voronoiFactory.Create( delaunator, size.Columns, size.Rows );
 	}
 }

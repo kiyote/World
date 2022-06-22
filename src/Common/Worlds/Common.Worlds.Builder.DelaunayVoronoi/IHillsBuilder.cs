@@ -3,7 +3,7 @@
 internal interface IHillsBuilder {
 
 	public HashSet<Cell> Create(
-		Voronoi fineVoronoi,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains
 	);

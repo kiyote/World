@@ -7,25 +7,29 @@ internal sealed class VoronoiBuilder : IVoronoiBuilder {
 	private readonly IDelaunatorFactory _delaunatorFactory;
 	private readonly IVoronoiFactory _voronoiFactory;
 	private readonly IPointFactory _pointFactory;
+	private readonly ISearchableVoronoiFactory _searchableVoronoiFactory;
 
 	public VoronoiBuilder(
 		IDelaunatorFactory delaunatorFactory,
 		IVoronoiFactory voronoiFactory,
-		IPointFactory pointFactory
+		IPointFactory pointFactory,
+		ISearchableVoronoiFactory searchableVoronoiFactory
 	) {
 		_delaunatorFactory = delaunatorFactory;
 		_voronoiFactory = voronoiFactory;
 		_pointFactory = pointFactory;
+		_searchableVoronoiFactory = searchableVoronoiFactory;
 	}
 
-	Voronoi IVoronoiBuilder.Create(
+	ISearchableVoronoi IVoronoiBuilder.Create(
 		Size size,
 		int pointCount
 	) {
 		IReadOnlyList<IPoint> points = _pointFactory.Random( pointCount, size, 5 );
 		Delaunator delaunator = _delaunatorFactory.Create( points );
-		Voronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
+		IVoronoi voronoi = _voronoiFactory.Create( delaunator, size.Columns, size.Rows );
+		ISearchableVoronoi searchableVoronoi = _searchableVoronoiFactory.Create( voronoi, size );
 
-		return voronoi;
+		return searchableVoronoi;
 	}
 }

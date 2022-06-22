@@ -1,5 +1,4 @@
 ﻿using Common.Geometry;
-using Common.Geometry.QuadTrees;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
@@ -19,14 +18,13 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 
 	HashSet<Cell> IMountainsBuilder.Create(
 		Size size,
-		Voronoi fineVoronoi,
-		IVoronoiCellLocator cellLocator,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
 		do {
 			List<Edge> lines = GetMountainLines( size, size.Columns / 100 );
-			HashSet<Cell> rangeCells = BuildRanges( fineVoronoi, fineLandforms, cellLocator, lines );
+			HashSet<Cell> rangeCells = BuildRanges( voronoi, fineLandforms, lines );
 			foreach( Cell cell in rangeCells ) {
 				result.Add( cell );
 			};
@@ -67,9 +65,8 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 	}
 
 	public HashSet<Cell> BuildRanges(
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
-		IVoronoiCellLocator cellLocator,
 		List<Edge> lines
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
@@ -84,7 +81,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		// Check to see if the line crosses a cell, if it does, mark it as a mountain
 		foreach( Edge edge in lines ) {
 			Rect edgeBounds = new Rect( edge.A, edge.B );
-			IReadOnlyList<Cell> targetCells = cellLocator.Locate( edgeBounds );
+			IReadOnlyList<Cell> targetCells = voronoi.Search( edgeBounds );
 			
 			_geometry.RasterizeLine(
 				edge.A,
@@ -102,7 +99,7 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		// This prevents the mountains from being up against water
 		result = result.Where( mountainCell => {
 			bool allowed = true;
-			foreach( Cell neighbourCell in fineVoronoi.Neighbours[mountainCell] ) {
+			foreach( Cell neighbourCell in voronoi.Neighbours[mountainCell] ) {
 				if( !fineLandforms.Contains( neighbourCell ) ) {
 					allowed = false;
 				}

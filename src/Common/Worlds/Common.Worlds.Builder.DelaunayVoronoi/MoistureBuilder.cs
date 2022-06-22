@@ -3,17 +3,10 @@
 internal sealed class MoistureBuilder : IMoistureBuilder {
 
 	public const int CapacityLimit = 1000;
-	private readonly IVoronoiEdgeDetector _voronoiEdgeDetector;
-
-	public MoistureBuilder(
-		IVoronoiEdgeDetector voronoiEdgeDetector
-	) {
-		_voronoiEdgeDetector = voronoiEdgeDetector;
-	}
 
 	Dictionary<Cell, float> IMoistureBuilder.Create(
 		Size size,
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> saltwater,
 		HashSet<Cell> freshwater,
@@ -30,12 +23,18 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 			result[cell] = CapacityLimit;
 		}
 
-		HashSet<Cell> sweepEdge = _voronoiEdgeDetector.Find( size, fineVoronoi, VoronoiEdge.Left );
+		IReadOnlyList<Cell> sweepEdge = voronoi.Search( 50, 0, 1, size.Rows );
+		foreach(Cell cell in sweepEdge) {
+			result[cell] = CapacityLimit;
+		}
 		while( sweepEdge.Count > 0 ) {
-			sweepEdge = SweepRight( sweepEdge, fineVoronoi, fineLandforms, airflow, temperature, result );
+			sweepEdge = SweepRight( sweepEdge, voronoi, fineLandforms, airflow, temperature, result );
 		}
 
-		foreach (Cell cell in fineVoronoi.Cells) {
+		foreach (Cell cell in voronoi.Cells) {
+			if (!result.ContainsKey(cell)) {
+				result[cell] = CapacityLimit;
+			}
 			if( result[cell] == CapacityLimit ) {
 				result[cell] = (int)( result[cell] * temperature[cell] );
 			}
@@ -51,9 +50,9 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 		return result.ToDictionary( r => r.Key, r => (float)( (float)r.Value / (float)maxValue ) );
 	}
 
-	private static HashSet<Cell> SweepRight(
-		HashSet<Cell> source,
-		Voronoi fineVoronoi,
+	private static IReadOnlyList<Cell> SweepRight(
+		IReadOnlyList<Cell> source,
+		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms,
 		Dictionary<Cell, float> airflow,
 		Dictionary<Cell, float> temperature,
@@ -83,6 +82,6 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 			}
 		}
 
-		return result;
+		return result.ToList();
 	}
 }

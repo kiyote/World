@@ -7,7 +7,6 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class TemperatureBuilderIntegrationTests {
 
-	private IVoronoiCellLocatorFactory _voronoiCellLocatorFactory;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IGeometry _geometry;
@@ -54,7 +53,6 @@ internal sealed class TemperatureBuilderIntegrationTests {
 		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
-		_voronoiCellLocatorFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiCellLocatorFactory>();
 
 		_builder = new TemperatureBuilder(
 			_geometry
@@ -70,15 +68,14 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		Size size = new Size( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out Voronoi fineVoronoi );
-		IVoronoiCellLocator cellLocator = _voronoiCellLocatorFactory.Create( fineVoronoi, size );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, fineVoronoi, cellLocator, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( fineVoronoi, fineLandforms, mountains );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, fineVoronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( fineVoronoi, fineLandforms, oceans );
+		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
+		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( voronoi, fineLandforms, oceans );
 		Dictionary<Cell, float> temperatures = ( _builder as ITemperatureBuilder ).Create(
 			size,
-			fineVoronoi,
+			voronoi,
 			fineLandforms,
 			mountains,
 			hills,
@@ -97,7 +94,7 @@ internal sealed class TemperatureBuilderIntegrationTests {
 			} );
 		}
 
-		foreach( Edge edge in fineVoronoi.Edges ) {
+		foreach( Edge edge in voronoi.Edges ) {
 			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
 				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
 					buffer[x, y] = 0.2f;

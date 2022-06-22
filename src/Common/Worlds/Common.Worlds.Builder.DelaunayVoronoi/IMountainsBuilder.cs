@@ -4,8 +4,7 @@ internal interface IMountainsBuilder {
 
 	HashSet<Cell> Create(
 		Size size,
-		Voronoi fineVoronoi,
-		IVoronoiCellLocator cellLocator,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms
 	);
 }

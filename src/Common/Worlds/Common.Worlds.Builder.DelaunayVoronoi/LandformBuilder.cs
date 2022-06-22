@@ -20,7 +20,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 
 	HashSet<Cell> ILandformBuilder.Create(
 		Size size,
-		out Voronoi voronoi
+		out ISearchableVoronoi voronoi
 	) {
 		HashSet<Cell> roughLandforms = CreateRoughLandform( size );
 		HashSet<Cell> fineLandforms = CreateFineLandform( roughLandforms, size, out voronoi );
@@ -31,7 +31,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 	private HashSet<Cell> CreateRoughLandform(
 		Size size
 	) {
-		Voronoi roughVoronoi = _voronoiBuilder.Create( size, 100 );
+		IVoronoi roughVoronoi = _voronoiBuilder.Create( size, 100 );
 
 		// Get the seeds of the landforms
 		List<Cell> cells = roughVoronoi.Cells.Where( c => !c.IsOpen ).ToList();
@@ -59,7 +59,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 	private HashSet<Cell> CreateFineLandform(
 		HashSet<Cell> roughLandforms,
 		Size size,
-		out Voronoi voronoi
+		out ISearchableVoronoi voronoi
 	) {
 		int fineCount = size.Columns * size.Rows / 200;
 		voronoi = _voronoiBuilder.Create( size, fineCount );

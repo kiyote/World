@@ -3,7 +3,7 @@
 internal interface IAirflowBuilder {
 	Dictionary<Cell, float> Create(
 		Size size,
-		Voronoi fineVoronoi,
+		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills
