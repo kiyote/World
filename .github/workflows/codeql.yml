@@ -57,7 +57,7 @@ jobs:
           6.0.x
 
     - name: Setup CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
 
@@ -68,4 +68,4 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2
