@@ -38,7 +38,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 		if (!_fileSystem.File.Exists( filename )) {
 			return false;
 		}
-		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
+		using Stream fs = _fileSystem.FileStream.New( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
 		await contentReader( fs ).ConfigureAwait( false );
 		return true;
 	}
@@ -48,7 +48,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 		CancellationToken cancellationToken
 	) {
 		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value + ".metadata" );
-		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
+		using Stream fs = _fileSystem.FileStream.New( filename, FileMode.Open, FileAccess.Read, FileShare.Read );
 		FileMetadata? result = await JsonSerializer.DeserializeAsync<FileMetadata>( fs, _options, cancellationToken ).ConfigureAwait( false );
 		return result ?? throw new FileNotFoundException();
 	}
@@ -59,7 +59,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 		CancellationToken cancellationToken
 	) {
 		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileId.Value );
-		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Create, FileAccess.Write, FileShare.None );
+		using Stream fs = _fileSystem.FileStream.New( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 		await asyncWriter( fs ).ConfigureAwait( false );
 	}
 
@@ -68,7 +68,7 @@ internal class DiskFileRepository : IDiskFileRepository {
 		CancellationToken cancellationToken
 	) {
 		string filename = Path.Combine( _fileFolderProvider.GetLocation(), fileMetadata.FileId.Value + ".metadata" );
-		using Stream fs = _fileSystem.FileStream.Create( filename, FileMode.Create, FileAccess.Write, FileShare.None );
+		using Stream fs = _fileSystem.FileStream.New( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 		await JsonSerializer.SerializeAsync( fs, fileMetadata, _options, cancellationToken ).ConfigureAwait( false );
 	}
 }
