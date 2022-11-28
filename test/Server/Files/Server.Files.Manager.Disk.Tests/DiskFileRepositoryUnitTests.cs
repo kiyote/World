@@ -27,6 +27,11 @@ public class DiskFileRepositoryUnitTests {
 		);
 	}
 
+	private class MemoryStreamWrapper : FileSystemStream {
+		public MemoryStreamWrapper( Stream stream, string path, bool isAsync ) : base( stream, path, isAsync ) {
+		}
+	}
+
 	[Test]
 	public void PutMetadataAsync_ValidMetadata_NoExceptionsThrown() {
 		IMutableFileMetadataRepository repo = _diskRepository;
@@ -37,9 +42,9 @@ public class DiskFileRepositoryUnitTests {
 
 		Id<FileMetadata> fileId = new Id<FileMetadata>( Guid.NewGuid() );
 		string filename = Path.Combine( folder, fileId.Value + ".metadata" );
-		using MemoryStream output = new MemoryStream();
+		using FileSystemStream output = new MemoryStreamWrapper( new MemoryStream(), folder, true );
 		_fileStreamFactory
-			.Setup( fsf => fsf.Create( filename, FileMode.Create, FileAccess.Write, FileShare.None ) )
+			.Setup( fsf => fsf.New( filename, FileMode.Create, FileAccess.Write, FileShare.None ) )
 			.Returns( output );
 
 		FileMetadata fileMetadata = new FileMetadata( fileId, "name", "mime type", 1234L, DateTime.UtcNow );
