@@ -27,7 +27,7 @@ public class DiskFileRepositoryUnitTests {
 		);
 	}
 
-	private class MemoryStreamWrapper : FileSystemStream {
+	private sealed class MemoryStreamWrapper : FileSystemStream {
 		public MemoryStreamWrapper( Stream stream, string path, bool isAsync ) : base( stream, path, isAsync ) {
 		}
 	}

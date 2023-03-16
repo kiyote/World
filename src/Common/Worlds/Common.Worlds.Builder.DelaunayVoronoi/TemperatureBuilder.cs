@@ -4,14 +4,6 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class TemperatureBuilder : ITemperatureBuilder {
 
-	private readonly IGeometry _geometry;
-
-	public TemperatureBuilder(
-		IGeometry geometry
-	) {
-		_geometry = geometry;
-	}
-
 	Dictionary<Cell, float> ITemperatureBuilder.Create(
 		Size size,
 		ISearchableVoronoi voronoi,
@@ -58,7 +50,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		do {
 			tempMissing = false;
 			foreach( Cell cell in voronoi.Cells.Where( c => c.IsOpen ) ) {
-				IEnumerable<Cell> neighbours = voronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) );
+				List<Cell> neighbours = voronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) ).ToList();
 				if( neighbours.Any() ) {
 					result[cell] = (int)neighbours.Average( n => result[n] );
 				} else {

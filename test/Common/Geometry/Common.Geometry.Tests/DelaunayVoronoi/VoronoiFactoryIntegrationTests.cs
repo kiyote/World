@@ -1,8 +1,9 @@
 ﻿using Common.Buffers;
+using Size = Common.Core.Size;
 
 namespace Common.Geometry.DelaunayVoronoi.Tests;
 
-internal class VoronoiIntegrationTests {
+internal sealed class VoronoiIntegrationTests {
 
 	private IRandom _random;
 	private IGeometry _geometry;

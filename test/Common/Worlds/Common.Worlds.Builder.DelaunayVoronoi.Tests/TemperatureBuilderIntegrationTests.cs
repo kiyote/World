@@ -1,6 +1,7 @@
 ﻿using Common.Buffers;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
+using Size = Common.Core.Size;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -54,9 +55,7 @@ internal sealed class TemperatureBuilderIntegrationTests {
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
 
-		_builder = new TemperatureBuilder(
-			_geometry
-		);
+		_builder = new TemperatureBuilder();
 	}
 
 	[TearDown]
