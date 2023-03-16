@@ -1,6 +1,7 @@
 ﻿using Common.Buffers;
 using Common.Geometry;
 using Common.Geometry.DelaunayVoronoi;
+using Size = Common.Core.Size;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 

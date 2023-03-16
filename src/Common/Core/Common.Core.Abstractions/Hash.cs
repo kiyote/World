@@ -8,8 +8,7 @@ namespace Common.Core {
 			if( !string.IsNullOrEmpty( strText ) ) {
 				//Unicode Encode Covering all characterset
 				byte[] byteContents = Encoding.Unicode.GetBytes( strText );
-				using System.Security.Cryptography.SHA256 hash = System.Security.Cryptography.SHA256.Create();
-				byte[] hashText = hash.ComputeHash( byteContents );
+				byte[] hashText = System.Security.Cryptography.SHA256.HashData( byteContents );
 				//32Byte hashText separate
 				//hashCodeStart = 0~7  8Byte
 				//hashCodeMedium = 8~23  8Byte
