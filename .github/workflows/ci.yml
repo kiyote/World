@@ -10,6 +10,7 @@ on:
       - '**.sln'
       - '.editorconfig'
       - '**.Build.props'
+      - '**.Packages.props'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
@@ -18,6 +19,7 @@ on:
       - '**.sln'
       - '.editorconfig'
       - '**.Build.props'
+      - '**.Packages.props'
       - '.github/workflows/ci.yml'
 
 jobs:
