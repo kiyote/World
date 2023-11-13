@@ -5,7 +5,7 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 	public const int CapacityLimit = 1000;
 
 	Dictionary<Cell, float> IMoistureBuilder.Create(
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> saltwater,
@@ -23,7 +23,7 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 			result[cell] = CapacityLimit;
 		}
 
-		IReadOnlyList<Cell> sweepEdge = voronoi.Search( 50, 0, 1, size.Rows );
+		IReadOnlyList<Cell> sweepEdge = voronoi.Search( 50, 0, 1, size.Height );
 		foreach(Cell cell in sweepEdge) {
 			result[cell] = CapacityLimit;
 		}
@@ -60,8 +60,8 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
 		foreach( Cell cell in source ) {
-			int minY = cell.Points.Min( p => p.Y );
-			int maxY = cell.Points.Max( p => p.Y );
+			int minY = cell.Polygon.Points.Min( p => p.Y );
+			int maxY = cell.Polygon.Points.Max( p => p.Y );
 			int range = maxY - minY;
 			foreach( Cell neighbour in fineVoronoi.Neighbours[cell].Where( n => !n.IsOpen ) ) {
 				if( neighbour.Center.X > cell.Center.X

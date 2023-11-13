@@ -3,7 +3,7 @@
 internal interface IVoronoiBuilder {
 
 	ISearchableVoronoi Create(
-		Size size,
+		ISize size,
 		int pointCount
 	);
 }

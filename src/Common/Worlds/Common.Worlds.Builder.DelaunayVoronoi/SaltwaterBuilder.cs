@@ -1,27 +1,17 @@
-﻿using Common.Geometry;
-
-namespace Common.Worlds.Builder.DelaunayVoronoi;
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
-	private readonly IGeometry _geometry;
-
-	public SaltwaterBuilder(
-		IGeometry geometry
-	) {
-		_geometry = geometry;
-	}
-
 	HashSet<Cell> ISaltwaterBuilder.Create(
-		Size size,
+		ISize size,
 		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms
 	) {
 		// Find a cell along the top of the map that isn't land
 		Cell start = fineVoronoi.Cells[0];
-		for( int i = 0; i < size.Columns; i += 10 ) {
+		for( int i = 0; i < size.Width; i += 10 ) {
 			foreach( Cell cell in fineVoronoi.Cells ) {
-				if( _geometry.PointInPolygon( cell.Points, i, 0 ) ) {
+				if( cell.Polygon.Contains( i, 0 ) ) {
 					if( !fineLandforms.Contains( cell ) ) {
 						start = cell;
 					}

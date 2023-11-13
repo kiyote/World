@@ -1,5 +1,5 @@
 ﻿using Common.Core;
-using Common.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.DelaunayVoronoi;
 
 namespace Common.Geometry.Analyses;
 

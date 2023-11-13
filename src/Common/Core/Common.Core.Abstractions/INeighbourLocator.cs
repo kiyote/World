@@ -1,18 +1,20 @@
-﻿namespace Common.Core;
+﻿using Kiyote.Geometry;
+
+namespace Common.Core;
 
 public interface INeighbourLocator {
-	IEnumerable<Location> GetNeighbours(
-		Size size,
-		Location location
+	IEnumerable<Point> GetNeighbours(
+		ISize size,
+		Point location
 	);
 
-	IEnumerable<Location> GetNeighbours(
-		Size size,
+	IEnumerable<Point> GetNeighbours(
+		ISize size,
 		int column,
 		int row
 	);
 
-	IEnumerable<Location> GetNeighbours(
+	IEnumerable<Point> GetNeighbours(
 		int columns,
 		int rows,
 		int column,

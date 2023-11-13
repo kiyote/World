@@ -2,7 +2,7 @@
 
 internal interface ILandformBuilder {
 	HashSet<Cell> Create(
-		Size size,
+		ISize size,
 		out ISearchableVoronoi voronoi
 	);
 }

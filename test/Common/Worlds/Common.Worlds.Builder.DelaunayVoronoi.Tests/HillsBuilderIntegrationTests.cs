@@ -1,7 +1,8 @@
 ﻿using Common.Buffers;
-using Common.Geometry;
-using Common.Geometry.DelaunayVoronoi;
-using Size = Common.Core.Size;
+using Kiyote.Geometry;
+using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Rasterizers;
+using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -10,7 +11,7 @@ internal sealed class HillsBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
-	private IGeometry _geometry;
+	private IRasterizer _rasterizer;
 	private HillsBuilder _builder;
 	private IMountainsBuilder _mountainsBuilder;
 	private IServiceProvider _provider;
@@ -23,12 +24,12 @@ internal sealed class HillsBuilderIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( HillsBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonCore();
 		services.AddCommonBuffers();
-		services.AddCommonGeometry();
 		services.AddCommonWorlds();
-
 		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddRandomization();
+		services.AddDelaunayVoronoi();
+		services.AddRasterizer();
 
 		_provider = services.BuildServiceProvider();
 
@@ -44,7 +45,7 @@ internal sealed class HillsBuilderIntegrationTests {
 		_scope = _provider.CreateScope();
 
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
+		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
 
@@ -59,7 +60,7 @@ internal sealed class HillsBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		Size size = new Size( 1000, 1000 );
+		ISize size = new Point( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
 		HashSet<Cell> hills =  (_builder as IHillsBuilder).Create( voronoi, fineLandforms, mountains );
@@ -68,28 +69,28 @@ internal sealed class HillsBuilderIntegrationTests {
 
 
 		foreach( Cell cell in fineLandforms ) {
-			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.3f;
 				}
 			} );
 		}
 
 		foreach( Cell mountain in mountains ) {
-			_geometry.RasterizePolygon( mountain.Points, ( int x, int y ) => {
+			_rasterizer.Rasterize( mountain.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = 0.75f;
 			} );
 		}
 
 		foreach( Cell hill in hills ) {
-			_geometry.RasterizePolygon( hill.Points, ( int x, int y ) => {
+			_rasterizer.Rasterize( hill.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = 1.0f;
 			} );
 		}
 
 		foreach( Edge edge in voronoi.Edges ) {
-			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.2f;
 				}
 			} );

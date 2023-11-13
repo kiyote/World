@@ -1,22 +1,22 @@
 ﻿namespace Common.Worlds.Builder;
 
 internal class HexNeighbourLocator : INeighbourLocator {
-	IEnumerable<Location> INeighbourLocator.GetNeighbours(
-		Size size,
-		Location location
+	IEnumerable<Point> INeighbourLocator.GetNeighbours(
+		ISize size,
+		Point location
 	) {
-		return DoGetNeighbours( size.Columns, size.Rows, location.Column, location.Row );
+		return DoGetNeighbours( size.Width, size.Height, location.X, location.Y );
 	}
 
-	IEnumerable<Location> INeighbourLocator.GetNeighbours(
-		Size size,
+	IEnumerable<Point> INeighbourLocator.GetNeighbours(
+		ISize size,
 		int column,
 		int row
 	) {
-		return DoGetNeighbours( size.Columns, size.Rows, column, row );
+		return DoGetNeighbours( size.Width, size.Height, column, row );
 	}
 
-	IEnumerable<Location> INeighbourLocator.GetNeighbours(
+	IEnumerable<Point> INeighbourLocator.GetNeighbours(
 		int columns,
 		int rows,
 		int column,
@@ -25,42 +25,42 @@ internal class HexNeighbourLocator : INeighbourLocator {
 		return DoGetNeighbours( columns, rows, column, row );
 	}
 
-	private static IEnumerable<Location> DoGetNeighbours(
+	private static IEnumerable<Point> DoGetNeighbours(
 		int columns,
 		int rows,
 		int column,
 		int row
 	) {
-		List<Location> result;
+		List<Point> result;
 
 		if( ( column & 1 ) == 0 ) {
-			result = new List<Location>() {
-				new Location( column + 1, row ),
-				new Location( column, row + 1 ),
-				new Location( column - 1, row ),
+			result = new List<Point>() {
+				new Point( column + 1, row ),
+				new Point( column, row + 1 ),
+				new Point( column - 1, row ),
 
-				new Location( column - 1, row - 1 ),
-				new Location( column, row - 1 ),
-				new Location( column + 1, row - 1 ),
+				new Point( column - 1, row - 1 ),
+				new Point( column, row - 1 ),
+				new Point( column + 1, row - 1 ),
 			};
 		} else {
-			result = new List<Location>() {
-				new Location( column + 1, row + 1 ),
-				new Location( column, row + 1 ),
-				new Location( column - 1, row + 1 ),
+			result = new List<Point>() {
+				new Point( column + 1, row + 1 ),
+				new Point( column, row + 1 ),
+				new Point( column - 1, row + 1 ),
 
-				new Location( column - 1, row ),
-				new Location( column, row - 1 ),
-				new Location( column + 1, row ),
+				new Point( column - 1, row ),
+				new Point( column, row - 1 ),
+				new Point( column + 1, row ),
 			};
 		}
 
 		return result
 			.Where(
-				p => p.Column >= 0
-				&& p.Column < columns
-				&& p.Row >= 0
-				&& p.Row < rows
+				p => p.X >= 0
+				&& p.X < columns
+				&& p.Y >= 0
+				&& p.Y < rows
 			);
 	}
 

@@ -2,7 +2,7 @@
 
 internal interface ISaltwaterBuilder {
 	HashSet<Cell> Create(
-		Size size,
+		ISize size,
 		IVoronoi fineVoronoi,
 		HashSet<Cell> fineLandforms
 	);

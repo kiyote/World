@@ -20,7 +20,7 @@ internal sealed class WorldManager : IWorldManager {
 		Id<World> worldId,
 		string name,
 		string seed,
-		Size size,
+		ISize size,
 		CancellationToken cancellationToken
 	) {
 		return _worldRepository.CreateAsync(

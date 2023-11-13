@@ -2,6 +2,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 		<PackageReference Include="MimeTypeMapOfficial" />
+		<PackageReference Include="Kiyote.Geometry" />
 	</ItemGroup>
 
 	<ItemGroup>

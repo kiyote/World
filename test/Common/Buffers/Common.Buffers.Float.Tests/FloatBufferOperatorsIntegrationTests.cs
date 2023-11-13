@@ -44,8 +44,8 @@ public class FloatBufferOperatorsIntegrationTests {
 
 		_operators.Normalize( _buffer, 0.0f, 1.0f, actual );
 
-		for( int r = 0; r < _buffer.Size.Rows; r++ ) {
-			for( int c = 0; c < _buffer.Size.Columns; c++ ) {
+		for( int r = 0; r < _buffer.Size.Height; r++ ) {
+			for( int c = 0; c < _buffer.Size.Width; c++ ) {
 				Assert.GreaterOrEqual( actual[c, r], 0.0f );
 				Assert.LessOrEqual( actual[c, r], 1.0f );
 			}

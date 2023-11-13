@@ -1,7 +1,9 @@
 ﻿using Common.Buffers;
-using Common.Geometry;
-using Common.Geometry.DelaunayVoronoi;
-using Size = Common.Core.Size;
+using Kiyote.Geometry;
+using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Randomization;
+using Kiyote.Geometry.Rasterizers;
+using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -11,8 +13,7 @@ internal sealed class MountainsBuilderIntegrationTests {
 	private ILandformBuilder _landformBuilder;
 	private IRandom _random;
 	private IBufferFactory _bufferFactory;
-	private IGeometry _geometry;
-	private IDelaunatorFactory _delaunatorFactory;
+	private IRasterizer _rasterizer;
 	private IVoronoiFactory _voronoiFactory;
 	private MountainsBuilder _builder;
 	private IServiceProvider _provider;
@@ -25,12 +26,12 @@ internal sealed class MountainsBuilderIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( MountainsBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonCore();
 		services.AddCommonBuffers();
-		services.AddCommonGeometry();
 		services.AddCommonWorlds();
-
 		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddRandomization();
+		services.AddDelaunayVoronoi();
+		services.AddRasterizer();
 
 		_provider = services.BuildServiceProvider();
 
@@ -48,12 +49,11 @@ internal sealed class MountainsBuilderIntegrationTests {
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_random = _scope.ServiceProvider.GetRequiredService<IRandom>();
-		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
-		_delaunatorFactory = _scope.ServiceProvider.GetRequiredService<IDelaunatorFactory>();
+		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_voronoiFactory = _scope.ServiceProvider.GetRequiredService<IVoronoiFactory>();
 		_builder = new MountainsBuilder(
 			_scope.ServiceProvider.GetRequiredService<IRandom>(),
-			_scope.ServiceProvider.GetRequiredService<IGeometry>()
+			_scope.ServiceProvider.GetRequiredService<IRasterizer>()
 		);
 	}
 
@@ -65,35 +65,35 @@ internal sealed class MountainsBuilderIntegrationTests {
 	[Test]
 	[Ignore("Used to visualize output for inspection.")]
 	public async Task Visualize() {
-		Size size = new Size( 1000, 1000 );
+		ISize size = new Point( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 		List<Cell> mountains = new List<Cell>();
 		do {
-			List<Edge> lines = _builder.GetMountainLines( size, size.Columns / 100 );
+			List<Edge> lines = _builder.GetMountainLines( size, size.Width / 100 );
 			mountains.AddRange( _builder.BuildRanges( voronoi, fineLandforms, lines ) );
-		} while( mountains.Count < ( size.Rows / 10 ) );
+		} while( mountains.Count < ( size.Height / 10 ) );
 		mountains = mountains.Distinct().ToList();
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
 
 		foreach( Cell cell in fineLandforms ) {
-			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.3f;
 				}
 			} );
 		}
 
 		foreach( Cell mountain in mountains ) {
-			_geometry.RasterizePolygon( mountain.Points, ( int x, int y ) => {
+			_rasterizer.Rasterize( mountain.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = 0.6f;
 			} );
 		}
 
 		foreach( Edge edge in voronoi.Edges ) {
-			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.2f;
 				}
 			} );
@@ -106,12 +106,12 @@ internal sealed class MountainsBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize_GetMountainLines() {
-		Size size = new Size( 1000, 1000 );
+		ISize size = new Point( 1000, 1000 );
 		List<Edge> lines = _builder.GetMountainLines( size, 10 );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 		foreach( Edge edge in lines ) {
-			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
+			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
 				buffer[x, y] = 1.0f;
 			} );
 		}

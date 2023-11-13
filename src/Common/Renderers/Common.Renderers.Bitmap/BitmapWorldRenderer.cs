@@ -30,8 +30,8 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.Size.Rows;
-		int columns = terrain.Size.Columns;
+		int rows = terrain.Size.Height;
+		int columns = terrain.Size.Width;
 		Image<L8> map = _imageFactory.CreateMap( columns, rows );
 
 		for( int r = 0; r < rows; r++ ) {
@@ -65,8 +65,8 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		Image<Rgba32> coast = await LoadImageAsync( _resourceFileManager.CoastTileId, cancellationToken ).ConfigureAwait( false );
 		Image<Rgba32> ocean = await LoadImageAsync( _resourceFileManager.OceanTileId, cancellationToken ).ConfigureAwait( false );
 
-		int rows = terrain.Size.Rows;
-		int columns = terrain.Size.Columns;
+		int rows = terrain.Size.Height;
+		int columns = terrain.Size.Width;
 		using Image<Rgba32> img = _imageFactory.CreateImage( ( columns * 53 ) + 16, ( rows * 64 ) + 32 );
 
 		for( int r = 0; r < rows; r++ ) {

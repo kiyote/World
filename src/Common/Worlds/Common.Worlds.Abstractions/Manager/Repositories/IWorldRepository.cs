@@ -6,7 +6,7 @@ public interface IWorldRepository
 		Id<World> worldId,
 		string name,
 		string seed,
-		Size size,
+		ISize size,
 		DateTime createdOn,
 		CancellationToken cancellationToken
 	);
