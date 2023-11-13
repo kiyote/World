@@ -3,7 +3,7 @@
 public interface IWorldMapGenerator {
 	WorldMaps Create(
 		long seed,
-		Size size,
+		ISize size,
 		INeighbourLocator neighbourLocator
 	);
 }

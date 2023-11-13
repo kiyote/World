@@ -1,7 +1,8 @@
 ﻿using Common.Buffers;
-using Common.Geometry;
-using Common.Geometry.DelaunayVoronoi;
-using Size = Common.Core.Size;
+using Kiyote.Geometry;
+using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Rasterizers;
+using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -10,7 +11,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
-	private IGeometry _geometry;
+	private IRasterizer _rasterizer;
 	private SaltwaterBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -23,12 +24,12 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( SaltwaterBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonCore();
 		services.AddCommonBuffers();
-		services.AddCommonGeometry();
 		services.AddCommonWorlds();
-
 		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddRandomization();
+		services.AddDelaunayVoronoi();
+		services.AddRasterizer();
 
 		_provider = services.BuildServiceProvider();
 
@@ -44,12 +45,10 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		_scope = _provider.CreateScope();
 
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_geometry = _scope.ServiceProvider.GetRequiredService<IGeometry>();
+		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 
-		_builder = new SaltwaterBuilder(
-			_geometry
-		);
+		_builder = new SaltwaterBuilder();
 	}
 
 	[TearDown]
@@ -60,7 +59,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		Size size = new Size( 1000, 1000 );
+		ISize size = new Point( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 		HashSet<Cell> oceans = ( _builder as ISaltwaterBuilder ).Create( size, voronoi, fineLandforms );
 
@@ -68,8 +67,8 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 
 
 		foreach( Cell cell in fineLandforms ) {
-			_geometry.RasterizePolygon( cell.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.3f;
 				}
 			} );
@@ -77,15 +76,15 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 
 		foreach( Cell ocean in oceans ) {
 			if( !ocean.IsOpen ) {
-				_geometry.RasterizePolygon( ocean.Points, ( int x, int y ) => {
+				_rasterizer.Rasterize( ocean.Polygon.Points, ( int x, int y ) => {
 					buffer[x, y] = 1.0f;
 				} );
 			}
 		}
 
 		foreach( Edge edge in voronoi.Edges ) {
-			_geometry.RasterizeLine( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Columns && y >= 0 && y < size.Rows ) {
+			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
+				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
 					buffer[x, y] = 0.2f;
 				}
 			} );

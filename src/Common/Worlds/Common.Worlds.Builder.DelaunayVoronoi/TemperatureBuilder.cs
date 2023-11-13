@@ -1,11 +1,9 @@
-﻿using Common.Geometry;
-
-namespace Common.Worlds.Builder.DelaunayVoronoi;
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class TemperatureBuilder : ITemperatureBuilder {
 
 	Dictionary<Cell, float> ITemperatureBuilder.Create(
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
@@ -13,7 +11,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		HashSet<Cell> oceans,
 		HashSet<Cell> lakes
 	) {
-		int midLine = size.Rows / 2;
+		int midLine = size.Height / 2;
 
 		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
 		foreach( Cell cell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
@@ -70,11 +68,11 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 
 	private static HashSet<Cell> RenderEquator(
 		int midLine,
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		Dictionary<Cell, int> temperatureMap
 	) {
-		IReadOnlyList<Cell> equatorCells = voronoi.Search( 0, midLine, size.Columns, 1 );
+		IReadOnlyList<Cell> equatorCells = voronoi.Search( 0, midLine, size.Width, 1 );
 		foreach (Cell cell in equatorCells) {
 			temperatureMap[cell] = int.MaxValue - 1;			
 		}

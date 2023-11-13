@@ -1,39 +1,39 @@
-﻿using Common.Geometry;
+﻿using Kiyote.Geometry.Rasterizers;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class MountainsBuilder : IMountainsBuilder {
 
 	private readonly IRandom _random;
-	private readonly IGeometry _geometry;
+	private readonly IRasterizer _rasterizer;
 
 	public MountainsBuilder(
 		IRandom random,
-		IGeometry geometry
+		IRasterizer rasterizer
 	) {
 		_random = random;
-		_geometry = geometry;
+		_rasterizer = rasterizer;
 	}
 
 
 	HashSet<Cell> IMountainsBuilder.Create(
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms
 	) {
 		HashSet<Cell> result = new HashSet<Cell>();
 		do {
-			List<Edge> lines = GetMountainLines( size, size.Columns / 100 );
+			List<Edge> lines = GetMountainLines( size, size.Width / 100 );
 			HashSet<Cell> rangeCells = BuildRanges( voronoi, fineLandforms, lines );
 			foreach( Cell cell in rangeCells ) {
 				result.Add( cell );
 			};
-		} while( result.Count < size.Columns / 12 );
+		} while( result.Count < size.Width / 12 );
 		return result;
 	}
 
 	public List<Edge> GetMountainLines(
-		Size size,
+		ISize size,
 		int count
 	) {
 		List<Edge> result = new List<Edge>();
@@ -41,12 +41,12 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 		// Get a rough direction for the mountain range
 		float direction = _random.NextInt( 90 ) - 45;
 		// Start it somewhere middle-top -ish
-		int widthRange = size.Columns / 2;
+		int widthRange = size.Width / 2;
 		Point start = new Point(
 			_random.NextInt( widthRange ) + ( widthRange / 2 ),
-			_random.NextInt( size.Rows )
+			_random.NextInt( size.Height )
 		);
-		int segmentRange = ( size.Columns / 12 );
+		int segmentRange = ( size.Width / 12 );
 
 		do {
 			int segmentLength = _random.NextInt( segmentRange ) + ( segmentRange / 2 );
@@ -83,12 +83,12 @@ internal sealed class MountainsBuilder : IMountainsBuilder {
 			Rect edgeBounds = new Rect( edge.A, edge.B );
 			IReadOnlyList<Cell> targetCells = voronoi.Search( edgeBounds );
 			
-			_geometry.RasterizeLine(
+			_rasterizer.Rasterize(
 				edge.A,
 				edge.B,
 				( int x, int y ) => {
 					foreach( Cell cell in targetCells ) {
-						if( _geometry.PointInPolygon( cell.Points, x, y ) ) {
+						if (cell.Polygon.Contains( x, y )) { 
 							result.Add( cell );
 						}
 					}

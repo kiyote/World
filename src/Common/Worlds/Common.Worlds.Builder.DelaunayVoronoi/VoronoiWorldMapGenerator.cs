@@ -1,12 +1,12 @@
 ﻿using Common.Buffers;
-using Common.Geometry;
+using Kiyote.Geometry.Rasterizers;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
-	private readonly IGeometry _geometry;
+	private readonly IRasterizer _rasterizer;
 	private readonly IMountainsBuilder _mountainsBuilder;
 	private readonly ILandformBuilder _landformBuilder;
 	private readonly IHillsBuilder _hillsBuilder;
@@ -20,7 +20,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	
 	public VoronoiWorldMapGenerator(
 		IBufferFactory bufferFactory,
-		IGeometry geometry,
+		IRasterizer rasterizer,
 		IMountainsBuilder mountainsBuilder,
 		ILandformBuilder landformBuilder,
 		IHillsBuilder hillsBuilder,
@@ -33,7 +33,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IDesertBuilder desertBuilder
 	) {
 		_bufferFactory = bufferFactory;
-		_geometry = geometry;
+		_rasterizer = rasterizer;
 		_landformBuilder = landformBuilder;
 		_mountainsBuilder = mountainsBuilder;
 		_hillsBuilder = hillsBuilder;
@@ -48,7 +48,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	WorldMaps IWorldMapGenerator.Create(
 		long seed,
-		Size size,
+		ISize size,
 		INeighbourLocator neighbourLocator
 	) {
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
@@ -115,7 +115,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		TileTerrain terrain
 	) {
 		foreach( Cell cell in cells ) {
-			_geometry.RasterizePolygon( cell.Points, ( x, y ) => {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( x, y ) => {
 				buffer[x, y] = terrain;
 			} );
 		}
@@ -129,7 +129,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	) {
 		foreach( Cell cell in cells ) {
 			TileFeature feature = calculateFeature( cell );
-			_geometry.RasterizePolygon( cell.Points, ( x, y ) => {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( x, y ) => {
 				buffer[x, y] |= feature;
 			} );
 		}

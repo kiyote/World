@@ -3,7 +3,7 @@
 internal interface IMountainsBuilder {
 
 	HashSet<Cell> Create(
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms
 	);

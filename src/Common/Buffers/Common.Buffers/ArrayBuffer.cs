@@ -3,23 +3,23 @@
 internal sealed class ArrayBuffer<T>: IBuffer<T> {
 
 	private readonly T[][] _buffer;
-	private readonly Size _size;
+	private readonly ISize _size;
 
 	public ArrayBuffer(
-		Size size
+		ISize size
 	) {
 		if( size is null ) {
 			throw new ArgumentNullException( nameof( size ) );
 		}
 
 		_size = size;
-		_buffer = new T[size.Rows][];
-		for( int r = 0; r < size.Rows; r++ ) {
-			_buffer[r] = new T[size.Columns];
+		_buffer = new T[size.Height][];
+		for( int r = 0; r < size.Height; r++ ) {
+			_buffer[r] = new T[size.Width];
 		}
 	}
 
-	public Size Size => _size;
+	public ISize Size => _size;
 
 	public T this[int column, int row] {
 		get {

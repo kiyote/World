@@ -22,7 +22,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 	Task<Id<World>> IWorldBuilder.BuildAsync(
 		string name,
 		string seed,
-		Size size,
+		ISize size,
 		CancellationToken cancellationToken
 	) {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );

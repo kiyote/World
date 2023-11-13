@@ -5,7 +5,7 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 	private const int CapacityLimit = int.MaxValue / 2;
 
 	Dictionary<Cell, float> IAirflowBuilder.Create(
-		Size size,
+		ISize size,
 		ISearchableVoronoi voronoi,
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains,
@@ -15,7 +15,7 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 
 		List<Cell> closedCells = voronoi.Cells.Where( c => !c.IsOpen ).ToList();
 
-		IReadOnlyList<Cell> leftEdge = voronoi.Search( 50, 0, 1, size.Rows );
+		IReadOnlyList<Cell> leftEdge = voronoi.Search( 50, 0, 1, size.Height );
 		foreach( Cell cell in leftEdge ) {
 			result[cell] = CapacityLimit;
 		}

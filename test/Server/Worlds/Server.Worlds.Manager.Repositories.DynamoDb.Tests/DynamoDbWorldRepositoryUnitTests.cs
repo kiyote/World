@@ -1,6 +1,8 @@
 using Common.Worlds;
 using Common.Worlds.Manager.Repositories;
 using Server.Core.DynamoDb;
+using Kiyote.Geometry;
+using Point = Kiyote.Geometry.Point;
 
 namespace Server.Worlds.Manager.Repositories.DynamoDb.Tests;
 
@@ -24,7 +26,7 @@ public class DynamoDbWorldRepositoryUnitTests {
 		string seed = "world_seed";
 		int rows = 1;
 		int columns = 2;
-		Size size = new Size( columns, rows );
+		ISize size = new Point( columns, rows );
 		DateTime createdOn = new DateTime( 2022, 1, 21 );
 		WorldRecord record = new WorldRecord( worldId, name, seed, rows, columns, createdOn );
 

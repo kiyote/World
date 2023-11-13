@@ -1,22 +1,23 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.1.0" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.1" />
-    <PackageVersion Include="Amazon.Lambda.SNSEvents" Version="2.0.0" />
-    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.1.0" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />
+    <PackageVersion Include="Amazon.Lambda.SNSEvents" Version="2.1.0" />
+    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.2.0" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="InjectableAWS" Version="2.5.7" />
     <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="MimeTypeMapOfficial" Version="1.0.17" />
-    <PackageVersion Include="NUnit" Version="3.13.3" />
+    <PackageVersion Include="NUnit" Version="3.14.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
-    <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="1.0.0" />
+    <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
     <PackageVersion Include="System.IO.Abstractions" Version="19.2.69" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.8" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.10" />
+    <PackageVersion Include="Kiyote.Geometry" Version="0.8.0" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 ﻿using Common.Buffers;
 using Common.Buffers.Float;
-using Common.Geometry;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using Size = Common.Core.Size;
+using Kiyote.Geometry;
+using Kiyote.Geometry.Randomization;
+using Kiyote.Geometry.Rasterizers;
+using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -24,13 +24,13 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( VoronoiWorldMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonCore();
-		services.AddCommonGeometry();
 		services.AddCommonBuffers();
 		services.AddCommonWorlds();
-
 		services.AddCommonBuffersFloat();
 		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddRandomization();
+		services.AddRasterizer();
+		services.AddDelaunayVoronoi();
 
 		_provider = services.BuildServiceProvider();
 
@@ -50,7 +50,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
 		_worldMapGenerator = new VoronoiWorldMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
-			_scope.ServiceProvider.GetRequiredService<IGeometry>(),
+			_scope.ServiceProvider.GetRequiredService<IRasterizer>(),
 			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<ILandformBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IHillsBuilder>(),
@@ -73,14 +73,14 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)( _random.NextInt() << 32 ) | (long)_random.NextInt();
-		Size size = new Size( 1600, 900 );
+		ISize size = new Point( 1600, 900 );
 		WorldMaps worldMaps = _worldMapGenerator.Create(
 			seed,
 			size,
 			_neighbourLocator
 		);
 
-		using Image<Rgba32> image = new Image<Rgba32>( size.Columns, size.Rows );
+		using Image<Rgba32> image = new Image<Rgba32>( size.Width, size.Height );
 
 		Dictionary<TileTerrain, Rgba32> terrainColours = new Dictionary<TileTerrain, Rgba32> {
 			{ TileTerrain.Mountain, new Rgba32( 0xF7, 0xF7, 0xF7 ) },
@@ -100,8 +100,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			{ TileFeature.TropicalForest, new Rgba32( 0x0E, 0xAF, 0x20 ) }
 		};
 
-		for( int r = 0; r < size.Rows; r++ ) {
-			for( int c = 0; c < size.Columns; c++ ) {
+		for( int r = 0; r < size.Height; r++ ) {
+			for( int c = 0; c < size.Width; c++ ) {
 				Rgba32 colour = terrainColours[worldMaps.Terrain[c, r]];
 				if( worldMaps.Feature[c, r] != TileFeature.None ) {
 					colour = featureColours[worldMaps.Feature[c, r]];

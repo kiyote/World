@@ -14,13 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		.github\dependabot.yml = .github\dependabot.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		forceclean.bat = forceclean.bat
 		forceclean.ps1 = forceclean.ps1
 		LICENSE = LICENSE
 		nuget.config = nuget.config
+		removebranches.sh = removebranches.sh
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core", "src\Common\Core\Common.Core\Common.Core.csproj", "{A6E254E3-DBC5-4109-B417-B8B20A4C1B1E}"
@@ -284,14 +284,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelpers", "test\TestHel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Buffers.Float.Tests", "test\Common\Buffers\Common.Buffers.Float.Tests\Common.Buffers.Float.Tests.csproj", "{F475386F-BBBD-4E78-B969-9921A44AE4BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{6C901783-FA07-49AA-9AB4-9AD6370EB029}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry", "src\Common\Geometry\Common.Geometry\Common.Geometry.csproj", "{0054F0FD-E135-444B-9B9D-C757AE718CD1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geometry", "Geometry", "{4CC1F77A-1D60-4825-9E8D-72724DD3F05F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Tests", "test\Common\Geometry\Common.Geometry.Tests\Common.Geometry.Tests.csproj", "{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds.Builder.DelaunayVoronoi", "src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj", "{ABCC410F-527A-47DA-A039-1568D17F0CB4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds.Builder.DelaunayVoronoi.Tests", "test\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi.Tests\Common.Worlds.Builder.DelaunayVoronoi.Tests.csproj", "{354C3A6C-7019-49A3-AFB0-E117DE0F6580}"
@@ -306,17 +298,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DelaunayVoronoi", "Delaunay
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds.Builder.DelaunayVoronoi.Benchmarks", "test\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi.Benchmarks\Common.Worlds.Builder.DelaunayVoronoi.Benchmarks.csproj", "{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Benchmarks", "test\Common\Geometry\Common.Geometry.Benchmarks\Common.Geometry.Benchmarks.csproj", "{689C3866-B8DB-41EC-B378-6CABBC87722E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Analyses", "test\Common\Geometry\Common.Geometry.Analyses\Common.Geometry.Analyses.csproj", "{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Geometry.Abstractions", "src\Common\Geometry\Common.Geometry.Abstractions\Common.Geometry.Abstractions.csproj", "{FE9C2854-580E-44AA-A612-15377A882AC1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Core.Abstractions", "src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj", "{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Worlds", "src\Common\Worlds\Common.Worlds\Common.Worlds.csproj", "{F8F5CD1D-3B36-46D1-94E9-4200BC827374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds", "src\Common\Worlds\Common.Worlds\Common.Worlds.csproj", "{F8F5CD1D-3B36-46D1-94E9-4200BC827374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Worlds.Tests", "test\Common\Worlds\Common.Worlds.Tests\Common.Worlds.Tests.csproj", "{59A6100D-4A31-4F8C-A159-DB8094C251E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Worlds.Tests", "test\Common\Worlds\Common.Worlds.Tests\Common.Worlds.Tests.csproj", "{59A6100D-4A31-4F8C-A159-DB8094C251E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -468,14 +454,6 @@ Global
 		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F475386F-BBBD-4E78-B969-9921A44AE4BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0054F0FD-E135-444B-9B9D-C757AE718CD1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABCC410F-527A-47DA-A039-1568D17F0CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABCC410F-527A-47DA-A039-1568D17F0CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABCC410F-527A-47DA-A039-1568D17F0CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -488,18 +466,6 @@ Global
 		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{689C3866-B8DB-41EC-B378-6CABBC87722E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE9C2854-580E-44AA-A612-15377A882AC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE9C2854-580E-44AA-A612-15377A882AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE9C2854-580E-44AA-A612-15377A882AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE9C2854-580E-44AA-A612-15377A882AC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -624,10 +590,6 @@ Global
 		{C26A875D-734C-448D-A9AD-1D909A6E58D1} = {32453C30-328C-4402-BD18-F111587F495F}
 		{5D46CF13-5BB6-4290-B4F9-2B6E4BFA6629} = {A1769682-C0E8-400C-8E0F-FB6BA4B7A2CB}
 		{F475386F-BBBD-4E78-B969-9921A44AE4BF} = {32453C30-328C-4402-BD18-F111587F495F}
-		{6C901783-FA07-49AA-9AB4-9AD6370EB029} = {8D332E78-B3F7-4CF6-8179-1F136C596CE0}
-		{0054F0FD-E135-444B-9B9D-C757AE718CD1} = {6C901783-FA07-49AA-9AB4-9AD6370EB029}
-		{4CC1F77A-1D60-4825-9E8D-72724DD3F05F} = {ADEAED9A-1D29-425A-A364-AD6D4F9AC9E4}
-		{8F55350F-BE2B-4203-9F54-C0CB9F8BD5D5} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
 		{ABCC410F-527A-47DA-A039-1568D17F0CB4} = {138E1C0B-2097-4629-A8A2-54B9A8224FD7}
 		{354C3A6C-7019-49A3-AFB0-E117DE0F6580} = {3565778A-3FD9-4C0B-8246-42D589DF047D}
 		{B030DBBB-812D-4407-94DA-DF0F9524A2C8} = {25446DA8-9C4F-4008-A1A5-62576AC2719C}
@@ -635,9 +597,6 @@ Global
 		{138E1C0B-2097-4629-A8A2-54B9A8224FD7} = {5B1ABF59-69B6-486F-8A00-6E8F99175316}
 		{3565778A-3FD9-4C0B-8246-42D589DF047D} = {C9655001-CA81-49AB-A5E6-84CAA0F5A9C2}
 		{CBE8ABB0-33C7-45A2-9B7A-01212CAB125B} = {3565778A-3FD9-4C0B-8246-42D589DF047D}
-		{689C3866-B8DB-41EC-B378-6CABBC87722E} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
-		{32659DD2-BCF6-4AD7-AEF6-C12420A983D3} = {4CC1F77A-1D60-4825-9E8D-72724DD3F05F}
-		{FE9C2854-580E-44AA-A612-15377A882AC1} = {6C901783-FA07-49AA-9AB4-9AD6370EB029}
 		{C8C3DFA9-18E6-4111-B865-2A2FD03043EB} = {4DB4965B-653E-4B56-A7C7-449B481B1E2F}
 		{F8F5CD1D-3B36-46D1-94E9-4200BC827374} = {A0A794D7-7913-4536-8CD5-59A0A534B74D}
 		{59A6100D-4A31-4F8C-A159-DB8094C251E6} = {E934102F-8A32-4D6F-830B-C46795C71F43}

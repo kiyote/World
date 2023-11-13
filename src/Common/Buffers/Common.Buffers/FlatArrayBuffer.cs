@@ -4,21 +4,21 @@
 internal sealed class FlatArrayBuffer<T> : IBuffer<T> {
 
 	private readonly T[] _buffer;
-	private readonly Size _size;
+	private readonly ISize _size;
 
 	public FlatArrayBuffer(
-		Size size
+		ISize size
 	) {
 		if( size is null ) {
 			throw new ArgumentNullException( nameof( size ) );
 		}
 
 		_size = size;
-		_buffer = new T[size.Columns * size.Rows];
+		_buffer = new T[size.Width * size.Height];
 	}
 
 	public FlatArrayBuffer(
-		Size size,
+		ISize size,
 		T initialValue
 	) {
 		if( size is null ) {
@@ -26,19 +26,19 @@ internal sealed class FlatArrayBuffer<T> : IBuffer<T> {
 		}
 
 		_size = size;
-		_buffer = new T[size.Columns * size.Rows];
+		_buffer = new T[size.Width * size.Height];
 		Array.Fill( _buffer, initialValue );
 	}
 
-	public Size Size => _size;
+	public ISize Size => _size;
 
 	public T this[int column, int row] {
 		get {
-			int index = (row * _size.Columns) + column;
+			int index = (row * _size.Width) + column;
 			return _buffer[index];
 		}
 		set {
-			int index = ( row * _size.Columns ) + column;
+			int index = ( row * _size.Width ) + column;
 			_buffer[index] = value;
 		}
 	}

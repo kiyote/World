@@ -6,11 +6,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+		<PackageReference Include="Kiyote.Geometry.Abstractions" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Geometry\Common.Geometry\Common.Geometry.csproj" />
 	</ItemGroup>
 
 </Project>

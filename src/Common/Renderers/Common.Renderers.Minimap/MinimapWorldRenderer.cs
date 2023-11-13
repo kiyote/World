@@ -23,8 +23,8 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 		IBuffer<TileTerrain> terrain,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.Size.Rows;
-		int columns = terrain.Size.Columns;
+		int rows = terrain.Size.Height;
+		int columns = terrain.Size.Width;
 		using Image<Rgba32> img = _imageFactory.CreateImage( ( columns * 2 ), ( rows * 2 ) + 1 );
 
 		var ocean = new Rgba32( 28, 134, 238, 255 );
@@ -107,8 +107,8 @@ internal sealed class MinimapWorldRenderer : IWorldRenderer {
 		TileTerrain terrainToRender,
 		CancellationToken cancellationToken
 	) {
-		int rows = terrain.Size.Rows;
-		int columns = terrain.Size.Columns;
+		int rows = terrain.Size.Height;
+		int columns = terrain.Size.Width;
 		Image<L8> map = _imageFactory.CreateMap( columns, rows );
 
 		for( int r = 0; r < rows; r++ ) {

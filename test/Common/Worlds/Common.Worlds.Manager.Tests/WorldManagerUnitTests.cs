@@ -1,4 +1,5 @@
 using Common.Worlds.Manager.Repositories;
+using Kiyote.Geometry;
 
 namespace Common.Worlds.Manager.Tests;
 
@@ -25,7 +26,7 @@ public class WorldManagerUnitTests {
 		string seed = "world_seed";
 		int rows = 1;
 		int columns = 2;
-		Size size = new Size( columns, rows );
+		ISize size = new Point( columns, rows );
 		DateTime createdOn = new DateTime( 2022, 1, 13 );
 		World world = new World( worldId, name, seed, size, createdOn );
 		_worldRepository

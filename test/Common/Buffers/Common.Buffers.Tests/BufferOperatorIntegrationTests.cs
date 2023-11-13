@@ -35,8 +35,8 @@ public class BufferOperatorIntegrationTests {
 			output
 		);
 
-		for (int r = 0; r < input.Size.Rows; r++) {
-			for (int c = 0; c < input.Size.Columns; c++) {
+		for (int r = 0; r < input.Size.Height; r++) {
+			for (int c = 0; c < input.Size.Width; c++) {
 				Assert.AreEqual( input[c, r], output[c, r] );
 			}
 		}
@@ -66,8 +66,8 @@ public class BufferOperatorIntegrationTests {
 			output
 		);
 
-		for( int r = 0; r < input1.Size.Rows; r++ ) {
-			for( int c = 0; c < input1.Size.Columns; c++ ) {
+		for( int r = 0; r < input1.Size.Height; r++ ) {
+			for( int c = 0; c < input1.Size.Width; c++ ) {
 				Assert.AreEqual( input1[c, r] * 2, output[c, r] );
 			}
 		}

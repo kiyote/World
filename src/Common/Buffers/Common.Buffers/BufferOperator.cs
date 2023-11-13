@@ -8,8 +8,8 @@ internal sealed class BufferOperator : IBufferOperator {
 		Func<T, T> op,
 		IBuffer<T> output
 	) {
-		int rows = a.Size.Rows;
-		int columns = a.Size.Columns;
+		int rows = a.Size.Height;
+		int columns = a.Size.Width;
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
@@ -24,10 +24,10 @@ internal sealed class BufferOperator : IBufferOperator {
 		Func<T, T, T> op,
 		IBuffer<T> output
 	) {
-		int rows = a.Size.Rows;
-		int columns = a.Size.Columns;
-		if( rows != b.Size.Rows
-			|| columns != b.Size.Columns
+		int rows = a.Size.Height;
+		int columns = a.Size.Width;
+		if( rows != b.Size.Height
+			|| columns != b.Size.Width
 		) {
 			throw new InvalidOperationException( "Operands must be same dimensions." );
 		}
@@ -43,8 +43,8 @@ internal sealed class BufferOperator : IBufferOperator {
 		Func<int, int, IBuffer<T>, T, T> op,
 		IBuffer<T> output
 	) {
-		int rows = source.Size.Rows;
-		int columns = source.Size.Columns;
+		int rows = source.Size.Height;
+		int columns = source.Size.Width;
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {
@@ -58,8 +58,8 @@ internal sealed class BufferOperator : IBufferOperator {
 		Func<int, int, TSource, TOutput> op,
 		IBuffer<TOutput> output
 	) {
-		int rows = source.Size.Rows;
-		int columns = source.Size.Columns;
+		int rows = source.Size.Height;
+		int columns = source.Size.Width;
 
 		for( int r = 0; r < rows; r++ ) {
 			for( int c = 0; c < columns; c++ ) {

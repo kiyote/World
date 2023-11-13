@@ -1,25 +1,20 @@
-﻿using Common.Geometry;
-
-namespace Common.Worlds.Builder.DelaunayVoronoi;
+﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal sealed class LandformBuilder : ILandformBuilder {
 
 	private readonly IRandom _random;
-	private readonly IGeometry _geometry;
 	private readonly IVoronoiBuilder _voronoiBuilder;
 
 	public LandformBuilder(
 		IRandom random,
-		IGeometry geometry,
 		IVoronoiBuilder voronoiBuilder
 	) {
 		_random = random;
-		_geometry = geometry;
 		_voronoiBuilder = voronoiBuilder;
 	}
 
 	HashSet<Cell> ILandformBuilder.Create(
-		Size size,
+		ISize size,
 		out ISearchableVoronoi voronoi
 	) {
 		HashSet<Cell> roughLandforms = CreateRoughLandform( size );
@@ -29,7 +24,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 	}
 
 	private HashSet<Cell> CreateRoughLandform(
-		Size size
+		ISize size
 	) {
 		IVoronoi roughVoronoi = _voronoiBuilder.Create( size, 100 );
 
@@ -58,16 +53,18 @@ internal sealed class LandformBuilder : ILandformBuilder {
 
 	private HashSet<Cell> CreateFineLandform(
 		HashSet<Cell> roughLandforms,
-		Size size,
+		ISize size,
 		out ISearchableVoronoi voronoi
 	) {
-		int fineCount = size.Columns * size.Rows / 200;
+		int fineCount = size.Width * size.Height / 200;
 		voronoi = _voronoiBuilder.Create( size, fineCount );
 
 		HashSet<Cell> fineLandforms = new HashSet<Cell>();
-		foreach( Cell fineCell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
-			foreach( Cell roughCell in roughLandforms ) {
-				if( _geometry.PointInPolygon( roughCell.Points, fineCell.Center ) ) {
+		foreach( Cell roughCell in roughLandforms ) {
+			Rect bounds = roughCell.BoundingBox;
+			IReadOnlyList<Cell> fineCells = voronoi.Search( bounds );
+			foreach( Cell fineCell in fineCells ) {
+				if( roughCell.Polygon.Contains( fineCell.Center ) ) {
 					// Only make this land if all of its neighbours are closed,
 					// otherwise you'll have land with an Open water neighbour
 					// which leads to weird degenerate cases when trying to
