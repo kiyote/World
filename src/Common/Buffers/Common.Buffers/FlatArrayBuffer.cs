@@ -9,9 +9,7 @@ internal sealed class FlatArrayBuffer<T> : IBuffer<T> {
 	public FlatArrayBuffer(
 		ISize size
 	) {
-		if( size is null ) {
-			throw new ArgumentNullException( nameof( size ) );
-		}
+		ArgumentNullException.ThrowIfNull( size, nameof( size ) );
 
 		_size = size;
 		_buffer = new T[size.Width * size.Height];
@@ -21,9 +19,7 @@ internal sealed class FlatArrayBuffer<T> : IBuffer<T> {
 		ISize size,
 		T initialValue
 	) {
-		if( size is null ) {
-			throw new ArgumentNullException( nameof( size ) );
-		}
+		ArgumentNullException.ThrowIfNull( size, nameof( size ) );
 
 		_size = size;
 		_buffer = new T[size.Width * size.Height];
