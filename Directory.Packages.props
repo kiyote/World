@@ -16,7 +16,7 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
-    <PackageVersion Include="System.IO.Abstractions" Version="19.2.69" />
+    <PackageVersion Include="System.IO.Abstractions" Version="19.2.87" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.10" />
     <PackageVersion Include="Kiyote.Geometry" Version="0.8.0" />
   </ItemGroup>
