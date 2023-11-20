@@ -20,13 +20,13 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 			}
 		}
 
-		HashSet<Cell> saltwater = new HashSet<Cell>();
+		HashSet<Cell> saltwater = [];
 
 		Queue<Cell> queue = new Queue<Cell>();
 		queue.Enqueue( start );
 
-		List<Cell> visited = new List<Cell>();
-		while( queue.Any() ) {
+		List<Cell> visited = [];
+		while( queue.Count != 0 ) {
 			Cell cell = queue.Dequeue();
 			if( !visited.Contains( cell ) ) {
 				visited.Add( cell );

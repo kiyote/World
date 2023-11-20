@@ -13,7 +13,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 	) {
 		int midLine = size.Height / 2;
 
-		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
+		Dictionary<Cell, int> result = [];
 		foreach( Cell cell in voronoi.Cells.Where( c => !c.IsOpen ) ) {
 			result[cell] = int.MaxValue;
 		}
@@ -49,7 +49,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 			tempMissing = false;
 			foreach( Cell cell in voronoi.Cells.Where( c => c.IsOpen ) ) {
 				List<Cell> neighbours = voronoi.Neighbours[cell].Where( c => result.ContainsKey( c ) ).ToList();
-				if( neighbours.Any() ) {
+				if( neighbours.Count != 0 ) {
 					result[cell] = (int)neighbours.Average( n => result[n] );
 				} else {
 					tempMissing = true;
@@ -76,7 +76,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		foreach (Cell cell in equatorCells) {
 			temperatureMap[cell] = int.MaxValue - 1;			
 		}
-		return equatorCells.ToHashSet();
+		return [.. equatorCells];
 	}
 
 	private static HashSet<Cell> HeatNeighbours(
@@ -85,7 +85,7 @@ internal sealed class TemperatureBuilder : ITemperatureBuilder {
 		Dictionary<Cell, int> result,
 		int heat
 	) {
-		HashSet<Cell> neighbours = new HashSet<Cell>();
+		HashSet<Cell> neighbours = [];
 		foreach( Cell source in current ) {
 			foreach( Cell neighbour in fineVoronoi.Neighbours[source].Where( c => !c.IsOpen ) ) {
 				if( result[neighbour] == int.MaxValue ) {

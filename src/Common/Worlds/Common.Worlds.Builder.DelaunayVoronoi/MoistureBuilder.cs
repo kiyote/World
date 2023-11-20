@@ -13,7 +13,7 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 		Dictionary<Cell, float> temperature,
 		Dictionary<Cell, float> airflow
 	) {
-		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
+		Dictionary<Cell, int> result = [];
 
 		foreach( Cell cell in saltwater ) {
 			result[cell] = CapacityLimit;
@@ -32,11 +32,12 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 		}
 
 		foreach (Cell cell in voronoi.Cells) {
-			if (!result.ContainsKey(cell)) {
-				result[cell] = CapacityLimit;
+			if (!result.TryGetValue( cell, out int value ) ) {
+				value = CapacityLimit;
+				result[cell] = value;
 			}
-			if( result[cell] == CapacityLimit ) {
-				result[cell] = (int)( result[cell] * temperature[cell] );
+			if( value == CapacityLimit ) {
+				result[cell] = (int)( value * temperature[cell] );
 			}
 		}
 
@@ -58,7 +59,7 @@ internal sealed class MoistureBuilder : IMoistureBuilder {
 		Dictionary<Cell, float> temperature,
 		Dictionary<Cell, int> moisture
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 		foreach( Cell cell in source ) {
 			int minY = cell.Polygon.Points.Min( p => p.Y );
 			int maxY = cell.Polygon.Points.Max( p => p.Y );

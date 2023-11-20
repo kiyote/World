@@ -11,7 +11,7 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 		HashSet<Cell> mountains,
 		HashSet<Cell> hills
 	) {
-		Dictionary<Cell, int> result = new Dictionary<Cell, int>();
+		Dictionary<Cell, int> result = [];
 
 		List<Cell> closedCells = voronoi.Cells.Where( c => !c.IsOpen ).ToList();
 
@@ -55,7 +55,7 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 		HashSet<Cell> hills,
 		Dictionary<Cell, int> airflow
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 		foreach( Cell cell in current ) {
 
 			double giveaway = airflow[cell];
@@ -73,11 +73,12 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 
 			foreach( Cell neighbour in fineVoronoi.Neighbours[cell].Where( n => !n.IsOpen ) ) {
 				if( neighbour.Center.X > cell.Center.X ) {
-					if( !airflow.ContainsKey( neighbour ) ) {
-						airflow[neighbour] = 0;
+					if( !airflow.TryGetValue( neighbour, out int value ) ) {
+						value = 0;
+						airflow[neighbour] = value;
 					}
 					// Add the giveaway to the neighbour
-					int newValue = (int)giveaway + airflow[neighbour];
+					int newValue = (int)giveaway + value;
 					if ( newValue > CapacityLimit) {
 						newValue = CapacityLimit;
 					}
@@ -107,7 +108,7 @@ internal sealed class AirflowBuilder : IAirflowBuilder {
 		IVoronoi fineVoronoi,
 		IReadOnlyList<Cell> source
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 		foreach (Cell cell in source) {
 			foreach (Cell neighbour in fineVoronoi.Neighbours[cell].Where( c => !c.IsOpen )) {
 				if (neighbour.Center.X > cell.Center.X) {

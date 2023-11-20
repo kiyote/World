@@ -8,9 +8,7 @@ internal sealed class ArrayBuffer<T>: IBuffer<T> {
 	public ArrayBuffer(
 		ISize size
 	) {
-		if( size is null ) {
-			throw new ArgumentNullException( nameof( size ) );
-		}
+		ArgumentNullException.ThrowIfNull( size, nameof( size ) );
 
 		_size = size;
 		_buffer = new T[size.Height][];
