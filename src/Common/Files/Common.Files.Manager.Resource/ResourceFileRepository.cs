@@ -33,11 +33,7 @@ internal sealed class ResourceFileRepository : IResourceFileRepository {
 	) {
 		string filename = fileId.Value;
 		string resourceName = ResourceRoot + filename;
-		ManifestResourceInfo? info = _assembly.GetManifestResourceInfo( resourceName );
-		if( info is null ) {
-			throw new FileNotFoundException();
-		}
-
+		_ = _assembly.GetManifestResourceInfo( resourceName ) ?? throw new FileNotFoundException();
 		MimeTypes.MimeTypeMap.TryGetMimeType( Path.GetExtension( filename ), out string mimeType );
 		Stream? resource = _assembly.GetManifestResourceStream( ResourceRoot + fileId.Value )!;
 		return Task.FromResult( new FileMetadata( fileId, filename, mimeType, resource.Length, GetBuildDate( _assembly ) ) );

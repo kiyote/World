@@ -108,7 +108,6 @@ internal sealed class BitmapWorldRenderer : IWorldRenderer {
 		).ConfigureAwait( false );
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Maintainability", "CA1508:Avoid dead conditional code", Justification = "Code is not dead." )]
 	private async Task<Image<Rgba32>> LoadImageAsync(
 		Id<FileMetadata> fileId,
 		CancellationToken cancellationToken

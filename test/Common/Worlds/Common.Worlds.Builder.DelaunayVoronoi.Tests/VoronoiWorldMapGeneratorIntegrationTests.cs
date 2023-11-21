@@ -104,7 +104,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			for( int c = 0; c < size.Width; c++ ) {
 				Rgba32 colour = terrainColours[worldMaps.Terrain[c, r]];
 				if( worldMaps.Feature[c, r] != TileFeature.None ) {
-					colour = featureColours[worldMaps.Feature[c, r]];
+					featureColours.TryGetValue( worldMaps.Feature[c, r], out colour );
+					//colour = featureColours[worldMaps.Feature[c, r]];
 				}
 				image[c, r] = colour;
 			}

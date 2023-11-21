@@ -27,15 +27,19 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
 		List<Cell> visited = [];
 		while( queue.Count != 0 ) {
+			// From the starting cell, check to see if we've been here before...
 			Cell cell = queue.Dequeue();
 			if( !visited.Contains( cell ) ) {
+				// If we haven't, mark that we have
 				visited.Add( cell );
 
+				// Now add every neighbour of the cell if it's not land
 				foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
 					if( !fineLandforms.Contains( neighbour ) ) {
 						queue.Enqueue( neighbour );
 					}
 				}
+				// We know this cell isn't land, so it's saltwater
 				saltwater.Add( cell );
 			}
 		}

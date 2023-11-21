@@ -1,9 +1,7 @@
-﻿using System.Runtime.ExceptionServices;
-using Common.Buffers;
+﻿using Common.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
-using NUnit.Framework;
 using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
@@ -86,12 +84,9 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 
 		foreach( Edge edge in voronoi.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = 0.2f;
-				}
+				buffer[x, y] = 0.2f;
 			} );
 		}
-
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
 		await writer.WriteAsync( buffer );

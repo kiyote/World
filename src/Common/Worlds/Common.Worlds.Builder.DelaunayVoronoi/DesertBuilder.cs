@@ -7,7 +7,7 @@ internal sealed class DesertBuilder : IDesertBuilder {
 		HashSet<Cell> hills,
 		Dictionary<Cell, float> moistures
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 
 		foreach (Cell cell in fineLandforms) {
 			float moisture = moistures[cell];
