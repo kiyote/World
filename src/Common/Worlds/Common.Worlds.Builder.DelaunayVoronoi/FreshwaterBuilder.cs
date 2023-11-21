@@ -6,12 +6,12 @@ internal class FreshwaterBuilder : IFreshwaterBuilder {
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> saltwater
 	) {
-		HashSet<Cell> freshwater = new HashSet<Cell>();
+		HashSet<Cell> freshwater = [];
 		foreach( Cell cell in fineVoronoi.Cells ) {
-			if( !fineLandforms.Contains( cell ) ) {
-				if( !saltwater.Contains( cell ) ) {
-					freshwater.Add( cell );
-				}
+			if( !fineLandforms.Contains( cell )
+				&& !saltwater.Contains( cell )
+			) {
+				freshwater.Add( cell );
 			}
 		}
 

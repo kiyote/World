@@ -24,7 +24,7 @@ internal sealed class ForestBuilder : IForestBuilder {
 		Dictionary<Cell, float> temperatures,
 		Dictionary<Cell, float> moistures
 	) {
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 		foreach( Cell cell in fineLandforms ) {
 			float temperature = temperatures[cell];
 			float moisture = moistures[cell];

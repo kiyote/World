@@ -7,7 +7,7 @@ internal sealed class HillsBuilder : IHillsBuilder {
 		HashSet<Cell> fineLandforms,
 		HashSet<Cell> mountains
 	) {
-		HashSet<Cell> hills = new HashSet<Cell>();
+		HashSet<Cell> hills = [];
 		foreach( Cell mountain in mountains ) {
 			foreach( Cell neighbour in fineVoronoi.Neighbours[mountain] ) {
 				if( !mountains.Contains( neighbour ) && fineLandforms.Contains( neighbour ) ) {

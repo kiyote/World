@@ -67,7 +67,7 @@ internal sealed class MountainsBuilderIntegrationTests {
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
-		List<Cell> mountains = new List<Cell>();
+		List<Cell> mountains = [];
 		do {
 			List<Edge> lines = _builder.GetMountainLines( size, size.Width / 100 );
 			mountains.AddRange( _builder.BuildRanges( voronoi, fineLandforms, lines ) );

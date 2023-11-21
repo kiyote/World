@@ -4,5 +4,3 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 using System.Diagnostics.CodeAnalysis;
-
-[assembly: SuppressMessage( "Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:Common.Worlds.Builder.DelaunayVoronoi.Benchmarks.BuilderBenchmarks.VoronoiBuilder_1000" )]

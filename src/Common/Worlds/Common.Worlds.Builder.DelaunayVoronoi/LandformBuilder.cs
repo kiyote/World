@@ -31,7 +31,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 		// Get the seeds of the landforms
 		List<Cell> cells = roughVoronoi.Cells.Where( c => !c.IsOpen ).ToList();
 		int desiredCount = (int)( cells.Count * 0.3 );
-		HashSet<Cell> roughLandforms = new HashSet<Cell>();
+		HashSet<Cell> roughLandforms = [];
 		do {
 			Cell cell = cells[_random.NextInt( cells.Count )];
 			roughLandforms.Add( cell );
@@ -39,7 +39,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 		} while( roughLandforms.Count < desiredCount );
 
 		// Add the landforms neighbours to beef the shape up
-		HashSet<Cell> result = new HashSet<Cell>();
+		HashSet<Cell> result = [];
 		foreach( Cell seedCell in roughLandforms ) {
 			result.Add( seedCell );
 			foreach( Cell neighbourCell in roughVoronoi.Neighbours[seedCell].Where( c => !c.IsOpen ) ) {
@@ -59,7 +59,7 @@ internal sealed class LandformBuilder : ILandformBuilder {
 		int fineCount = size.Width * size.Height / 200;
 		voronoi = _voronoiBuilder.Create( size, fineCount );
 
-		HashSet<Cell> fineLandforms = new HashSet<Cell>();
+		HashSet<Cell> fineLandforms = [];
 		foreach( Cell roughCell in roughLandforms ) {
 			Rect bounds = roughCell.BoundingBox;
 			IReadOnlyList<Cell> fineCells = voronoi.Search( bounds );

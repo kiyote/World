@@ -34,7 +34,7 @@ internal class HexNeighbourLocator : INeighbourLocator {
 		List<Point> result;
 
 		if( ( column & 1 ) == 0 ) {
-			result = new List<Point>() {
+			result = [
 				new Point( column + 1, row ),
 				new Point( column, row + 1 ),
 				new Point( column - 1, row ),
@@ -42,9 +42,9 @@ internal class HexNeighbourLocator : INeighbourLocator {
 				new Point( column - 1, row - 1 ),
 				new Point( column, row - 1 ),
 				new Point( column + 1, row - 1 ),
-			};
+			];
 		} else {
-			result = new List<Point>() {
+			result = [
 				new Point( column + 1, row + 1 ),
 				new Point( column, row + 1 ),
 				new Point( column - 1, row + 1 ),
@@ -52,7 +52,7 @@ internal class HexNeighbourLocator : INeighbourLocator {
 				new Point( column - 1, row ),
 				new Point( column, row - 1 ),
 				new Point( column + 1, row ),
-			};
+			];
 		}
 
 		return result
