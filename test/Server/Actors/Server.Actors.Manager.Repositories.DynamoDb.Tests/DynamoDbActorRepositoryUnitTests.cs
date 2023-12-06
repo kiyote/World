@@ -28,9 +28,9 @@ public class DynamoDbActorRepositoryUnitTests {
 
 		_db.Setup( db => db.CreateAsync( It.IsAny<ActorRecord>(), CancellationToken.None ) )
 			.Callback( (ActorRecord actorRecord, CancellationToken _) => {
-				Assert.AreEqual( worldId.Value, actorRecord.WorldId );
-				Assert.AreEqual( actorId.Value, actorRecord.ActorId );
-				Assert.AreEqual( name, actorRecord.Name );
+				Assert.That( worldId.Value, Is.EqualTo( actorRecord.WorldId ) );
+				Assert.That( actorId.Value, Is.EqualTo( actorRecord.ActorId ) );
+				Assert.That( name, Is.EqualTo( actorRecord.Name ) );
 			} )
 			.Returns( Task.CompletedTask );
 
@@ -42,7 +42,7 @@ public class DynamoDbActorRepositoryUnitTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( actorId, result.ActorId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( actorId, Is.EqualTo( result.ActorId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }

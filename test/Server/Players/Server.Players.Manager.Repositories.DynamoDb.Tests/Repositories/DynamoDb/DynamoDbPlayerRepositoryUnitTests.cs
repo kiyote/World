@@ -26,8 +26,8 @@ public class DynamoDbPlayerRepositoryUnitTests {
 
 		_db.Setup( db => db.CreateAsync( It.IsAny<PlayerRecord>(), CancellationToken.None ) )
 			.Callback( ( PlayerRecord playerRecord, CancellationToken _ ) => {
-				Assert.AreEqual( playerId.Value, playerRecord.PlayerId );
-				Assert.AreEqual( name, playerRecord.Name );
+				Assert.That( playerId.Value, Is.EqualTo( playerRecord.PlayerId ) );
+				Assert.That( name, Is.EqualTo( playerRecord.Name ) );
 			} )
 			.Returns( Task.CompletedTask );
 
@@ -38,7 +38,7 @@ public class DynamoDbPlayerRepositoryUnitTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( playerId, result.PlayerId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( playerId, Is.EqualTo( result.PlayerId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }

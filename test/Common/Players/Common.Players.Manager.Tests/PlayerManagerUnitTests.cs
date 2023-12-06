@@ -28,7 +28,7 @@ public class PlayerManagerUnitTests {
 
 		Player result = await _playerManager.CreateAsync( playerId, name, CancellationToken.None );
 
-		Assert.AreEqual( playerId, result.PlayerId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( playerId, Is.EqualTo( result.PlayerId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }

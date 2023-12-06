@@ -24,7 +24,7 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 3, 3, 1, 1 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 
 	[Test]
@@ -39,7 +39,7 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 4, 3, 2, 1 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 
 	[Test]
@@ -50,7 +50,7 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 2, 2, 0, 0 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 
 	[Test]
@@ -62,7 +62,7 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 3, 3, 1, 2 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 
 	[Test]
@@ -76,7 +76,7 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 4, 3, 2, 2 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 
 	[Test]
@@ -88,6 +88,6 @@ public sealed class HexNeighbourLocatorUnitTests {
 		];
 
 		IEnumerable<Point> neighbours = _neighbourLocator.GetNeighbours( 3, 3, 2, 2 );
-		CollectionAssert.AreEquivalent( expected, neighbours );
+		Assert.That( expected, Is.EquivalentTo( neighbours ) );
 	}
 }

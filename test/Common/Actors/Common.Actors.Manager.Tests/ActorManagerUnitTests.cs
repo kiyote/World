@@ -30,7 +30,7 @@ public class ActorManagerUnitTests {
 
 		Actor result = await _actorManager.CreateAsync( worldId, actorId, name, CancellationToken.None );
 
-		Assert.AreEqual( actorId, result.ActorId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( actorId, Is.EqualTo( result.ActorId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }
