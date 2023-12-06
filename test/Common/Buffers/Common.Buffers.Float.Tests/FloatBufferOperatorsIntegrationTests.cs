@@ -46,14 +46,14 @@ public class FloatBufferOperatorsIntegrationTests {
 
 		for( int r = 0; r < _buffer.Size.Height; r++ ) {
 			for( int c = 0; c < _buffer.Size.Width; c++ ) {
-				Assert.GreaterOrEqual( actual[c, r], 0.0f );
-				Assert.LessOrEqual( actual[c, r], 1.0f );
+				Assert.That( actual[c, r], Is.GreaterThanOrEqualTo( 0.0f ) );
+				Assert.That( actual[c, r], Is.LessThanOrEqualTo( 1.0f ) );
 			}
 		}
 
-		Assert.AreEqual( 0.0f, actual[0, 0] );
-		Assert.AreEqual( 0.5f, actual[1, 0] );
-		Assert.AreEqual( 0.5f, actual[0, 1] );
-		Assert.AreEqual( 1.0f, actual[1, 1] );
+		Assert.That( actual[0, 0], Is.EqualTo( 0.0f ) );
+		Assert.That( actual[1, 0], Is.EqualTo( 0.5f ) );
+		Assert.That( actual[0, 1], Is.EqualTo( 0.5f ) );
+		Assert.That( actual[1, 1] , Is.EqualTo( 1.0f ) );
 	}
 }

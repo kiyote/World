@@ -35,7 +35,7 @@ public class WorldManagerUnitTests {
 
 		World result = await _worldManager.CreateWorldAsync( worldId, name, seed, size, CancellationToken.None );
 
-		Assert.AreEqual( worldId, result.WorldId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( worldId, Is.EqualTo( result.WorldId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }

@@ -3,6 +3,8 @@ using Common.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.Randomization;
 using Kiyote.Geometry.Rasterizers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;

@@ -1,4 +1,6 @@
 ﻿using Common.Buffers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace TestHelpers;
 

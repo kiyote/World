@@ -18,10 +18,10 @@ public class ResourceFileRepositoryIntegrationTests {
 		Id<FileMetadata> fileId = new Id<FileMetadata>( filename );
 		FileMetadata fileMetadata = await _repo.GetMetadataAsync( fileId, CancellationToken.None ).ConfigureAwait( false );
 
-		Assert.IsNotNull( fileMetadata );
-		Assert.AreEqual( filename, fileMetadata.Name );
-		Assert.AreNotEqual( default( long ), fileMetadata.Size );
-		Assert.AreEqual( "image/png", fileMetadata.MimeType );
-		Assert.GreaterOrEqual( DateTime.UtcNow, fileMetadata.CreatedOn );
+		Assert.That( fileMetadata, Is.Not.Null );
+		Assert.That( filename, Is.EqualTo( fileMetadata.Name ) );
+		Assert.That( default( long ), Is.Not.EqualTo( fileMetadata.Size ) );
+		Assert.That( "image/png", Is.EqualTo( fileMetadata.MimeType ) );
+		Assert.That( DateTime.UtcNow, Is.GreaterThanOrEqualTo( fileMetadata.CreatedOn ) );
 	}
 }

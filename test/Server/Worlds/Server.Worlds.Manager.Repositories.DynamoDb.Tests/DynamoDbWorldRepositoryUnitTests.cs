@@ -32,8 +32,8 @@ public class DynamoDbWorldRepositoryUnitTests {
 
 		_db.Setup( db => db.CreateAsync( It.IsAny<WorldRecord>(), CancellationToken.None ) )
 			.Callback( ( WorldRecord worldRecord, CancellationToken _ ) => {
-				Assert.AreEqual( worldId.Value, worldRecord.WorldId );
-				Assert.AreEqual( name, worldRecord.Name );
+				Assert.That( worldId.Value, Is.EqualTo( worldRecord.WorldId ) );
+				Assert.That( name, Is.EqualTo( worldRecord.Name ) );
 			} )
 			.Returns( Task.CompletedTask );
 
@@ -46,7 +46,7 @@ public class DynamoDbWorldRepositoryUnitTests {
 			CancellationToken.None
 		);
 
-		Assert.AreEqual( worldId, result.WorldId );
-		Assert.AreEqual( name, result.Name );
+		Assert.That( worldId, Is.EqualTo( result.WorldId ) );
+		Assert.That( name, Is.EqualTo( result.Name ) );
 	}
 }
