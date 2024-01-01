@@ -14,7 +14,7 @@
     <PackageVersion Include="MimeTypeMapOfficial" Version="1.0.17" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.1" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.2" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.0" />
     <PackageVersion Include="System.IO.Abstractions" Version="20.0.4" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.11" />
