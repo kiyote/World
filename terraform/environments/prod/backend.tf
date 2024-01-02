@@ -15,6 +15,8 @@ terraform {
     dynamodb_table = "kiyote.terraformstate"
     key    = "prod/world"
     region = "ca-central-1"
-    role_arn = "arn:aws:iam::860568434255:role/terraform_state_prod"
+    assume_role = {
+      role_arn = "arn:aws:iam::860568434255:role/terraform_state_prod"
+    }
   }
 }
