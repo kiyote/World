@@ -84,7 +84,7 @@ jobs:
         working-directory: terraform/environments/${{ github.event.inputs.environment }}
 
       - name: Store Plan
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plan
           path: "${{ env.PLAN_DIR }}/terraform.plan"
