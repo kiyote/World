@@ -2,10 +2,7 @@
 # For deploying AWS resources
 provider "aws" {
   region = "ca-central-1"
-
-  assume_role {
-    role_arn = "arn:aws:iam::860568434255:role/world_deploy_dev"
-  }
+  role_arn = "arn:aws:iam::860568434255:role/world_deploy_dev"
 }
 
 # For managing the terraform state
