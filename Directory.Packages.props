@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.2.0" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.1" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.2" />
     <PackageVersion Include="Amazon.Lambda.SNSEvents" Version="2.1.0" />
     <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.2.0" />
     <PackageVersion Include="Amazon.Lambda.TestUtilities" Version="2.0.0" />
