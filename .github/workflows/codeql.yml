@@ -12,6 +12,11 @@ on:
     paths:
       - '.github/workflows/codeql.yml'
 
+env:
+  DOTNET_VERSION: 8.0.401
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
 jobs:
   check_date:
     name: Check
@@ -52,7 +57,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
+          ${{ env.DOTNET_VERSION }}
 
     - name: Setup CodeQL
       uses: github/codeql-action/init@v3
