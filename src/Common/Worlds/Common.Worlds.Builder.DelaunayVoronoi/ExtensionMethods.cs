@@ -5,12 +5,15 @@ namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 public static class ExtensionMethods {
 
-	public static IServiceCollection AddCommonWorldsBuilderDelaunayVoronoi(
+	public static IServiceCollection AddDelaunayVoronoiWorldBuilder(
 		this IServiceCollection services
 	) {
+		services.AddRandomization();
+		services.AddDelaunayVoronoi();
+
+		services.TryAddSingleton<ILandformBuilder, IterativeLandformBuilder>();
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
-		services.TryAddSingleton<ILandformBuilder, LandformBuilder>();
 		services.TryAddSingleton<IMountainsBuilder, MountainsBuilder>();
 		services.TryAddSingleton<IHillsBuilder, HillsBuilder>();
 		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();

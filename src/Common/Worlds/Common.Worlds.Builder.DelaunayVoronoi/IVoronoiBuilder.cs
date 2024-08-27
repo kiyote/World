@@ -4,6 +4,7 @@ internal interface IVoronoiBuilder {
 
 	ISearchableVoronoi Create(
 		ISize size,
-		int pointCount
+		int cellSize
 	);
+
 }

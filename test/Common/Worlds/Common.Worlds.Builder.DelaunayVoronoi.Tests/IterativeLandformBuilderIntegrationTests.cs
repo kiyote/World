@@ -1,19 +1,17 @@
 ﻿using Common.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Randomization;
 using Kiyote.Geometry.Rasterizers;
-using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class FreshwaterBuilderIntegrationTests {
+internal sealed class IterativeLandformBuilderIntegrationTests {
 
-	private ILandformBuilder _landformBuilder;
+	private ILandformBuilder _builder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
-	private ISaltwaterBuilder _saltwaterBuilder;
-	private FreshwaterBuilder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -21,19 +19,14 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( FreshwaterBuilderIntegrationTests ) );
+		_folder = Path.Combine( Path.GetTempPath(), "world", nameof( IterativeLandformBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonBuffers();
-		services.AddCommonWorlds();
-		services.AddDelaunayVoronoiWorldBuilder();
-		services.AddRandomization();
-		services.AddDelaunayVoronoi();
 		services.AddRasterizer();
+		services.AddCommonBuffers();
+		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
-
 	}
 
 	[OneTimeTearDown]
@@ -47,10 +40,13 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
-		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
-		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
+		IRandom random = _scope.ServiceProvider.GetRequiredService<IRandom>();
+		IVoronoiBuilder voronoiBuilder = _scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>();
 
-		_builder = new FreshwaterBuilder();
+		_builder = new IterativeLandformBuilder(
+			random,
+			voronoiBuilder
+		);
 	}
 
 	[TearDown]
@@ -62,23 +58,13 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> lakes = ( _builder as IFreshwaterBuilder ).Create( voronoi, fineLandforms, oceans );
+		HashSet<Cell> landform = _builder.Create( size, out ISearchableVoronoi voronoi );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
-		foreach( Cell cell in fineLandforms ) {
+		foreach( Cell cell in landform ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = 0.3f;
-				}
-			} );
-		}
-
-		foreach( Cell lake in lakes ) {
-			_rasterizer.Rasterize( lake.Polygon.Points, ( int x, int y ) => {
-				buffer[x, y] = 0.75f;
+				buffer[x, y] = 0.3f;
 			} );
 		}
 
@@ -88,7 +74,7 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "iterative_landform.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }
