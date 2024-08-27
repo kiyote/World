@@ -26,7 +26,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		var services = new ServiceCollection();
 		services.AddCommonBuffers();
 		services.AddCommonWorlds();
-		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();
 		services.AddDelaunayVoronoi();
 		services.AddRasterizer();

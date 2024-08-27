@@ -32,7 +32,7 @@ internal sealed class MoistureBuilderIntegrationTests {
 		var services = new ServiceCollection();
 		services.AddCommonBuffers();
 		services.AddCommonWorlds();
-		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();
 		services.AddDelaunayVoronoi();
 		services.AddRasterizer();

@@ -29,7 +29,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		services.AddCommonBuffers();
 		services.AddCommonWorlds();
 		services.AddCommonBuffersFloat();
-		services.AddCommonWorldsBuilderDelaunayVoronoi();
+		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();
 		services.AddRasterizer();
 		services.AddDelaunayVoronoi();
