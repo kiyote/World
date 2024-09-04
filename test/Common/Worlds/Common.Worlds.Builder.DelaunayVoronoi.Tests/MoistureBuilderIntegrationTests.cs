@@ -74,7 +74,7 @@ internal sealed class MoistureBuilderIntegrationTests {
 		ISize size = new Point( 1000, 1000 );
 		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( voronoi, fineLandforms, oceans );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( size, voronoi, fineLandforms, oceans );
 		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
 		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, voronoi, fineLandforms, mountains, hills, oceans, lakes );

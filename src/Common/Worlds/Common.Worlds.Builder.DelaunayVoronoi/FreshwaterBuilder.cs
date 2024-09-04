@@ -2,13 +2,14 @@
 
 internal class FreshwaterBuilder : IFreshwaterBuilder {
 	HashSet<Cell> IFreshwaterBuilder.Create(
-		IVoronoi fineVoronoi,
-		HashSet<Cell> fineLandforms,
+		ISize size,
+		IVoronoi map,
+		HashSet<Cell> landform,
 		HashSet<Cell> saltwater
 	) {
 		HashSet<Cell> freshwater = [];
-		foreach( Cell cell in fineVoronoi.Cells ) {
-			if( !fineLandforms.Contains( cell )
+		foreach( Cell cell in map.Cells ) {
+			if( !landform.Contains( cell )
 				&& !saltwater.Contains( cell )
 			) {
 				freshwater.Add( cell );

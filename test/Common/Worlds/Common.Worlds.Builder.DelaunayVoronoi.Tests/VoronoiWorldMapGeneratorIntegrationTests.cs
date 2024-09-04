@@ -72,7 +72,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)( _random.NextInt() << 32 ) | (long)_random.NextInt();
 		ISize size = new Point( 1600, 900 );

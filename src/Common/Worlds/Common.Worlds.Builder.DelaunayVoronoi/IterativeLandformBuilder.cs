@@ -16,22 +16,22 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 
 	HashSet<Cell> ILandformBuilder.Create(
 		ISize size,
-		out ISearchableVoronoi voronoi
+		out ISearchableVoronoi map
 	) {
 		int cellSize = Math.Min( size.Width, size.Height ) / 20;
 		HashSet<Cell> landforms = CreateLandform( size, cellSize );
-		voronoi = _voronoiBuilder.Create( size, cellSize );
+		map = _voronoiBuilder.Create( size, cellSize );
 
 		for( int distance = cellSize / 2; distance >= 5; distance /= 2 ) {
 			// Create the finer landforms
-			voronoi = _voronoiBuilder.Create( size, distance );
+			map = _voronoiBuilder.Create( size, distance );
 
 			HashSet<Cell> finerLandforms = [];
 			foreach( Cell roughCell in landforms ) {
 				// Find all the fine cells that fall within the bounding box
 				// of the rough cell
 				Rect bounds = roughCell.BoundingBox;
-				IReadOnlyList<Cell> fineCells = voronoi.Search( bounds );
+				IReadOnlyList<Cell> fineCells = map.Search( bounds );
 
 				foreach( Cell fineCell in fineCells ) {
 					if( roughCell.Polygon.Contains( fineCell.Center ) ) {
@@ -39,7 +39,7 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 						// otherwise you'll have land with an Open water neighbour
 						// which leads to weird degenerate cases when trying to
 						// render the coast.
-						bool openNeighbours = voronoi.Neighbours[fineCell].Any( c => c.IsOpen );
+						bool openNeighbours = map.Neighbours[fineCell].Any( c => c.IsOpen );
 						if( !openNeighbours ) {
 							finerLandforms.Add( fineCell );
 						}
@@ -77,15 +77,6 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 				cells.Remove( target );
 			}
 		}
-
-		/*
-	do {
-		Cell cell = cells[_random.NextInt( cells.Count )];
-
-		roughLandforms.Add( cell );
-		cells.Remove( cell );
-	} while( roughLandforms.Count < desiredCount );
-		*/
 
 		// Add the landforms neighbours to beef the shape up
 		HashSet<Cell> result = [];

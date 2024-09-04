@@ -4,15 +4,15 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
 	HashSet<Cell> ISaltwaterBuilder.Create(
 		ISize size,
-		IVoronoi fineVoronoi,
-		HashSet<Cell> fineLandforms
+		IVoronoi map,
+		HashSet<Cell> landform
 	) {
 		// Find a cell along the top of the map that isn't land
-		Cell start = fineVoronoi.Cells[0];
+		Cell start = map.Cells[0];
 		for( int i = 0; i < size.Width; i += 10 ) {
-			foreach( Cell cell in fineVoronoi.Cells ) {
+			foreach( Cell cell in map.Cells ) {
 				if( cell.Polygon.Contains( i, 0 ) ) {
-					if( !fineLandforms.Contains( cell ) ) {
+					if( !landform.Contains( cell ) ) {
 						start = cell;
 					}
 					break;
@@ -34,8 +34,8 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 				visited.Add( cell );
 
 				// Now add every neighbour of the cell if it's not land
-				foreach( Cell neighbour in fineVoronoi.Neighbours[cell] ) {
-					if( !fineLandforms.Contains( neighbour ) ) {
+				foreach( Cell neighbour in map.Neighbours[cell] ) {
+					if( !landform.Contains( neighbour ) ) {
 						queue.Enqueue( neighbour );
 					}
 				}
