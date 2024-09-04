@@ -2,8 +2,9 @@
 
 internal interface IFreshwaterBuilder {
 	HashSet<Cell> Create(
-		IVoronoi fineVoronoi,
-		HashSet<Cell> fineLandforms,
+		ISize size,
+		IVoronoi map,
+		HashSet<Cell> landform,
 		HashSet<Cell> saltwater
 	);
 }

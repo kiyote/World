@@ -60,33 +60,27 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
-		HashSet<Cell> oceans = ( _builder as ISaltwaterBuilder ).Create( size, voronoi, fineLandforms );
+		HashSet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		HashSet<Cell> saltwater = ( _builder as ISaltwaterBuilder ).Create( size, map, landform );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
 
-		foreach( Cell cell in fineLandforms ) {
+		foreach( Cell cell in landform ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = 0.3f;
-				}
+				buffer[x, y] = 0.3f;
 			} );
 		}
 
-		foreach( Cell ocean in oceans ) {
-			if( !ocean.IsOpen ) {
-				_rasterizer.Rasterize( ocean.Polygon.Points, ( int x, int y ) => {
-					buffer[x, y] = 1.0f;
-				} );
-			}
+		foreach( Cell cell in saltwater ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				buffer[x, y] = 1.0f;
+			} );
 		}
 
-		foreach( Edge edge in voronoi.Edges ) {
+		foreach( Edge edge in map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = 0.2f;
-				}
+				buffer[x, y] = 0.2f;
 			} );
 		}
 

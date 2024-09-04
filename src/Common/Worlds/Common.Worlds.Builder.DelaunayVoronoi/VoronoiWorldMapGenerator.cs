@@ -56,7 +56,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
 		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
 		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( voronoi, fineLandforms, oceans );
+		HashSet<Cell> lakes = _freshwaterBuilder.Create( size, voronoi, fineLandforms, oceans );
 		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, voronoi, fineLandforms, mountains, hills, oceans, lakes );
 		Dictionary<Cell, float> airflows = _airflowBuilder.Create( size, voronoi, fineLandforms, mountains, hills );
 		Dictionary<Cell, float> moistures = _moistureBuilder.Create( size, voronoi, fineLandforms, oceans, lakes, temperatures, airflows );

@@ -57,7 +57,7 @@ public class BuilderBenchmarks {
 		_mountains = _mountainsBuilder.Create( _size, _voronoi, _fineLandforms );
 		_hills = _hillsBuilder.Create( _voronoi, _fineLandforms, _mountains );
 		_saltwater = _saltwaterBuilder.Create( _size, _voronoi, _fineLandforms );
-		_freshwater = _freshwaterBuilder.Create( _voronoi, _fineLandforms, _saltwater );
+		_freshwater = _freshwaterBuilder.Create( _size, _voronoi, _fineLandforms, _saltwater );
 		_temperatures = _temperatureBuilder.Create( _size, _voronoi, _fineLandforms, _mountains, _hills, _saltwater, _freshwater );
 		_airflows = _airflowBuilder.Create( _size, _voronoi, _fineLandforms, _mountains, _hills );
 		_moistures = _moistureBuilder.Create( _size, _voronoi, _fineLandforms, _saltwater, _freshwater, _temperatures, _airflows );
@@ -90,7 +90,7 @@ public class BuilderBenchmarks {
 
 	[Benchmark]
 	public void FreshwaterBuilder() {
-		_freshwaterBuilder.Create( _voronoi, _fineLandforms, _saltwater );
+		_freshwaterBuilder.Create( _size, _voronoi, _fineLandforms, _saltwater );
 	}
 
 	[Benchmark]

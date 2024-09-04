@@ -7,16 +7,14 @@ using Point = Kiyote.Geometry.Point;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class TemperatureBuilderIntegrationTests {
+internal sealed class ElevationBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private IFreshwaterBuilder _freshwaterBuilder;
-	private IMountainsBuilder _mountainsBuilder;
-	private IHillsBuilder _hillsBuilder;
-	private TemperatureBuilder _builder;
+	private ElevationBuilder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -25,15 +23,12 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( TemperatureBuilderIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( ElevationBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonBuffers();
-		services.AddCommonWorlds();
 		services.AddDelaunayVoronoiWorldBuilder();
-		services.AddRandomization();
-		services.AddDelaunayVoronoi();
 		services.AddRasterizer();
+		services.AddCommonBuffers();
 
 		_provider = services.BuildServiceProvider();
 
@@ -51,12 +46,10 @@ internal sealed class TemperatureBuilderIntegrationTests {
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
-		_mountainsBuilder = _scope.ServiceProvider.GetRequiredService<IMountainsBuilder>();
-		_hillsBuilder = _scope.ServiceProvider.GetRequiredService<IHillsBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
 
-		_builder = new TemperatureBuilder();
+		_builder = new ElevationBuilder();
 	}
 
 	[TearDown]
@@ -65,44 +58,34 @@ internal sealed class TemperatureBuilderIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( size, voronoi, fineLandforms, oceans );
-		Dictionary<Cell, float> temperatures = ( _builder as ITemperatureBuilder ).Create(
-			size,
-			voronoi,
-			fineLandforms,
-			mountains,
-			hills,
-			oceans,
-			lakes
-		);
+		HashSet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		HashSet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
+		HashSet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
+		Dictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, map, landform, saltwater, freshwater );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		float maximum = elevation.Max( kvp => kvp.Value );
 
-		foreach( Cell cell in temperatures.Keys ) {
-			float temp = (float)temperatures[cell] ;
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+
+		foreach( Cell cell in landform ) {
+			if (!elevation.TryGetValue(cell, out float intensity)) {
+				intensity = 0.0f;
+			}
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = temp;
-				}
+				buffer[x, y] = ( intensity / maximum * 0.8f ) + 0.2f;
 			} );
 		}
 
-		foreach( Edge edge in voronoi.Edges ) {
+		foreach( Edge edge in map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
-				if( x >= 0 && x < size.Width && y >= 0 && y < size.Height ) {
-					buffer[x, y] = 0.2f;
-				}
+				buffer[x, y] = 0.2f;
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "temperature.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "elevation.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }
