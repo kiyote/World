@@ -1,9 +1,9 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface ISaltwaterBuilder {
-	HashSet<Cell> Create(
+public interface ISaltwaterBuilder {
+	IReadOnlySet<Cell> Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform
+		IReadOnlySet<Cell> landform
 	);
 }

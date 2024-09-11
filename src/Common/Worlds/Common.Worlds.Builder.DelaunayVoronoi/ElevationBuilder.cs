@@ -2,12 +2,13 @@
 
 internal class ElevationBuilder : IElevationBuilder {
 
-	Dictionary<Cell, float> IElevationBuilder.Create(
+	IReadOnlyDictionary<Cell, float> IElevationBuilder.Create(
 		ISize size,
 		ISearchableVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater,
-		HashSet<Cell> freshwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater,
+		IReadOnlySet<Cell> freshwater,
+		IReadOnlyList<IReadOnlySet<Cell>> lakes
 	) {
 		Dictionary<Cell, float> result = [];
 
@@ -18,8 +19,8 @@ internal class ElevationBuilder : IElevationBuilder {
 		// Find all the land bordering the ocean
 		foreach( Cell cell in saltwater ) {
 			foreach( Cell neighbour in map.Neighbours[cell] ) {
-				if (!result.ContainsKey(neighbour)
-					&& landform.Contains(neighbour)
+				if( !result.ContainsKey( neighbour )
+					&& landform.Contains( neighbour )
 				) {
 					visited.Add( neighbour );
 					result[neighbour] = currentElevation;
@@ -54,6 +55,33 @@ internal class ElevationBuilder : IElevationBuilder {
 
 		// Find the average altitude around lakes and set their coast to be
 		// that height
+		foreach( HashSet<Cell> lake in lakes ) {
+			float newElevation = int.MaxValue;
+			// Find the lowest elevation around the lake
+			foreach( Cell cell in lake ) {
+				foreach( Cell neighbour in map.Neighbours[cell] ) {
+					if( landform.Contains( neighbour ) ) {
+						if( result[neighbour] < newElevation ) {
+							newElevation = result[neighbour];
+						}
+					}
+				}
+			}
+			foreach( Cell cell in lake ) {
+				result[cell] = newElevation;
+				foreach( Cell neighbour in map.Neighbours[cell] ) {
+					if( landform.Contains( neighbour ) ) {
+						float targetElevation = result[neighbour];
+						if (targetElevation < newElevation) {
+							result[neighbour] = newElevation;
+						}
+						if( targetElevation > newElevation ) {
+							result[neighbour] = ( targetElevation + newElevation ) / 2.0f;
+						}
+					}
+				}
+			}
+		}
 
 		// Then re-average the terrain around those tiles
 

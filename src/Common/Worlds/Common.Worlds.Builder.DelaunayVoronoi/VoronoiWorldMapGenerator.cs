@@ -7,43 +7,25 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private readonly IBufferFactory _bufferFactory;
 	private readonly IRasterizer _rasterizer;
-	private readonly IMountainsBuilder _mountainsBuilder;
 	private readonly ILandformBuilder _landformBuilder;
-	private readonly IHillsBuilder _hillsBuilder;
 	private readonly ISaltwaterBuilder _saltwaterBuilder;
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
-	private readonly ITemperatureBuilder _temperatureBuilder;
-	private readonly IAirflowBuilder _airflowBuilder;
-	private readonly IMoistureBuilder _moistureBuilder;
-	private readonly IForestBuilder _forestBuilder;
-	private readonly IDesertBuilder _desertBuilder;
+	private readonly ILakeBuilder _lakeBuilder;
 	
 	public VoronoiWorldMapGenerator(
 		IBufferFactory bufferFactory,
 		IRasterizer rasterizer,
-		IMountainsBuilder mountainsBuilder,
 		ILandformBuilder landformBuilder,
-		IHillsBuilder hillsBuilder,
 		ISaltwaterBuilder saltwaterBuilder,
 		IFreshwaterBuilder freshwaterBuilder,
-		ITemperatureBuilder temperatureBuilder,
-		IAirflowBuilder airflowBuilder,
-		IMoistureBuilder moistureBuilder,
-		IForestBuilder forestBuilder,
-		IDesertBuilder desertBuilder
+		ILakeBuilder lakeBuilder
 	) {
 		_bufferFactory = bufferFactory;
 		_rasterizer = rasterizer;
 		_landformBuilder = landformBuilder;
-		_mountainsBuilder = mountainsBuilder;
-		_hillsBuilder = hillsBuilder;
 		_saltwaterBuilder = saltwaterBuilder;
 		_freshwaterBuilder = freshwaterBuilder;
-		_temperatureBuilder = temperatureBuilder;
-		_airflowBuilder = airflowBuilder;
-		_moistureBuilder = moistureBuilder;
-		_forestBuilder = forestBuilder;
-		_desertBuilder = desertBuilder;
+		_lakeBuilder = lakeBuilder;
 	}
 
 	WorldMaps IWorldMapGenerator.Create(
@@ -51,22 +33,15 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		ISize size,
 		INeighbourLocator neighbourLocator
 	) {
-		HashSet<Cell> fineLandforms = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Create( size, map, landform, saltwater, freshwater );
 
-		HashSet<Cell> mountains = _mountainsBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> hills = _hillsBuilder.Create( voronoi, fineLandforms, mountains );
-		HashSet<Cell> oceans = _saltwaterBuilder.Create( size, voronoi, fineLandforms );
-		HashSet<Cell> lakes = _freshwaterBuilder.Create( size, voronoi, fineLandforms, oceans );
-		Dictionary<Cell, float> temperatures = _temperatureBuilder.Create( size, voronoi, fineLandforms, mountains, hills, oceans, lakes );
-		Dictionary<Cell, float> airflows = _airflowBuilder.Create( size, voronoi, fineLandforms, mountains, hills );
-		Dictionary<Cell, float> moistures = _moistureBuilder.Create( size, voronoi, fineLandforms, oceans, lakes, temperatures, airflows );
-		HashSet<Cell> forests = _forestBuilder.Create( voronoi, fineLandforms, mountains, hills, temperatures, moistures );
-		HashSet<Cell> deserts = _desertBuilder.Create( fineLandforms, mountains, hills, moistures );
-
-		HashSet<Cell> coast = new HashSet<Cell>();
-		foreach( Cell land in fineLandforms ) {
-			foreach( Cell neighbour in voronoi.Neighbours[land] ) {
-				if( oceans.Contains( neighbour ) ) {
+		HashSet<Cell> coast = [];
+		foreach( Cell land in landform ) {
+			foreach( Cell neighbour in map.Neighbours[land] ) {
+				if( saltwater.Contains( neighbour ) ) {
 					coast.Add( neighbour );
 				}
 			}
@@ -76,32 +51,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IBuffer<TileTerrain> terrain = _bufferFactory.Create( size, TileTerrain.Ocean );
 
 		RenderTerrain( terrain, coast, TileTerrain.Coast );
-		RenderTerrain( terrain, fineLandforms, TileTerrain.Plain );
-		RenderTerrain( terrain, lakes, TileTerrain.Lake );
-		RenderTerrain( terrain, hills, TileTerrain.Hill );
-		RenderTerrain( terrain, mountains, TileTerrain.Mountain );
-
-		RenderFeature( feature, forests, cell => {
-			TileFeature tileFeature = TileFeature.TemperateForest;
-			float temperature = temperatures[cell];
-			if( temperature < 0.3f ) {
-				tileFeature = TileFeature.BorealForest;
-			} else if( temperature > 0.8f ) {
-				tileFeature = TileFeature.TropicalForest;
-			}
-			return tileFeature;
-		} );
-
-		RenderFeature( feature, deserts, cell => {
-			TileFeature tileFeature = TileFeature.RockyDesert;
-			float temperature = temperatures[cell];
-			if( temperature > 0.8f ) {
-				tileFeature = TileFeature.SandyDesert;
-			} else if( temperature < 0.2f ) {
-				tileFeature = TileFeature.Tundra;
-			}
-			return tileFeature;
-		} );
+		RenderTerrain( terrain, landform, TileTerrain.Plain );
+		RenderTerrain( terrain, freshwater, TileTerrain.Lake );
 
 		return new WorldMaps(
 			terrain,
@@ -111,7 +62,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private void RenderTerrain(
 		IBuffer<TileTerrain> buffer,
-		HashSet<Cell> cells,
+		IReadOnlySet<Cell> cells,
 		TileTerrain terrain
 	) {
 		foreach( Cell cell in cells ) {
@@ -124,7 +75,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 
 	private void RenderFeature(
 		IBuffer<TileFeature> buffer,
-		HashSet<Cell> cells,			
+		IReadOnlySet<Cell> cells,			
 		Func<Cell, TileFeature> calculateFeature
 	) {
 		foreach( Cell cell in cells ) {

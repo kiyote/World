@@ -14,7 +14,7 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 		_voronoiBuilder = voronoiBuilder;
 	}
 
-	HashSet<Cell> ILandformBuilder.Create(
+	IReadOnlySet<Cell> ILandformBuilder.Create(
 		ISize size,
 		out ISearchableVoronoi map
 	) {

@@ -1,11 +1,11 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal class FreshwaterBuilder : IFreshwaterBuilder {
-	HashSet<Cell> IFreshwaterBuilder.Create(
+	IReadOnlySet<Cell> IFreshwaterBuilder.Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater
 	) {
 		HashSet<Cell> freshwater = [];
 		foreach( Cell cell in map.Cells ) {

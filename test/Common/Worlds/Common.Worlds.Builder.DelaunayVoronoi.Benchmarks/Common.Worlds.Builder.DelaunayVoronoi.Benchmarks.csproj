@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+		<IsPackable>false</IsPackable>
+		<FCCExcludeFromCodeCoverage />
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -11,8 +13,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj" />
+	  <ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
+	  <ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -2,10 +2,10 @@
 
 internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 
-	HashSet<Cell> ISaltwaterBuilder.Create(
+	IReadOnlySet<Cell> ISaltwaterBuilder.Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform
+		IReadOnlySet<Cell> landform
 	) {
 		// Find a cell along the top of the map that isn't land
 		Cell start = map.Cells[0];

@@ -1,10 +1,10 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface IFreshwaterBuilder {
-	HashSet<Cell> Create(
+public interface IFreshwaterBuilder {
+	IReadOnlySet<Cell> Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater
 	);
 }

@@ -1,6 +1,6 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface IVoronoiBuilder {
+public interface IVoronoiBuilder {
 
 	ISearchableVoronoi Create(
 		ISize size,

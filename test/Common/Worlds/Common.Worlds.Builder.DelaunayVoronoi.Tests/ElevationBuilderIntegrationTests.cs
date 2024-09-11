@@ -14,6 +14,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 	private IRasterizer _rasterizer;
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private IFreshwaterBuilder _freshwaterBuilder;
+	private ILakeBuilder _lakeBuilder;
 	private ElevationBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -48,6 +49,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
+		_lakeBuilder = _scope.ServiceProvider.GetRequiredService<ILakeBuilder>();
 
 		_builder = new ElevationBuilder();
 	}
@@ -58,13 +60,14 @@ internal sealed class ElevationBuilderIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
-		HashSet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
-		HashSet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
-		Dictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, map, landform, saltwater, freshwater );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Create( size, map, landform, saltwater, freshwater );
+		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, map, landform, saltwater, freshwater, lakes );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
@@ -77,6 +80,17 @@ internal sealed class ElevationBuilderIntegrationTests {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = ( intensity / maximum * 0.8f ) + 0.2f;
 			} );
+		}
+
+		foreach (HashSet<Cell> lake in lakes) {
+			foreach( Cell cell in lake ) {
+				if( !elevation.TryGetValue( cell, out float intensity ) ) {
+					intensity = 0.0f;
+				}
+				_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+					buffer[x, y] = ( intensity / maximum * 0.8f ) + 0.2f;
+				} );
+			}
 		}
 
 		foreach( Edge edge in map.Edges ) {

@@ -2,12 +2,12 @@
 
 internal class LakeBuilder : ILakeBuilder {
 
-	List<HashSet<Cell>> ILakeBuilder.Create(
+	IReadOnlyList<IReadOnlySet<Cell>> ILakeBuilder.Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater,
-		HashSet<Cell> freshwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater,
+		IReadOnlySet<Cell> freshwater
 	) {
 		List<HashSet<Cell>> result = [];
 		HashSet<Cell> visited = [];
