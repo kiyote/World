@@ -15,6 +15,6 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
 	</ItemGroup>
 </Project>

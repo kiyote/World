@@ -5,7 +5,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
 	</ItemGroup>
 </Project>

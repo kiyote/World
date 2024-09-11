@@ -3,7 +3,7 @@
 		<RootNamespace>Common.Buffers</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

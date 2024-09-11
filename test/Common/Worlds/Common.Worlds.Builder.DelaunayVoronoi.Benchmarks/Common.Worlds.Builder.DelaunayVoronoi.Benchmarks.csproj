@@ -13,8 +13,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
-	  <ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core\Common.Core.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
 	</ItemGroup>
 
 </Project>

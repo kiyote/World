@@ -15,7 +15,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)\src\Common\Core\Common.Core\Common.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)\src\Server\Worlds\Server.Worlds.Builder.Lambda\Server.Worlds.Builder.Lambda.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core\Common.Core.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Server\Worlds\Server.Worlds.Builder.Lambda\Server.Worlds.Builder.Lambda.csproj" />
 	</ItemGroup>
 </Project>

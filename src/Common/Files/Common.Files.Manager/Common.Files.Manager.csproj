@@ -3,6 +3,6 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Abstractions\Common.Files.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Files\Common.Files.Abstractions\Common.Files.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

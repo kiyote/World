@@ -17,11 +17,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)test\TestHelpers\TestHelpers.csproj" />
+		<ProjectReference Include="..\..\..\..\test\TestHelpers\TestHelpers.csproj" />
 	</ItemGroup>		
 		
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
 	</ItemGroup>
 </Project>

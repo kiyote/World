@@ -5,6 +5,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
 	</ItemGroup>
 </Project>
