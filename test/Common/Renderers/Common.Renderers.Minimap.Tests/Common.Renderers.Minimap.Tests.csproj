@@ -15,8 +15,8 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)\src\Common\Renderers\Common.Renderers.Minimap\Common.Renderers.Minimap.csproj" />
-		<ProjectReference Include="$(SolutionDir)\src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
-		<ProjectReference Include="$(SolutionDir)\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Renderers\Common.Renderers.Minimap\Common.Renderers.Minimap.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
 	</ItemGroup>
 </Project>

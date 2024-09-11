@@ -14,6 +14,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Server\Actors\Server.Actors.Manager.Repositories.DynamoDb\Server.Actors.Manager.Repositories.DynamoDb.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Server\Actors\Server.Actors.Manager.Repositories.DynamoDb\Server.Actors.Manager.Repositories.DynamoDb.csproj" />
 	</ItemGroup>
 </Project>

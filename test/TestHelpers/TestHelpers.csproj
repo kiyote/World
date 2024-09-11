@@ -5,7 +5,7 @@
 		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
+		<ProjectReference Include="..\..\src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

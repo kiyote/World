@@ -3,7 +3,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Server\Core\Server.Core\Server.Core.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Players\Common.Players.Abstractions\Common.Players.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Server\Core\Server.Core\Server.Core.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Players\Common.Players.Abstractions\Common.Players.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

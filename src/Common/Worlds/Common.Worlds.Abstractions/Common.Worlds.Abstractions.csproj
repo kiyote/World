@@ -7,7 +7,7 @@
 		<PackageReference Include="Kiyote.Geometry" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

@@ -15,6 +15,6 @@
 		<PackageReference Include="Kiyote.Geometry" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds.Manager\Common.Worlds.Manager.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Manager\Common.Worlds.Manager.csproj" />
 	</ItemGroup>
 </Project>

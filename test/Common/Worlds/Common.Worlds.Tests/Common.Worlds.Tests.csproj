@@ -20,11 +20,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)test\TestHelpers\TestHelpers.csproj" />
+		<ProjectReference Include="..\..\..\..\test\TestHelpers\TestHelpers.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Worlds\Common.Worlds\Common.Worlds.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Common\Core\Common.Core\Common.Core.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds\Common.Worlds.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core\Common.Core.csproj" />
 	</ItemGroup>
 </Project>

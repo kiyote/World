@@ -14,6 +14,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
+		<ProjectReference Include="..\..\..\..\src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 	</ItemGroup>
 </Project>
