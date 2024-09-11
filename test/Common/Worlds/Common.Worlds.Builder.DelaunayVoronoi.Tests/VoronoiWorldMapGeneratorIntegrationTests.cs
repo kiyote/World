@@ -53,16 +53,10 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		_worldMapGenerator = new VoronoiWorldMapGenerator(
 			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
 			_scope.ServiceProvider.GetRequiredService<IRasterizer>(),
-			_scope.ServiceProvider.GetRequiredService<IMountainsBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<ILandformBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IHillsBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>(),
 			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<ITemperatureBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IAirflowBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IMoistureBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IForestBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IDesertBuilder>()
+			_scope.ServiceProvider.GetRequiredService<ILakeBuilder>()
 		);
 	}
 
@@ -72,7 +66,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = (long)( _random.NextInt() << 32 ) | (long)_random.NextInt();
 		ISize size = new Point( 1600, 900 );

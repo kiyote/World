@@ -1,12 +1,13 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface IElevationBuilder {
+public interface IElevationBuilder {
 
-	Dictionary<Cell, float> Create(
+	IReadOnlyDictionary<Cell, float> Create(
 		ISize size,
 		ISearchableVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater,
-		HashSet<Cell> freshwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater,
+		IReadOnlySet<Cell> freshwater,
+		IReadOnlyList<IReadOnlySet<Cell>> lakes
 	);
 }

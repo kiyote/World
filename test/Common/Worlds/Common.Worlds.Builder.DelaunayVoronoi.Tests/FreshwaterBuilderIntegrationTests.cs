@@ -61,9 +61,9 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
-		HashSet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
-		HashSet<Cell> lakes = ( _builder as IFreshwaterBuilder ).Create( size, map, landform, saltwater );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
+		IReadOnlySet<Cell> lakes = ( _builder as IFreshwaterBuilder ).Create( size, map, landform, saltwater );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 

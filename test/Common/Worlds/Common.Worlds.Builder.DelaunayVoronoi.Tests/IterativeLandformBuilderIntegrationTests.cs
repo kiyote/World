@@ -58,7 +58,7 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		HashSet<Cell> landform = _builder.Create( size, out ISearchableVoronoi voronoi );
+		IReadOnlySet<Cell> landform = _builder.Create( size, out ISearchableVoronoi voronoi );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 

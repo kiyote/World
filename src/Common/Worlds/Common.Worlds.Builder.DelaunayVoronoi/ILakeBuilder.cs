@@ -1,12 +1,12 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface ILakeBuilder {
+public interface ILakeBuilder {
 
-	List<HashSet<Cell>> Create(
+	IReadOnlyList<IReadOnlySet<Cell>> Create(
 		ISize size,
 		IVoronoi map,
-		HashSet<Cell> landform,
-		HashSet<Cell> saltwater,
-		HashSet<Cell> freshwater
+		IReadOnlySet<Cell> landform,
+		IReadOnlySet<Cell> saltwater,
+		IReadOnlySet<Cell> freshwater
 	);
 }

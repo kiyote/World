@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<Nullable>disable</Nullable>
 		<IsPackable>false</IsPackable>
+		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

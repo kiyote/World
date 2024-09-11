@@ -1,7 +1,7 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal interface ILandformBuilder {
-	HashSet<Cell> Create(
+public interface ILandformBuilder {
+	IReadOnlySet<Cell> Create(
 		ISize size,
 		out ISearchableVoronoi map
 	);

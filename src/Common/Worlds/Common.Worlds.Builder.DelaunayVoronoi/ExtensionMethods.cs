@@ -14,15 +14,9 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<ILandformBuilder, IterativeLandformBuilder>();
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
-		services.TryAddSingleton<IMountainsBuilder, MountainsBuilder>();
-		services.TryAddSingleton<IHillsBuilder, HillsBuilder>();
 		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();
 		services.TryAddSingleton<IFreshwaterBuilder, FreshwaterBuilder>();
-		services.TryAddSingleton<IAirflowBuilder, AirflowBuilder>();
-		services.TryAddSingleton<IMoistureBuilder, MoistureBuilder>();
-		services.TryAddSingleton<ITemperatureBuilder, TemperatureBuilder>();
-		services.TryAddSingleton<IForestBuilder, ForestBuilder>();
-		services.TryAddSingleton<IDesertBuilder, DesertBuilder>();
+		services.TryAddSingleton<ILakeBuilder, LakeBuilder>();
 
 		return services;
 	}
