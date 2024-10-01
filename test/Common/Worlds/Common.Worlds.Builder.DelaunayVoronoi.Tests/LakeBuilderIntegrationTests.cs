@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -25,7 +25,7 @@ internal sealed class LakeBuilderIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddRasterizer();
-		services.AddCommonBuffers();
+		services.AddBuffers();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
@@ -79,7 +79,7 @@ internal sealed class LakeBuilderIntegrationTests {
 			} );
 		}
 
-		foreach( HashSet<Cell> lake in lakes) {
+		foreach( IReadOnlySet<Cell> lake in lakes) {
 			foreach( Cell cell in lake ) {
 				_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
 					buffer[x, y] = 1.0f;

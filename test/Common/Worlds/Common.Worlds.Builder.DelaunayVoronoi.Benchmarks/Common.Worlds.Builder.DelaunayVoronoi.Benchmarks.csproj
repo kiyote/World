@@ -17,8 +17,4 @@
 		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Builder.DelaunayVoronoi\Common.Worlds.Builder.DelaunayVoronoi.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Properties\" />
-	</ItemGroup>
-
 </Project>

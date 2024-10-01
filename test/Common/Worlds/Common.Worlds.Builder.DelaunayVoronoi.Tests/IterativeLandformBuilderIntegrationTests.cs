@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Randomization;
@@ -23,7 +23,7 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddRasterizer();
-		services.AddCommonBuffers();
+		services.AddBuffers();
 		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();

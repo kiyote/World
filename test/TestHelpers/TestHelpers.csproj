@@ -3,9 +3,7 @@
 	<ItemGroup>
 		<PackageReference Include="SixLabors.ImageSharp" />
 		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
+		<PackageReference Include="Kiyote.Buffers" />
 	</ItemGroup>
 
 </Project>

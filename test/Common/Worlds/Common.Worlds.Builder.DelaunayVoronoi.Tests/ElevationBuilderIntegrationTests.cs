@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -29,7 +29,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 		var services = new ServiceCollection();
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
-		services.AddCommonBuffers();
+		services.AddBuffers();
 
 		_provider = services.BuildServiceProvider();
 

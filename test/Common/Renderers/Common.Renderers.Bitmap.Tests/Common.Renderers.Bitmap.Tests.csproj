@@ -18,6 +18,5 @@
 		<ProjectReference Include="..\..\..\..\src\Common\Renderers\Common.Renderers.Bitmap\Common.Renderers.Bitmap.csproj" />
 		<ProjectReference Include="..\..\..\..\src\Common\Files\Common.Files.Manager.Resource\Common.Files.Manager.Resource.csproj" />
 		<ProjectReference Include="..\..\..\..\src\Server\Files\Server.Files.Manager.Disk\Server.Files.Manager.Disk.csproj" />
-		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers\Common.Buffers.csproj" />
 	</ItemGroup>
 </Project>

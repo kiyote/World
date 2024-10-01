@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 using Kiyote.Geometry.Rasterizers;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;

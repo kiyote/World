@@ -5,9 +5,9 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 		<PackageReference Include="Kiyote.Geometry" />
+		<PackageReference Include="Kiyote.Buffers" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />
-		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers.Abstractions\Common.Buffers.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

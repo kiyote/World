@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 
 namespace Common.Worlds.Builder;
 

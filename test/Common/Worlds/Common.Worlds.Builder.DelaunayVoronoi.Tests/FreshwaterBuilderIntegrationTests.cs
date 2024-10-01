@@ -1,4 +1,4 @@
-﻿using Common.Buffers;
+﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -24,7 +24,7 @@ internal sealed class FreshwaterBuilderIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( FreshwaterBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonBuffers();
+		services.AddBuffers();
 		services.AddCommonWorlds();
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();

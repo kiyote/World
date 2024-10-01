@@ -1,5 +1,5 @@
-﻿using Common.Buffers;
-using Common.Buffers.Float;
+﻿using Kiyote.Buffers;
+using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.Randomization;
 using Kiyote.Geometry.Rasterizers;
@@ -26,9 +26,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		_folder = Path.Combine( rootPath, nameof( VoronoiWorldMapGeneratorIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddCommonBuffers();
 		services.AddCommonWorlds();
-		services.AddCommonBuffersFloat();
+		services.AddFloatBuffers();
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();
 		services.AddRasterizer();

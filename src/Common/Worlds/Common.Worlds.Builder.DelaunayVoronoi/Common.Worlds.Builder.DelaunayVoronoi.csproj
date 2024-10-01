@@ -2,10 +2,10 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 		<PackageReference Include="Kiyote.Geometry" />
+		<PackageReference Include="Kiyote.Buffers" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\src\Common\Worlds\Common.Worlds.Abstractions\Common.Worlds.Abstractions.csproj" />
-		<ProjectReference Include="..\..\..\..\src\Common\Buffers\Common.Buffers.Float\Common.Buffers.Float.csproj" />
 	</ItemGroup>
 </Project>
