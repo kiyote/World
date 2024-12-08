@@ -1,8 +1,6 @@
-﻿using Kiyote.Buffers;
-using Kiyote.Buffers.Float;
+﻿using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.Randomization;
-using Kiyote.Geometry.Rasterizers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Point = Kiyote.Geometry.Point;
@@ -49,14 +47,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		_random = _provider.GetRequiredService<IRandom>();
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
-		_worldMapGenerator = new VoronoiWorldMapGenerator(
-			_scope.ServiceProvider.GetRequiredService<IBufferFactory>(),
-			_scope.ServiceProvider.GetRequiredService<IRasterizer>(),
-			_scope.ServiceProvider.GetRequiredService<ILandformBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>(),
-			_scope.ServiceProvider.GetRequiredService<ILakeBuilder>()
-		);
+		_worldMapGenerator = _scope.ServiceProvider.GetRequiredService<IWorldMapGenerator>();
 	}
 
 	[TearDown]
