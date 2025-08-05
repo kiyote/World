@@ -9,15 +9,20 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 	) {
 		// Find a cell along the top of the map that isn't land
 		Cell start = map.Cells[0];
+		bool foundStart = false;
 		for( int i = 0; i < size.Width; i += 10 ) {
 			foreach( Cell cell in map.Cells ) {
-				if( cell.Polygon.Contains( i, 0 ) ) {
-					if( !landform.Contains( cell ) ) {
-						start = cell;
-					}
+				if( !landform.Contains( cell )
+					&& cell.Polygon.Contains( i, 0 )
+				) {
+					foundStart = true;
+					start = cell;
 					break;
 				}
 			}
+		}
+		if( !foundStart ) {
+			throw new InvalidOperationException( "Unable to find non-land at top edge of map." );
 		}
 
 		HashSet<Cell> saltwater = [];
@@ -25,14 +30,11 @@ internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
 		Queue<Cell> queue = new Queue<Cell>();
 		queue.Enqueue( start );
 
-		List<Cell> visited = [];
+		HashSet<Cell> visited = [];
 		while( queue.Count != 0 ) {
 			// From the starting cell, check to see if we've been here before...
 			Cell cell = queue.Dequeue();
-			if( !visited.Contains( cell ) ) {
-				// If we haven't, mark that we have
-				visited.Add( cell );
-
+			if( visited.Add( cell ) ) {
 				// Now add every neighbour of the cell if it's not land
 				foreach( Cell neighbour in map.Neighbours[cell] ) {
 					if( !landform.Contains( neighbour ) ) {
