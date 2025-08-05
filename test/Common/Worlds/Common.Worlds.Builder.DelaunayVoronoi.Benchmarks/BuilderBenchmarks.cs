@@ -3,7 +3,6 @@ using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Randomization;
 using Microsoft.Extensions.DependencyInjection;
-using Common.Worlds.Builder.DelaunayVoronoi;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Benchmarks;
 
@@ -23,6 +22,7 @@ public class BuilderBenchmarks {
 	private readonly ISaltwaterBuilder _saltwaterBuilder;
 	private readonly IFreshwaterBuilder _freshwaterBuilder;
 	private readonly ILakeBuilder _lakeBuilder;
+	private readonly ICoastBuilder _coastBuilder;
 
 	public BuilderBenchmarks() {
 		var services = new ServiceCollection();
@@ -35,13 +35,14 @@ public class BuilderBenchmarks {
 		_saltwaterBuilder = provider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = provider.GetRequiredService<IFreshwaterBuilder>();
 		_lakeBuilder = provider.GetRequiredService<ILakeBuilder>();
+		_coastBuilder = provider.GetRequiredService<ICoastBuilder>();
 
 		_size = new Point( 500, 500 );
 
 		IPointFactory pointsFactory = provider.GetRequiredService<IPointFactory>();
 		IRandom random = provider.GetRequiredService<IRandom>();
 		random.Reinitialise( 0x78901234 );
-		_points = pointsFactory.Fill( _size, 1 );
+		_points = pointsFactory.Fill( _size, 5 );
 		_landform = _landformBuilder.Create( _size, out _map );
 		_saltwater = _saltwaterBuilder.Create( _size, _map, _landform );
 		_freshwater = _freshwaterBuilder.Create( _size, _map, _landform, _saltwater );
@@ -50,7 +51,7 @@ public class BuilderBenchmarks {
 
 	[Benchmark]
 	public void VoronoiBuilder() {
-		_voronoiBuilder.Create( _size, 1000 );
+		_voronoiBuilder.Create( _size, 20 );
 	}
 
 	[Benchmark]
@@ -71,6 +72,11 @@ public class BuilderBenchmarks {
 	[Benchmark]
 	public void LakeBuilder() {
 		_lakeBuilder.Create( _size, _map, _landform, _saltwater, _freshwater );
+	}
+
+	[Benchmark]
+	public void CoastBuilder() {
+		_coastBuilder.Create( _size, _map, _landform, _saltwater );
 	}
 }
 
