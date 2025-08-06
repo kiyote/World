@@ -1,17 +1,17 @@
 ﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
-using Kiyote.Geometry.Randomization;
 using Kiyote.Geometry.Rasterizers;
+using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class IterativeLandformBuilderIntegrationTests {
+public sealed class TectonicLandformBuilderIntegrationTests {
 
-	private ILandformBuilder _builder;
-	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
+	private ILandformBuilder _landformBuilder;
+	private IBufferFactory _bufferFactory;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -19,14 +19,37 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		_folder = Path.Combine( Path.GetTempPath(), "world", nameof( IterativeLandformBuilderIntegrationTests ) );
+		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
+		_folder = Path.Combine( rootPath, nameof( TectonicLandformBuilderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
+
+		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
 		services.AddBuffers();
-		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
+	}
+
+	[SetUp]
+	public void SetUp() {
+		_scope = _provider.CreateScope();
+
+		_rasterizer = _provider.GetRequiredService<IRasterizer>();
+		_bufferFactory = _provider.GetRequiredService<IBufferFactory>();
+
+		IVoronoiBuilder voronoiBuilder = _provider.GetRequiredService<IVoronoiBuilder>();
+		ISearchableVoronoiFactory searchableVoronoiFactory = _provider.GetRequiredService<ISearchableVoronoiFactory>();
+
+		_landformBuilder = new TectonicLandformBuilder(
+			voronoiBuilder,
+			searchableVoronoiFactory
+		);
+	}
+
+	[TearDown]
+	public void TearDown() {
+		 _scope.Dispose();
 	}
 
 	[OneTimeTearDown]
@@ -34,31 +57,11 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 		Directory.Delete( _folder, true );
 	}
 
-	[SetUp]
-	public void SetUp() {
-		_scope = _provider.CreateScope();
-
-		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
-		IRandom random = _scope.ServiceProvider.GetRequiredService<IRandom>();
-		IVoronoiBuilder voronoiBuilder = _scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>();
-
-		_builder = new IterativeLandformBuilder(
-			random,
-			voronoiBuilder
-		);
-	}
-
-	[TearDown]
-	public void TearDown() {
-		_scope.Dispose();
-	}
-
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
-		IReadOnlySet<Cell> landform = _builder.Create( size, out ISearchableVoronoi voronoi );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
@@ -74,7 +77,7 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "iterative_landform.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "tectonic_landform.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

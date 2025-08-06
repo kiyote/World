@@ -11,7 +11,7 @@ public static class ExtensionMethods {
 		services.AddRandomization();
 		services.AddDelaunayVoronoi();
 
-		services.TryAddSingleton<ILandformBuilder, IterativeLandformBuilder>();
+		services.TryAddSingleton<ILandformBuilder, TectonicLandformBuilder>();
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
 		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();

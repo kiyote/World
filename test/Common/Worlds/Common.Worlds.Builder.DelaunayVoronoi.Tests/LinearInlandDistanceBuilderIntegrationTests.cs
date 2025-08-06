@@ -61,7 +61,7 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1000, 1000 );
+		ISize size = new Point( 1600, 900 );
 		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
 		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
 		IReadOnlySet<Cell> coast = _coastBuilder.Create( size, map, landform, saltwater );

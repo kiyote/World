@@ -60,7 +60,6 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 			// This means that the larger cells are the _largest_ possible area
 			// and every refinement makes the landmass smaller, thus it cannot
 			// spill outside of the desired area.
-			distance /= 2;
 			map = _voronoiBuilder.Create( size, distance );
 
 			HashSet<Cell> finerLandforms = [];
@@ -87,7 +86,8 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 			landforms = finerLandforms;
 
 			// Repeat until the cells are the desired size
-		} while( distance >= 5 );
+			distance /= 2;
+		} while( distance >= SmallestCellSize );
 
 		return landforms;
 	}
@@ -101,7 +101,7 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 		// Get the seeds of the landforms by finding all cells that are fully
 		// contained within the diagram. (Only cells that go outside the bounds
 		// of the ISize are open). These become the "candidiate" cells.
-		List<Cell> cells = roughVoronoi.Cells.Where( c => !c.IsOpen ).ToList();
+		List<Cell> cells = [.. roughVoronoi.Cells.Where( c => !c.IsOpen )];
 		int desiredCount = (int)( cells.Count * LandformDensity );
 		HashSet<Cell> roughLandforms = [];
 		while( roughLandforms.Count < desiredCount ) {
@@ -112,6 +112,8 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 			);
 			Cell? target = null;
 			// Check the candidate cells to see if that point is inside.
+			// Don't remove them inside this loop otherwise you'll get a
+			// comodification exception.
 			foreach( Cell cell in cells ) {
 				if( cell.Polygon.Contains( location ) ) {
 					target = cell;

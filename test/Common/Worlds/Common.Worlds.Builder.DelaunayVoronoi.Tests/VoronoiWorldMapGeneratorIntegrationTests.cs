@@ -1,6 +1,7 @@
-﻿using Kiyote.Buffers.Float;
+﻿using Kiyote.Buffers;
+using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
-using Kiyote.Geometry.Randomization;
+using Kiyote.Geometry.Rasterizers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Point = Kiyote.Geometry.Point;
@@ -10,7 +11,6 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 [TestFixture]
 internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
-	private IRandom _random;
 	private INeighbourLocator _neighbourLocator;
 	private IWorldMapGenerator _worldMapGenerator;
 
@@ -44,10 +44,17 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_random = _provider.GetRequiredService<IRandom>();
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
 
-		_worldMapGenerator = _scope.ServiceProvider.GetRequiredService<IWorldMapGenerator>();
+		_worldMapGenerator = new VoronoiWorldMapGenerator(
+			_provider.GetRequiredService<IBufferFactory>(),
+			_provider.GetRequiredService<IRasterizer>(),
+			_provider.GetRequiredService<ILandformBuilder>(),
+			_provider.GetRequiredService<ISaltwaterBuilder>(),
+			_provider.GetRequiredService<IFreshwaterBuilder>(),
+			_provider.GetRequiredService<ILakeBuilder>(),
+			_provider.GetRequiredService<ICoastBuilder>()
+		);
 	}
 
 	[TearDown]
@@ -56,7 +63,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public void Visualize() {
 		long seed = DateTime.UtcNow.Ticks;
 		ISize size = new Point( 1600, 900 );
