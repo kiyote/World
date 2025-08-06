@@ -55,7 +55,7 @@ internal class ElevationBuilder : IElevationBuilder {
 
 		// Find the average altitude around lakes and set their coast to be
 		// that height
-		foreach( HashSet<Cell> lake in lakes ) {
+		foreach( IReadOnlySet<Cell> lake in lakes ) {
 			float newElevation = int.MaxValue;
 			// Find the lowest elevation around the lake
 			foreach( Cell cell in lake ) {
