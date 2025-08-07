@@ -1,6 +1,7 @@
 ﻿using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Randomization;
 using Kiyote.Geometry.Rasterizers;
 using Point = Kiyote.Geometry.Point;
 
@@ -12,6 +13,7 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 	private IRasterizer _rasterizer;
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -37,13 +39,13 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 
 		_rasterizer = _provider.GetRequiredService<IRasterizer>();
 		_bufferFactory = _provider.GetRequiredService<IBufferFactory>();
-
-		IVoronoiBuilder voronoiBuilder = _provider.GetRequiredService<IVoronoiBuilder>();
-		ISearchableVoronoiFactory searchableVoronoiFactory = _provider.GetRequiredService<ISearchableVoronoiFactory>();
+		_tectonicPlateBuilder = _provider.GetRequiredService<ITectonicPlateBuilder>();
 
 		_landformBuilder = new TectonicLandformBuilder(
-			voronoiBuilder,
-			searchableVoronoiFactory
+			_provider.GetRequiredService<IRandom>(),
+			_provider.GetRequiredService<ITectonicPlateBuilder>(),
+			_provider.GetRequiredService<IVoronoiBuilder>(),
+			_provider.GetRequiredService<ISearchableVoronoiFactory>()
 		);
 	}
 
@@ -58,10 +60,11 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi voronoi );
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi voronoi );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 

@@ -53,7 +53,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			_provider.GetRequiredService<ISaltwaterBuilder>(),
 			_provider.GetRequiredService<IFreshwaterBuilder>(),
 			_provider.GetRequiredService<ILakeBuilder>(),
-			_provider.GetRequiredService<ICoastBuilder>()
+			_provider.GetRequiredService<ICoastBuilder>(),
+			_provider.GetRequiredService<ITectonicPlateBuilder>()
 		);
 	}
 

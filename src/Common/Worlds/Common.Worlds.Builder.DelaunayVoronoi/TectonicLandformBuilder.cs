@@ -10,41 +10,45 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 	/// The size of these rough cells will be proportional to the size of the
 	/// map divided by the number of cells.
 	/// </remarks>
-	public const int RoughCellCount = 3;
+	public const int RoughCellCount = 6;
 
 	public const int MinimumCellSize = 5;
 
 	public const float MinimumDensity = 0.5f;
 	public const float MaximumDensity = 0.7f;
 
+	private readonly IRandom _random;
 	private readonly IVoronoiBuilder _voronoiBuilder;
+	private readonly ITectonicPlateBuilder _tectonicPlateBuilder;
 	private readonly ISearchableVoronoiFactory _searchableVoronoiFactory;
 
 	public TectonicLandformBuilder(
+		IRandom random,
+		ITectonicPlateBuilder tectonicPlateBuilder,
 		IVoronoiBuilder voronoiBuilder,
 		ISearchableVoronoiFactory searchableVoronoiFactory
 	) {
+		_random = random;
 		_voronoiBuilder = voronoiBuilder;
+		_tectonicPlateBuilder = tectonicPlateBuilder;
 		_searchableVoronoiFactory = searchableVoronoiFactory;
 	}
 
 	IReadOnlySet<Cell> ILandformBuilder.Create(
 		ISize size,
+		TectonicPlates tectonicPlates,
 		out ISearchableVoronoi map
 	) {
 		HashSet<Cell> cells;
 		IVoronoi landform;
-		float terrainDensity = 0.0f;
+		float terrainDensity;
 		do {
-			int cellSize = Math.Min( size.Width, size.Height ) / RoughCellCount;
-			IVoronoi plates = _voronoiBuilder.Create( size, cellSize );
-
 			// Find all the cells that fall on the edges of the tectonic plates
-			cellSize /= 2;
+			int cellSize = Math.Min( size.Width, size.Height ) / RoughCellCount;
 			cells = [];
 			landform = _voronoiBuilder.Create( size, cellSize );
-			foreach( Edge edge in plates.Edges ) {
-				if( ( edge.GetHashCode() & 0x1111 ) == 0x1111 ) {
+			foreach( Edge edge in tectonicPlates.Plates.Edges ) {
+				if( ( _random.NextFloat() > 0.5f ) ) {
 					foreach( Cell cell in landform.Cells ) {
 						if( !cell.IsOpen
 							&& cell.Polygon.HasIntersection( edge )

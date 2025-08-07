@@ -4,10 +4,8 @@ public interface IElevationBuilder {
 
 	IReadOnlyDictionary<Cell, float> Create(
 		ISize size,
+		TectonicPlates tectonicPlates,
 		ISearchableVoronoi map,
-		IReadOnlySet<Cell> landform,
-		IReadOnlySet<Cell> saltwater,
-		IReadOnlySet<Cell> freshwater,
-		IReadOnlyList<IReadOnlySet<Cell>> lakes
+		IReadOnlySet<Cell> landform
 	);
 }

@@ -14,6 +14,7 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private ICoastBuilder _coastBuilder;
 	private IFloatBufferOperators _bufferOperator;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private LinearInlandDistanceBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -49,6 +50,7 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_coastBuilder = _scope.ServiceProvider.GetRequiredService<ICoastBuilder>();
+		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
 		_builder = new LinearInlandDistanceBuilder();
 	}
@@ -62,7 +64,8 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
 		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
 		IReadOnlySet<Cell> coast = _coastBuilder.Create( size, map, landform, saltwater );
 		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IInlandDistanceBuilder ).Create( size, map, landform, coast );

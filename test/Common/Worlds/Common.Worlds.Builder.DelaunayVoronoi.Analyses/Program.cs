@@ -12,6 +12,7 @@ services.AddDelaunayVoronoiWorldBuilder();
 ServiceProvider provider = services.BuildServiceProvider();
 ILandformBuilder landformBuilder = provider.GetRequiredService<ILandformBuilder>();
 
+/*
 ISize size = new Point( 500, 500 );
 
 IPointFactory pointsFactory = provider.GetRequiredService<IPointFactory>();
@@ -22,3 +23,4 @@ for (int i = 0; i < 100; i++) {
 	Console.WriteLine( $"Iteration: {i + 1}" );
 	_ = landformBuilder.Create( size, out ISearchableVoronoi _ );
 }
+*/

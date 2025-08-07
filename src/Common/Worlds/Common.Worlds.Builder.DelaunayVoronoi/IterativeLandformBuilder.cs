@@ -46,6 +46,7 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 
 	IReadOnlySet<Cell> ILandformBuilder.Create(
 		ISize size,
+		TectonicPlates tectonicPlates,
 		out ISearchableVoronoi map
 	) {
 		int cellSize = Math.Min( size.Width, size.Height ) / RoughCellCount;

@@ -15,6 +15,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 	private ISaltwaterBuilder _saltwaterBuilder;
 	private IFreshwaterBuilder _freshwaterBuilder;
 	private ILakeBuilder _lakeBuilder;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private ElevationBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -50,6 +51,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
 		_lakeBuilder = _scope.ServiceProvider.GetRequiredService<ILakeBuilder>();
+		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
 		_builder = new ElevationBuilder();
 	}
@@ -63,11 +65,12 @@ internal sealed class ElevationBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
 		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
 		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
 		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Create( size, map, landform, saltwater, freshwater );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, map, landform, saltwater, freshwater, lakes );
+		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, tectonicPlates, map, landform );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
@@ -82,7 +85,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 			} );
 		}
 
-		foreach (HashSet<Cell> lake in lakes) {
+		foreach (IReadOnlySet<Cell> lake in lakes) {
 			foreach( Cell cell in lake ) {
 				if( !elevation.TryGetValue( cell, out float intensity ) ) {
 					intensity = 0.0f;
