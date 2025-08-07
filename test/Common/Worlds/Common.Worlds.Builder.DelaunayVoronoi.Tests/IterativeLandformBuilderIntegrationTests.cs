@@ -12,6 +12,7 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 	private ILandformBuilder _builder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -40,8 +41,9 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
+		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 		IRandom random = _scope.ServiceProvider.GetRequiredService<IRandom>();
-		IVoronoiBuilder voronoiBuilder = _scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>();
+		IVoronoiBuilder voronoiBuilder = _scope.ServiceProvider.GetRequiredService<IVoronoiBuilder>();		
 
 		_builder = new IterativeLandformBuilder(
 			random,
@@ -58,7 +60,8 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
-		IReadOnlySet<Cell> landform = _builder.Create( size, out ISearchableVoronoi voronoi );
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
+		IReadOnlySet<Cell> landform = _builder.Create( size, tectonicPlates, out ISearchableVoronoi voronoi );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 

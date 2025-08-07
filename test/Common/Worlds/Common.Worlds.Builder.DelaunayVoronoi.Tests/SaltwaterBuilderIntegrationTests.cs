@@ -12,6 +12,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private SaltwaterBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -47,6 +48,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
+		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
 		_builder = new SaltwaterBuilder();
 	}
@@ -60,7 +62,8 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
 		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterBuilder ).Create( size, map, landform );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );

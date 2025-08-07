@@ -13,6 +13,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	private readonly ILakeBuilder _lakeBuilder;
 	private readonly ICoastBuilder _coastBuilder;
 
+	private readonly ITectonicPlateBuilder _tectonicPlateBuilder;
+
 	public VoronoiWorldMapGenerator(
 		IBufferFactory bufferFactory,
 		IRasterizer rasterizer,
@@ -20,7 +22,8 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		ISaltwaterBuilder saltwaterBuilder,
 		IFreshwaterBuilder freshwaterBuilder,
 		ILakeBuilder lakeBuilder,
-		ICoastBuilder coastBuilder
+		ICoastBuilder coastBuilder,
+		ITectonicPlateBuilder tectonicPlateBuilder
 	) {
 		_bufferFactory = bufferFactory;
 		_rasterizer = rasterizer;
@@ -29,6 +32,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_freshwaterBuilder = freshwaterBuilder;
 		_lakeBuilder = lakeBuilder;
 		_coastBuilder = coastBuilder;
+		_tectonicPlateBuilder = tectonicPlateBuilder;
 	}
 
 	WorldMaps IWorldMapGenerator.Create(
@@ -36,8 +40,9 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		ISize size,
 		INeighbourLocator neighbourLocator
 	) {
+		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		// Creates the cells that will be above sea level.
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, out ISearchableVoronoi map );
+		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
 		// Floodfills the map from the edge to find all "not land" cells that
 		// are not fully surrounded by land.
 		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );

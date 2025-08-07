@@ -9,6 +9,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Benchmarks;
 [MemoryDiagnoser(false)]
 public class BuilderBenchmarks {
 
+	/*
 	private readonly ISize _size;
 	private readonly IReadOnlyList<Point> _points;
 	private readonly ISearchableVoronoi _map;
@@ -78,5 +79,6 @@ public class BuilderBenchmarks {
 	public void CoastBuilder() {
 		_coastBuilder.Create( _size, _map, _landform, _saltwater );
 	}
+	*/
 }
 

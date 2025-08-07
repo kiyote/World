@@ -18,6 +18,7 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IFreshwaterBuilder, FreshwaterBuilder>();
 		services.TryAddSingleton<ILakeBuilder, LakeBuilder>();
 		services.TryAddSingleton<ICoastBuilder, LandAdjacentCoastBuilder>();
+		services.TryAddSingleton<ITectonicPlateBuilder, TectonicPlateBuilder>();
 
 		return services;
 	}
