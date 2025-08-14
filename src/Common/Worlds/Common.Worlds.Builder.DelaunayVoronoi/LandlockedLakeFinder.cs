@@ -1,8 +1,8 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal class LakeBuilder : ILakeBuilder {
+internal class LandlockedLakeFinder : ILakeFinder {
 
-	IReadOnlyList<IReadOnlySet<Cell>> ILakeBuilder.Create(
+	IReadOnlyList<IReadOnlySet<Cell>> ILakeFinder.Finder(
 		ISize size,
 		IVoronoi map,
 		IReadOnlySet<Cell> landform,

@@ -2,21 +2,18 @@
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
-using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class ElevationBuilderIntegrationTests {
+internal sealed class FreshwaterFinderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
-	private ISaltwaterBuilder _saltwaterBuilder;
-	private IFreshwaterBuilder _freshwaterBuilder;
-	private ILakeBuilder _lakeBuilder;
+	private ISaltwaterFinder _saltwaterBuilder;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
-	private ElevationBuilder _builder;
+	private NotSaltwaterFreshwaterFinder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -25,12 +22,15 @@ internal sealed class ElevationBuilderIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( ElevationBuilderIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( FreshwaterFinderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddDelaunayVoronoiWorldBuilder();
-		services.AddRasterizer();
 		services.AddBuffers();
+		services.AddCommonWorlds();
+		services.AddDelaunayVoronoiWorldBuilder();
+		services.AddRandomization();
+		services.AddDelaunayVoronoi();
+		services.AddRasterizer();
 
 		_provider = services.BuildServiceProvider();
 
@@ -48,12 +48,10 @@ internal sealed class ElevationBuilderIntegrationTests {
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
-		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
-		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterBuilder>();
-		_lakeBuilder = _scope.ServiceProvider.GetRequiredService<ILakeBuilder>();
+		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
-		_builder = new ElevationBuilder();
+		_builder = new NotSaltwaterFreshwaterFinder();
 	}
 
 	[TearDown]
@@ -67,33 +65,21 @@ internal sealed class ElevationBuilderIntegrationTests {
 		ISize size = new Point( 1000, 1000 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
-		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
-		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Create( size, map, landform, saltwater, freshwater );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, tectonicPlates, map, landform );
-
-		float maximum = elevation.Max( kvp => kvp.Value );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
+		IReadOnlySet<Cell> lakes = ( _builder as IFreshwaterFinder ).Create( size, map, landform, saltwater );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
 		foreach( Cell cell in landform ) {
-			if (!elevation.TryGetValue(cell, out float intensity)) {
-				intensity = 0.0f;
-			}
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				buffer[x, y] = ( intensity / maximum * 0.8f ) + 0.2f;
+				buffer[x, y] = 0.3f;
 			} );
 		}
 
-		foreach (IReadOnlySet<Cell> lake in lakes) {
-			foreach( Cell cell in lake ) {
-				if( !elevation.TryGetValue( cell, out float intensity ) ) {
-					intensity = 0.0f;
-				}
-				_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-					buffer[x, y] = ( intensity / maximum * 0.8f ) + 0.2f;
-				} );
-			}
+		foreach( Cell lake in lakes ) {
+			_rasterizer.Rasterize( lake.Polygon.Points, ( int x, int y ) => {
+				buffer[x, y] = 0.75f;
+			} );
 		}
 
 		foreach( Edge edge in map.Edges ) {
@@ -102,7 +88,7 @@ internal sealed class ElevationBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "elevation.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "freshwater.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

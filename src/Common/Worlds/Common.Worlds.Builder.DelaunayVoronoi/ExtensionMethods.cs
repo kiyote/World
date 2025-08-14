@@ -14,11 +14,12 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<ILandformBuilder, TectonicLandformBuilder>();
 		services.TryAddSingleton<IWorldMapGenerator, VoronoiWorldMapGenerator>();
 		services.TryAddSingleton<IVoronoiBuilder, VoronoiBuilder>();
-		services.TryAddSingleton<ISaltwaterBuilder, SaltwaterBuilder>();
-		services.TryAddSingleton<IFreshwaterBuilder, FreshwaterBuilder>();
-		services.TryAddSingleton<ILakeBuilder, LakeBuilder>();
-		services.TryAddSingleton<ICoastBuilder, LandAdjacentCoastBuilder>();
+		services.TryAddSingleton<ISaltwaterFinder, MapEdgeSaltwaterFinder>();
+		services.TryAddSingleton<IFreshwaterFinder, NotSaltwaterFreshwaterFinder>();
+		services.TryAddSingleton<ILakeFinder, LandlockedLakeFinder>();
+		services.TryAddSingleton<ICoastFinder, LandAdjacentCoastFinder>();
 		services.TryAddSingleton<ITectonicPlateBuilder, TectonicPlateBuilder>();
+		services.TryAddSingleton<IInlandDistanceBuilder, LinearInlandDistanceBuilder>();
 
 		return services;
 	}

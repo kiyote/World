@@ -1,9 +1,10 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-public interface IFreshwaterBuilder {
-	IReadOnlySet<Cell> Create(
+public interface ICoastFinder {
+
+	IReadOnlySet<Cell> Find(
 		ISize size,
-		IVoronoi map,
+		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform,
 		IReadOnlySet<Cell> saltwater
 	);

@@ -15,13 +15,14 @@ internal sealed class LinearInlandDistanceBuilder : IInlandDistanceBuilder {
 		// Find all of the land adjacent to the coastline and set it to 1
 		foreach( Cell coastCell in coast ) {
 			IReadOnlyList<Cell> neighbours = map.Neighbours[coastCell];
-			foreach ( Cell neighbourCell in neighbours) {
+			foreach( Cell neighbourCell in neighbours ) {
 				if( !result.ContainsKey( neighbourCell )
 					&& landform.Contains( neighbourCell )
 				) {
-					visited.Add( neighbourCell );
-					result[neighbourCell] = currentElevation;
-					currentQueue.Enqueue( neighbourCell );
+					if( visited.Add( neighbourCell ) ) {
+						result[neighbourCell] = currentElevation;
+						currentQueue.Enqueue( neighbourCell );
+					}
 				}
 			}
 		}

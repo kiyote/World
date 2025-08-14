@@ -1,7 +1,7 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal class FreshwaterBuilder : IFreshwaterBuilder {
-	IReadOnlySet<Cell> IFreshwaterBuilder.Create(
+internal class NotSaltwaterFreshwaterFinder : IFreshwaterFinder {
+	IReadOnlySet<Cell> IFreshwaterFinder.Create(
 		ISize size,
 		IVoronoi map,
 		IReadOnlySet<Cell> landform,

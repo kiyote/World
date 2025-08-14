@@ -6,6 +6,7 @@ public interface IElevationBuilder {
 		ISize size,
 		TectonicPlates tectonicPlates,
 		ISearchableVoronoi map,
-		IReadOnlySet<Cell> landform
+		IReadOnlySet<Cell> landform,
+		IReadOnlyDictionary<Cell, float> inlandDistance
 	);
 }

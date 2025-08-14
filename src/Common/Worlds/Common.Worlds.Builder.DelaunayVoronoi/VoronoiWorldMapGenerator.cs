@@ -8,10 +8,10 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 	private readonly IBufferFactory _bufferFactory;
 	private readonly IRasterizer _rasterizer;
 	private readonly ILandformBuilder _landformBuilder;
-	private readonly ISaltwaterBuilder _saltwaterBuilder;
-	private readonly IFreshwaterBuilder _freshwaterBuilder;
-	private readonly ILakeBuilder _lakeBuilder;
-	private readonly ICoastBuilder _coastBuilder;
+	private readonly ISaltwaterFinder _saltwaterBuilder;
+	private readonly IFreshwaterFinder _freshwaterBuilder;
+	private readonly ILakeFinder _lakeBuilder;
+	private readonly ICoastFinder _coastBuilder;
 
 	private readonly ITectonicPlateBuilder _tectonicPlateBuilder;
 
@@ -19,10 +19,10 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IBufferFactory bufferFactory,
 		IRasterizer rasterizer,
 		ILandformBuilder landformBuilder,
-		ISaltwaterBuilder saltwaterBuilder,
-		IFreshwaterBuilder freshwaterBuilder,
-		ILakeBuilder lakeBuilder,
-		ICoastBuilder coastBuilder,
+		ISaltwaterFinder saltwaterBuilder,
+		IFreshwaterFinder freshwaterBuilder,
+		ILakeFinder lakeBuilder,
+		ICoastFinder coastBuilder,
 		ITectonicPlateBuilder tectonicPlateBuilder
 	) {
 		_bufferFactory = bufferFactory;
@@ -45,14 +45,14 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
 		// Floodfills the map from the edge to find all "not land" cells that
 		// are not fully surrounded by land.
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
 		// Finds all cells that are "not land" that are not saltwater.
 		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
 		// Determines all freshwater cells that are adjacent to other freshwater
 		// cells. ie - This will contain the "clumps" of freshwater cells.
-		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Create( size, map, landform, saltwater, freshwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Finder( size, map, landform, saltwater, freshwater );
 		// Finds all ocean cells that are adjacent to land
-		IReadOnlySet<Cell> coast = _coastBuilder.Create( size, map, landform, saltwater );
+		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, map, landform, saltwater );
 
 		// This will indicate what type of terrain is present. (Grassland, ocean,
 		// whatever)  This underlies whatever feature may be present.  For example
