@@ -1,7 +1,7 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal sealed class LandAdjacentCoastBuilder : ICoastBuilder {
-	IReadOnlySet<Cell> ICoastBuilder.Create(
+internal sealed class LandAdjacentCoastFinder : ICoastFinder {
+	IReadOnlySet<Cell> ICoastFinder.Find(
 		ISize size,
 		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform,

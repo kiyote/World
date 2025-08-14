@@ -1,8 +1,8 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal sealed class SaltwaterBuilder : ISaltwaterBuilder {
+internal sealed class MapEdgeSaltwaterFinder : ISaltwaterFinder {
 
-	IReadOnlySet<Cell> ISaltwaterBuilder.Create(
+	IReadOnlySet<Cell> ISaltwaterFinder.Find(
 		ISize size,
 		IVoronoi map,
 		IReadOnlySet<Cell> landform

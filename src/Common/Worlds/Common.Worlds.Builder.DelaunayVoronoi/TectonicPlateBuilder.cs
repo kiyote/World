@@ -7,7 +7,7 @@ internal sealed class TectonicPlateBuilder : ITectonicPlateBuilder {
 	private readonly IRandom _random;
 	private readonly IVoronoiBuilder _voronoiBuilder;
 
-	private const int RoughCellCount = 3;
+	private const int RoughCellCount = 4;
 
 	public TectonicPlateBuilder(
 		IRandom random,

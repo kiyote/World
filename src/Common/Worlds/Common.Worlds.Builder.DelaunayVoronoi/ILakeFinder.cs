@@ -1,8 +1,8 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-public interface ILakeBuilder {
+public interface ILakeFinder {
 
-	IReadOnlyList<IReadOnlySet<Cell>> Create(
+	IReadOnlyList<IReadOnlySet<Cell>> Finder(
 		ISize size,
 		IVoronoi map,
 		IReadOnlySet<Cell> landform,

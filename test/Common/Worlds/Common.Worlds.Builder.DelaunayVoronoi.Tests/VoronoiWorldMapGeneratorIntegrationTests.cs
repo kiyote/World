@@ -50,10 +50,10 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			_provider.GetRequiredService<IBufferFactory>(),
 			_provider.GetRequiredService<IRasterizer>(),
 			_provider.GetRequiredService<ILandformBuilder>(),
-			_provider.GetRequiredService<ISaltwaterBuilder>(),
-			_provider.GetRequiredService<IFreshwaterBuilder>(),
-			_provider.GetRequiredService<ILakeBuilder>(),
-			_provider.GetRequiredService<ICoastBuilder>(),
+			_provider.GetRequiredService<ISaltwaterFinder>(),
+			_provider.GetRequiredService<IFreshwaterFinder>(),
+			_provider.GetRequiredService<ILakeFinder>(),
+			_provider.GetRequiredService<ICoastFinder>(),
 			_provider.GetRequiredService<ITectonicPlateBuilder>()
 		);
 	}

@@ -1,21 +1,20 @@
 ﻿using Kiyote.Buffers;
-using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
-internal sealed class LinearInlandDistanceBuilderIntegrationTests {
+[TestFixture]
+internal sealed class LakeFinderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
+	private ISaltwaterFinder _saltwaterBuilder;
+	private IFreshwaterFinder _freshwaterBuilder;
+	private ITectonicPlateBuilder _tectonicPlateBuilder;
+	private ILakeFinder _builder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
-	private ISaltwaterBuilder _saltwaterBuilder;
-	private ICoastBuilder _coastBuilder;
-	private IFloatBufferOperators _bufferOperator;
-	private ITectonicPlateBuilder _tectonicPlateBuilder;
-	private LinearInlandDistanceBuilder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -23,16 +22,14 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
-		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( LinearInlandDistanceBuilderIntegrationTests ) );
+		_folder = Path.Combine( Path.GetTempPath(), "world", nameof( LakeFinderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
-		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
-		services.AddFloatBuffers();
+		services.AddBuffers();
+		services.AddDelaunayVoronoiWorldBuilder();
 
 		_provider = services.BuildServiceProvider();
-
 	}
 
 	[OneTimeTearDown]
@@ -45,14 +42,15 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 		_scope = _provider.CreateScope();
 
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_bufferOperator = _scope.ServiceProvider.GetService<IFloatBufferOperators>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
+
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
-		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterBuilder>();
-		_coastBuilder = _scope.ServiceProvider.GetRequiredService<ICoastBuilder>();
+		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
+		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterFinder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
-		_builder = new LinearInlandDistanceBuilder();
+		_builder = new LandlockedLakeFinder(
+		);
 	}
 
 	[TearDown]
@@ -63,36 +61,42 @@ internal sealed class LinearInlandDistanceBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1600, 900 );
+		ISize size = new Point( 1000, 1000 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Create( size, map, landform );
-		IReadOnlySet<Cell> coast = _coastBuilder.Create( size, map, landform, saltwater );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IInlandDistanceBuilder ).Create( size, map, landform, coast );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _builder.Finder( size, map, landform, saltwater, freshwater );
 
-		float maximum = elevation.Max( kvp => kvp.Value );
-
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
 		foreach( Cell cell in landform ) {
-			if( !elevation.TryGetValue( cell, out float intensity ) ) {
-				intensity = 0.0f;
-			}
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				buffer[x, y] = intensity;
+				buffer[x, y] = 0.3f;
 			} );
 		}
 
-		_bufferOperator.Normalize( buffer, 0.0f, 1.0f );
+		foreach( Cell cell in freshwater ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				buffer[x, y] = 0.5f;
+			} );
+		}
+
+		foreach( IReadOnlySet<Cell> lake in lakes) {
+			foreach( Cell cell in lake ) {
+				_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+					buffer[x, y] = 1.0f;
+				} );
+			}
+		}
 
 		foreach( Edge edge in map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
-				buffer[x, y] = 0.0f;
+				buffer[x, y] = 0.2f;
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "inland_distance.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "lakes.png" ) );
 		await writer.WriteAsync( buffer );
 	}
-
 }

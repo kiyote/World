@@ -7,13 +7,13 @@ using Point = Kiyote.Geometry.Point;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class SaltwaterBuilderIntegrationTests {
+internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
-	private SaltwaterBuilder _builder;
+	private MapEdgeSaltwaterFinder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -22,7 +22,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 	[OneTimeSetUp]
 	public void OneTimeSetUp() {
 		string rootPath = Path.Combine( Path.GetTempPath(), "world" );
-		_folder = Path.Combine( rootPath, nameof( SaltwaterBuilderIntegrationTests ) );
+		_folder = Path.Combine( rootPath, nameof( MapEdgeSaltwaterFinderIntegrationTests ) );
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddBuffers();
@@ -50,7 +50,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
-		_builder = new SaltwaterBuilder();
+		_builder = new MapEdgeSaltwaterFinder();
 	}
 
 	[TearDown]
@@ -64,7 +64,7 @@ internal sealed class SaltwaterBuilderIntegrationTests {
 		ISize size = new Point( 1000, 1000 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterBuilder ).Create( size, map, landform );
+		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterFinder ).Find( size, map, landform );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
