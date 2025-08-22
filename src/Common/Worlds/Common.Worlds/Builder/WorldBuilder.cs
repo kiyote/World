@@ -19,7 +19,7 @@ internal sealed class WorldBuilder : IWorldBuilder {
 
 	}
 
-	Task<Id<World>> IWorldBuilder.BuildAsync(
+	async Task<Id<World>> IWorldBuilder.BuildAsync(
 		string name,
 		string seed,
 		ISize size,
@@ -27,11 +27,12 @@ internal sealed class WorldBuilder : IWorldBuilder {
 	) {
 		Id<World> worldId = new Id<World>( Guid.NewGuid() );
 
-		WorldMaps maps = _worldMapGenerator.Create(
+		WorldMaps maps = await _worldMapGenerator.CreateAsync(
 			Hash.GetLong( seed ),
 			size,
-			_neighbourLocator
-		);
+			_neighbourLocator,
+			cancellationToken
+		).ConfigureAwait( false );
 
 		/*
 		IBuffer<TileTerrain> terrain = _mapGenerator.GenerateTerrain( seed, size );
@@ -46,6 +47,6 @@ internal sealed class WorldBuilder : IWorldBuilder {
 		).ConfigureAwait( false );
 		*/
 
-		return Task.FromResult( worldId );
+		return worldId;
 	}
 }

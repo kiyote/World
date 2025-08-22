@@ -61,20 +61,20 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
-		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, map, landform, saltwater );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IInlandDistanceBuilder ).Create( size, map, landform, coast );
+		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, landform.Map, landform.Cells );
+		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, landform.Map, landform.Cells, saltwater );
+		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IInlandDistanceBuilder ).Create( size, landform.Map, landform.Cells, coast );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
 
-		foreach( Cell cell in landform ) {
+		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
 				intensity = 0.0f;
 			}
@@ -85,7 +85,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 
 		_bufferOperator.Normalize( buffer, 0.0f, 1.0f );
 
-		foreach( Edge edge in map.Edges ) {
+		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
 				buffer[x, y] = 0.0f;
 			} );

@@ -35,24 +35,25 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		_tectonicPlateBuilder = tectonicPlateBuilder;
 	}
 
-	WorldMaps IWorldMapGenerator.Create(
+	async Task<WorldMaps> IWorldMapGenerator.CreateAsync(
 		long seed,
 		ISize size,
-		INeighbourLocator neighbourLocator
+		INeighbourLocator neighbourLocator,
+		CancellationToken cancellationToken
 	) {
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		// Creates the cells that will be above sea level.
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
+		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, cancellationToken ).ConfigureAwait( false );
 		// Floodfills the map from the edge to find all "not land" cells that
 		// are not fully surrounded by land.
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, landform.Map, landform.Cells );
 		// Finds all cells that are "not land" that are not saltwater.
-		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, landform.Map, landform.Cells, saltwater );
 		// Determines all freshwater cells that are adjacent to other freshwater
 		// cells. ie - This will contain the "clumps" of freshwater cells.
-		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Finder( size, map, landform, saltwater, freshwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Finder( size, landform.Map, landform.Cells, saltwater, freshwater );
 		// Finds all ocean cells that are adjacent to land
-		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, map, landform, saltwater );
+		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, landform.Map, landform.Cells, saltwater );
 
 		// This will indicate what type of terrain is present. (Grassland, ocean,
 		// whatever)  This underlies whatever feature may be present.  For example
@@ -62,7 +63,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		// Apply the coastline
 		RenderTerrain( terrain, coast, TileTerrain.Coast );
 		// Render the land
-		RenderTerrain( terrain, landform, TileTerrain.Plain );
+		RenderTerrain( terrain, landform.Cells, TileTerrain.Plain );
 		// Paint the freshwater
 		RenderTerrain( terrain, freshwater, TileTerrain.Lake );
 

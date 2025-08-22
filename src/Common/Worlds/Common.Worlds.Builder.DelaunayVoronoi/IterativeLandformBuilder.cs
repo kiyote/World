@@ -44,13 +44,14 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 		_voronoiBuilder = voronoiBuilder;
 	}
 
-	IReadOnlySet<Cell> ILandformBuilder.Create(
+	Task<Landform> ILandformBuilder.CreateAsync(
 		ISize size,
 		TectonicPlates tectonicPlates,
-		out ISearchableVoronoi map
+		CancellationToken cancellationToken
 	) {
 		int cellSize = Math.Min( size.Width, size.Height ) / RoughCellCount;
 		HashSet<Cell> landforms = CreateLandform( size, cellSize );
+		ISearchableVoronoi map;
 
 		int distance = cellSize;
 		do {
@@ -90,7 +91,12 @@ internal sealed class IterativeLandformBuilder : ILandformBuilder {
 			distance /= 2;
 		} while( distance >= SmallestCellSize );
 
-		return landforms;
+		return Task.FromResult(
+			new Landform(
+				landforms,
+				map
+			)
+		);
 	}
 
 	private HashSet<Cell> CreateLandform(

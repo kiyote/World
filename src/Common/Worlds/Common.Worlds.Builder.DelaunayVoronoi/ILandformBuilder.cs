@@ -1,9 +1,9 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-public interface ILandformBuilder {
-	IReadOnlySet<Cell> Create(
+internal interface ILandformBuilder {
+	Task<Landform> CreateAsync(
 		ISize size,
 		TectonicPlates tectonicPlates,
-		out ISearchableVoronoi map
+		CancellationToken cancellationToken
 	);
 }

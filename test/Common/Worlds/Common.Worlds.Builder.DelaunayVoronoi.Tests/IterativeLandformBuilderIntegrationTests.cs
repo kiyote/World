@@ -61,17 +61,17 @@ internal sealed class IterativeLandformBuilderIntegrationTests {
 	public async Task Visualize() {
 		ISize size = new Point( 1600, 900 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
-		IReadOnlySet<Cell> landform = _builder.Create( size, tectonicPlates, out ISearchableVoronoi voronoi );
+		Landform landform = await _builder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
-		foreach( Cell cell in landform ) {
+		foreach( Cell cell in landform.Cells ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = 0.3f;
 			} );
 		}
 
-		foreach( Edge edge in voronoi.Edges ) {
+		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
 				buffer[x, y] = 0.2f;
 			} );
