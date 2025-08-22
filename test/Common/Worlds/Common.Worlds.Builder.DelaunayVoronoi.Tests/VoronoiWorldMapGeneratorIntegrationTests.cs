@@ -65,13 +65,14 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
-	public void Visualize() {
+	public async Task Visualize() {
 		long seed = DateTime.UtcNow.Ticks;
 		ISize size = new Point( 1600, 900 );
-		WorldMaps worldMaps = _worldMapGenerator.Create(
+		WorldMaps worldMaps = await _worldMapGenerator.CreateAsync(
 			seed,
 			size,
-			_neighbourLocator
+			_neighbourLocator,
+			TestContext.CurrentContext.CancellationToken
 		);
 
 		using Image<Rgba32> image = new Image<Rgba32>( size.Width, size.Height );
@@ -105,6 +106,6 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			}
 		}
 
-		image.Save( Path.Combine( _folder, "worldmap.png" ) );
+		await image.SaveAsync( Path.Combine( _folder, "worldmap.png" ) );
 	}
 }

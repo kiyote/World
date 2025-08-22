@@ -1,9 +1,10 @@
 ﻿namespace Common.Worlds.Builder;
 
 public interface IWorldMapGenerator {
-	WorldMaps Create(
+	Task<WorldMaps> CreateAsync(
 		long seed,
 		ISize size,
-		INeighbourLocator neighbourLocator
+		INeighbourLocator neighbourLocator,
+		CancellationToken cancellationToken
 	);
 }

@@ -15,33 +15,34 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 	public const int MinimumCellSize = 5;
 
 	public const float MinimumDensity = 0.5f;
-	public const float MaximumDensity = 0.7f;
+	public const float MaximumDensity = 0.8f;
 
 	private readonly IRandom _random;
 	private readonly IVoronoiBuilder _voronoiBuilder;
-	private readonly ITectonicPlateBuilder _tectonicPlateBuilder;
 	private readonly ISearchableVoronoiFactory _searchableVoronoiFactory;
+	private readonly IBuilderMonitor? _monitor;
 
 	public TectonicLandformBuilder(
 		IRandom random,
-		ITectonicPlateBuilder tectonicPlateBuilder,
 		IVoronoiBuilder voronoiBuilder,
-		ISearchableVoronoiFactory searchableVoronoiFactory
+		ISearchableVoronoiFactory searchableVoronoiFactory,
+		IBuilderMonitor? monitor
 	) {
 		_random = random;
 		_voronoiBuilder = voronoiBuilder;
-		_tectonicPlateBuilder = tectonicPlateBuilder;
 		_searchableVoronoiFactory = searchableVoronoiFactory;
+		_monitor = monitor;
 	}
 
-	IReadOnlySet<Cell> ILandformBuilder.Create(
+	async Task<Landform> ILandformBuilder.CreateAsync(
 		ISize size,
 		TectonicPlates tectonicPlates,
-		out ISearchableVoronoi map
+		CancellationToken cancellationToken
 	) {
 		HashSet<Cell> cells;
 		IVoronoi landform;
 		float terrainDensity;
+		int monitorStage = 1;
 		do {
 			// Find all the cells that fall on the edges of the tectonic plates
 			int cellSize = Math.Min( size.Width, size.Height ) / RoughCellCount;
@@ -59,50 +60,51 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 				}
 			}
 
-			while( cellSize >= ( MinimumCellSize * 2 ) ) {
-				cellSize /= 2;
+			if( _monitor is not null ) {
+				await _monitor.LandformStageAsync( size, monitorStage, cells, cancellationToken ).ConfigureAwait( false );
+				terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
+				await _monitor.LandformStageMessageAsync( $"Stage {monitorStage} density: {terrainDensity:P2}", cancellationToken ).ConfigureAwait( false );
+			}
+
+			while( cellSize >= ( MinimumCellSize * 3 ) ) {
+				cellSize /= 3;
+				monitorStage += 1;
 				landform = _voronoiBuilder.Create( size, cellSize );
 				ISearchableVoronoi searchableLandform = _searchableVoronoiFactory.Create( landform, size );
 
 				HashSet<Cell> newCells = [];
-				foreach( Cell oldCell in cells ) {
-					IReadOnlyList<Cell> searchCells = searchableLandform.Search( oldCell.BoundingBox );
-					foreach( Cell newCell in searchCells ) {
-						if( !newCell.IsOpen
-							&& newCell.Polygon.HasIntersection( oldCell.Polygon )
-						) {
-							newCells.Add( newCell );
+				foreach( Cell cell in cells ) {
+					IReadOnlyList<Cell> landformCells = searchableLandform.Search( cell.BoundingBox );
+					foreach( Cell newCell in landformCells ) {
+						if( !newCell.IsOpen ) {
+							foreach( Point p in newCell.Polygon.Points ) {
+								if( cell.Polygon.Contains( p ) ) {
+									newCells.Add( newCell );
+									break;
+								}
+							}
 						}
 					}
 				}
+
 				cells = newCells;
-			}
 
-
-			foreach( Cell cell in landform.Cells ) {
-				if( cells.Contains( cell ) ) {
-					continue;
-				}
-				IReadOnlyList<Cell> neighbours = landform.Neighbours[cell];
-				bool surrounded = true;
-				foreach( Cell neighbour in neighbours ) {
-					if( !cells.Contains( neighbour ) ) {
-						surrounded = false;
-						break;
-					}
-				}
-				if( surrounded ) {
-					cells.Add( cell );
+				if( _monitor is not null ) {
+					await _monitor.LandformStageAsync( size, monitorStage, cells, cancellationToken ).ConfigureAwait( false );
+					terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
+					await _monitor.LandformStageMessageAsync( $"Stage {monitorStage} density: {terrainDensity:P2}", cancellationToken ).ConfigureAwait( false );
 				}
 			}
 
 			terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
+
 		} while( terrainDensity < MinimumDensity
 			|| terrainDensity > MaximumDensity
 		);
 
-
-		map = _searchableVoronoiFactory.Create( landform, size );
-		return cells.ToHashSet();
+		return new Landform(
+			cells.ToHashSet(),
+			_searchableVoronoiFactory.Create( landform, size )
+		);
 	}
 }

@@ -63,14 +63,14 @@ internal sealed class LakeFinderIntegrationTests {
 	public async Task Visualize() {
 		ISize size = new Point( 1000, 1000 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
-		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
-		IReadOnlyList<IReadOnlySet<Cell>> lakes = _builder.Finder( size, map, landform, saltwater, freshwater );
+		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
+		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, landform.Map, landform.Cells );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, landform.Map, landform.Cells, saltwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _builder.Finder( size, landform.Map, landform.Cells, saltwater, freshwater );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
-		foreach( Cell cell in landform ) {
+		foreach( Cell cell in landform.Cells ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
 				buffer[x, y] = 0.3f;
 			} );
@@ -90,7 +90,7 @@ internal sealed class LakeFinderIntegrationTests {
 			}
 		}
 
-		foreach( Edge edge in map.Edges ) {
+		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
 				buffer[x, y] = 0.2f;
 			} );

@@ -1,4 +1,5 @@
-﻿using Kiyote.Buffers;
+﻿using System.Diagnostics;
+using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -7,17 +8,17 @@ using Point = Kiyote.Geometry.Point;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class MountainousElevationBuilderIntegrationTests {
+internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMonitor {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
-	private ISaltwaterFinder _saltwaterBuilder;
+	private ISaltwaterFinder _saltwaterFinder;
 	private IFreshwaterFinder _freshwaterBuilder;
-	private ILakeFinder _lakeBuilder;
+	private ILakeFinder _lakeFinder;
 	private IInlandDistanceBuilder _inlandDistanceBuilder;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
-	private ICoastFinder _coastBuilder;
+	private ICoastFinder _coastFinder;
 	private MountainousElevationBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -33,6 +34,8 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
 		services.AddBuffers();
+
+		services.AddSingleton<IBuilderMonitor>( this );
 
 		_provider = services.BuildServiceProvider();
 
@@ -50,12 +53,12 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
-		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
+		_saltwaterFinder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterFinder>();
-		_lakeBuilder = _scope.ServiceProvider.GetRequiredService<ILakeFinder>();
+		_lakeFinder = _scope.ServiceProvider.GetRequiredService<ILakeFinder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 		_inlandDistanceBuilder = _scope.ServiceProvider.GetRequiredService<IInlandDistanceBuilder>();
-		_coastBuilder = _scope.ServiceProvider.GetRequiredService<ICoastFinder>();
+		_coastFinder = _scope.ServiceProvider.GetRequiredService<ICoastFinder>();
 
 		_builder = new MountainousElevationBuilder();
 	}
@@ -68,21 +71,21 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1000, 1000 );
+		ISize size = new Point( 1920, 1080 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
-		IReadOnlySet<Cell> landform = _landformBuilder.Create( size, tectonicPlates, out ISearchableVoronoi map );
-		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, map, landform );
-		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, map, landform, saltwater );
-		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeBuilder.Finder( size, map, landform, saltwater, freshwater );
-		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, map, landform, saltwater );
-		IReadOnlyDictionary<Cell, float> inlandDistance = _inlandDistanceBuilder.Create( size, map, landform, coast );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, tectonicPlates, map, landform, inlandDistance );
+		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
+		IReadOnlySet<Cell> saltwater = _saltwaterFinder.Find( size, landform.Map, landform.Cells );
+		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, landform.Map, landform.Cells, saltwater );
+		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeFinder.Finder( size, landform.Map, landform.Cells, saltwater, freshwater );
+		IReadOnlySet<Cell> coast = _coastFinder.Find( size, landform.Map, landform.Cells, saltwater );
+		IReadOnlyDictionary<Cell, float> inlandDistance = _inlandDistanceBuilder.Create( size, landform.Map, landform.Cells, coast );
+		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, tectonicPlates, landform.Map, landform.Cells, inlandDistance );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
 		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
 
-		foreach( Cell cell in landform ) {
+		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
 				intensity = 0.0f;
 			}
@@ -104,7 +107,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		}
 		*/
 
-		foreach( Edge edge in map.Edges ) {
+		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
 				buffer[x, y] = 0.2f;
 			} );
@@ -112,5 +115,35 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "elevation.png" ) );
 		await writer.WriteAsync( buffer );
+	}
+
+	async Task IBuilderMonitor.LandformStageAsync(
+		ISize size,
+		int stage,
+		IReadOnlySet<Cell> cells,
+		CancellationToken cancellationToken
+	) {
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+		foreach( Cell cell in cells ) {
+			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
+				buffer[x, y] = 0.5f;
+			} );
+		}
+
+		foreach( Cell cell in cells ) {
+			foreach (Edge edge in cell.Polygon.Edges) {
+				_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
+					buffer[x, y] = 0.25f;
+				} );
+			}
+		}
+
+		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, $"elevation_stage{stage}.png" ) );
+		await writer.WriteAsync( buffer );
+	}
+
+	async Task IBuilderMonitor.LandformStageMessageAsync( string message, CancellationToken cancellationToken ) {
+		Debug.WriteLine( message );
+		await TestContext.Progress.WriteLineAsync( message ).ConfigureAwait( false );
 	}
 }
