@@ -24,7 +24,7 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 				float dot = Vector2.Dot( plate.Value, tectonicPlates.Velocity[neighbour] );
 				if( dot < 0.0f ) {
 					// These are colliding plates, so find their shared edges
-					float intensity = Vector2.Subtract( plate.Value, tectonicPlates.Velocity[neighbour] ).Length();
+					float intensity = Math.Abs( dot );//Vector2.Subtract( plate.Value, tectonicPlates.Velocity[neighbour] ).Length();
 					// TODO: Figure out the "Velocity" of the impact and adjust the mountain height at that point
 					foreach( Edge source in plate.Key.Polygon.Edges ) {
 						foreach( Edge target in neighbour.Polygon.Edges ) {
