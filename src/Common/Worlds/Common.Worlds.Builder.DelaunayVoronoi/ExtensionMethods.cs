@@ -20,6 +20,7 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<ICoastFinder, LandAdjacentCoastFinder>();
 		services.TryAddSingleton<ITectonicPlateBuilder, TectonicPlateBuilder>();
 		services.TryAddSingleton<IInlandDistanceBuilder, LinearInlandDistanceBuilder>();
+		services.TryAddSingleton<IElevationScaler, ExponentialElevationScaler>();
 
 		return services;
 	}

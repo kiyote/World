@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Kiyote.Buffers;
+using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -19,6 +20,9 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 	private IInlandDistanceBuilder _inlandDistanceBuilder;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private ICoastFinder _coastFinder;
+	private IFloatBufferOperators _operators;
+	private IElevationScaler _scaler;
+	private IBufferOperator _ops;
 	private MountainousElevationBuilder _builder;
 
 	private IServiceProvider _provider;
@@ -34,11 +38,14 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
 		services.AddBuffers();
+		services.AddFloatBuffers();
 
 		services.AddSingleton<IBuilderMonitor>( this );
 
 		_provider = services.BuildServiceProvider();
-
+		_operators = _provider.GetRequiredService<IFloatBufferOperators>();
+		_ops = _provider.GetRequiredService<IBufferOperator>();
+		_scaler = _provider.GetRequiredService<IElevationScaler>();
 	}
 
 	[OneTimeTearDown]
@@ -106,6 +113,9 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 			}
 		}
 		*/
+
+		_ops.Perform( buffer, _scaler.Scale, buffer );
+		_operators.Normalize( buffer, 0.0f, 1.0f );
 
 		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
