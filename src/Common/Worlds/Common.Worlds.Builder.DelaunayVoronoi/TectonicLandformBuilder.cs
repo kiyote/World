@@ -76,13 +76,20 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 				foreach( Cell cell in cells ) {
 					IReadOnlyList<Cell> landformCells = searchableLandform.Search( cell.BoundingBox );
 					foreach( Cell newCell in landformCells ) {
-						if( !newCell.IsOpen ) {
+						/*
+						if( !newCell.IsOpen ) {							
 							foreach( Point p in newCell.Polygon.Points ) {
 								if( cell.Polygon.Contains( p ) ) {
 									newCells.Add( newCell );
 									break;
 								}
 							}
+						}
+						*/
+						if (!newCell.IsOpen
+							&& newCell.Polygon.HasOverlap( cell.Polygon )
+						) {
+							newCells.Add( newCell );
 						}
 					}
 				}

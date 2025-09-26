@@ -1,8 +1,17 @@
 ﻿using System.Numerics;
+using Kiyote.Geometry.Noises;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
 
 internal class MountainousElevationBuilder : IElevationBuilder {
+
+	private readonly INoisyEdgeFactory _noisyEdgeFactory;
+
+	public MountainousElevationBuilder(
+		INoisyEdgeFactory noisyEdgeFactory
+	) {
+		_noisyEdgeFactory = noisyEdgeFactory;
+	}
 
 	IReadOnlyDictionary<Cell, float> IElevationBuilder.Create(
 		ISize size,
@@ -16,6 +25,7 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 		float minimumIntensity = float.MaxValue;
 		float maximumIntensity = float.MinValue;
 		Dictionary<Edge, float> collidingEdges = [];
+		Dictionary<Edge, Edge> controls = [];
 		// Find the cells where plates are colliding and those will be our
 		// mountain ranges
 		foreach( KeyValuePair<Cell, Vector2> plate in tectonicPlates.Velocity ) {
@@ -39,6 +49,7 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 									intensity = Math.Max( intensity, value );
 								}
 								collidingEdges[source] = intensity;
+								controls[source] = new Edge( plate.Key.Center, neighbour.Center );
 							}
 						}
 					}
@@ -56,24 +67,34 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 		Queue<Cell> currentQueue = [];
 		HashSet<Cell> visited = [];
 		foreach( KeyValuePair<Edge, float> item in collidingEdges ) {
-			IReadOnlyList<Cell> cells = map.Search( item.Key.GetBoundingBox() );
+			Edge edge = item.Key;
+			float intensity = item.Value;
+			float magnitude = edge.Magnitude();
 
-			foreach( Cell cell in cells ) {
-				if( cell.Polygon.HasIntersection( item.Key )
-					&& inlandDistance.TryGetValue( cell, out float distance )
-				) {
-					float elevation = distance * item.Value;
-					if( elevation < minimumElevation ) {
-						minimumElevation = elevation;
-					}
-					if( elevation > maximumElevation ) {
-						maximumElevation = elevation;
-					}
-					result[cell] = elevation;
+			if (magnitude > 32) {
+				NoisyEdge noisyEdge = _noisyEdgeFactory.Create( edge, controls[edge], 0.5f, 4 );
 
-					visited.Add( cell );
-					foreach( Cell neighbour in map.Neighbours[cell] ) {
-						currentQueue.Enqueue( neighbour );
+				IReadOnlyList<Cell> cells = map.Search( edge.GetBoundingBox() );
+
+				foreach( Cell cell in cells ) {
+					foreach( Edge noiseEdge in noisyEdge.Noise ) {
+						if( cell.Polygon.HasIntersection( noiseEdge )
+							&& inlandDistance.TryGetValue( cell, out float distance )
+						) {
+							float elevation = distance * intensity;
+							if( elevation < minimumElevation ) {
+								minimumElevation = elevation;
+							}
+							if( elevation > maximumElevation ) {
+								maximumElevation = elevation;
+							}
+							result[cell] = elevation;
+
+							visited.Add( cell );
+							foreach( Cell neighbour in map.Neighbours[cell] ) {
+								currentQueue.Enqueue( neighbour );
+							}
+						}
 					}
 				}
 			}
