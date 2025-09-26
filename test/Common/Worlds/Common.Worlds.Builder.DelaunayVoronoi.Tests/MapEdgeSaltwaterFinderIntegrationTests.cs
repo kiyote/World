@@ -2,12 +2,13 @@
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Point = Kiyote.Geometry.Point;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
+internal sealed class MapEdgeSaltwaterFinderIntegrationTests : IBuilderMonitor {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
@@ -31,6 +32,8 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 		services.AddRandomization();
 		services.AddDelaunayVoronoi();
 		services.AddRasterizer();
+
+		services.TryAddSingleton<IBuilderMonitor>( this );
 
 		_provider = services.BuildServiceProvider();
 
@@ -61,7 +64,7 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1000, 1000 );
+		ISize size = new Point( 1920, 1080 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterFinder ).Find( size, landform.Map, landform.Cells );
@@ -89,5 +92,13 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "saltwater.png" ) );
 		await writer.WriteAsync( buffer );
+	}
+
+	Task IBuilderMonitor.LandformStageAsync( ISize size, int stage, IReadOnlySet<Cell> cells, CancellationToken cancellationToken ) {
+		return Task.CompletedTask;
+	}
+
+	Task IBuilderMonitor.LandformStageMessageAsync( string message, CancellationToken cancellationToken ) {
+		return Task.CompletedTask;
 	}
 }

@@ -3,6 +3,7 @@ using Kiyote.Buffers;
 using Kiyote.Buffers.Float;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
+using Kiyote.Geometry.Noises;
 using Kiyote.Geometry.Rasterizers;
 using Point = Kiyote.Geometry.Point;
 
@@ -39,6 +40,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 		services.AddRasterizer();
 		services.AddBuffers();
 		services.AddFloatBuffers();
+		services.AddNoise();
 
 		services.AddSingleton<IBuilderMonitor>( this );
 
@@ -66,8 +68,9 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 		_inlandDistanceBuilder = _scope.ServiceProvider.GetRequiredService<IInlandDistanceBuilder>();
 		_coastFinder = _scope.ServiceProvider.GetRequiredService<ICoastFinder>();
+		INoisyEdgeFactory noisyEdgeFactory = _scope.ServiceProvider.GetRequiredService<INoisyEdgeFactory>();
 
-		_builder = new MountainousElevationBuilder();
+		_builder = new MountainousElevationBuilder( noisyEdgeFactory );
 	}
 
 	[TearDown]
@@ -78,7 +81,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1920, 1080 );
+		ISize size = new Point( 1920, 1080 ); // 7680, 4320
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = _saltwaterFinder.Find( size, landform.Map, landform.Cells );

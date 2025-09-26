@@ -4,24 +4,25 @@ internal sealed class MapEdgeSaltwaterFinder : ISaltwaterFinder {
 
 	IReadOnlySet<Cell> ISaltwaterFinder.Find(
 		ISize size,
-		IVoronoi map,
+		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform
 	) {
-		// Find a cell along the top of the map that isn't land
 		Cell start = map.Cells[0];
 		bool foundStart = false;
-		for( int i = 0; i < size.Width; i += 10 ) {
-			foreach( Cell cell in map.Cells ) {
-				if( !landform.Contains( cell )
-					&& cell.Polygon.Contains( i, 0 )
-				) {
-					foundStart = true;
-					start = cell;
-					break;
-				}
+
+		// Find a cell along the top of the map that isn't land
+		Rect topEdge = new Rect( 0, 0, size.Width, 1 );
+		IReadOnlyList<Cell> edgeCells = map.Search( topEdge );
+		foreach( Cell cell in edgeCells ) {
+			if( !landform.Contains( cell ) ) {
+				foundStart = true;
+				start = cell;
+				break;
 			}
 		}
+
 		if( !foundStart ) {
+			// TODO: Search the other edges before barfing
 			throw new InvalidOperationException( "Unable to find non-land at top edge of map." );
 		}
 

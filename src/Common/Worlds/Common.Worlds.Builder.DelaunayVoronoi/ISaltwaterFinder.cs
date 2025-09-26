@@ -3,7 +3,7 @@
 public interface ISaltwaterFinder {
 	IReadOnlySet<Cell> Find(
 		ISize size,
-		IVoronoi map,
+		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform
 	);
 }
