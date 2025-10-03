@@ -20,21 +20,18 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 	private readonly IRandom _random;
 	private readonly IVoronoiBuilder _voronoiBuilder;
 	private readonly ISearchableVoronoiFactory _searchableVoronoiFactory;
-	private readonly IBuilderMonitor? _monitor;
 
 	public TectonicLandformBuilder(
 		IRandom random,
 		IVoronoiBuilder voronoiBuilder,
-		ISearchableVoronoiFactory searchableVoronoiFactory,
-		IBuilderMonitor? monitor
+		ISearchableVoronoiFactory searchableVoronoiFactory
 	) {
 		_random = random;
 		_voronoiBuilder = voronoiBuilder;
 		_searchableVoronoiFactory = searchableVoronoiFactory;
-		_monitor = monitor;
 	}
 
-	async Task<Landform> ILandformBuilder.CreateAsync(
+	Task<Landform> ILandformBuilder.CreateAsync(
 		ISize size,
 		TectonicPlates tectonicPlates,
 		CancellationToken cancellationToken
@@ -58,12 +55,6 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 						}
 					}
 				}
-			}
-
-			if( _monitor is not null ) {
-				await _monitor.LandformStageAsync( size, monitorStage, cells, cancellationToken ).ConfigureAwait( false );
-				terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
-				await _monitor.LandformStageMessageAsync( $"Stage {monitorStage} density: {terrainDensity:P2}", cancellationToken ).ConfigureAwait( false );
 			}
 
 			while( cellSize >= ( MinimumCellSize * 3 ) ) {
@@ -95,12 +86,6 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 				}
 
 				cells = newCells;
-
-				if( _monitor is not null ) {
-					await _monitor.LandformStageAsync( size, monitorStage, cells, cancellationToken ).ConfigureAwait( false );
-					terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
-					await _monitor.LandformStageMessageAsync( $"Stage {monitorStage} density: {terrainDensity:P2}", cancellationToken ).ConfigureAwait( false );
-				}
 			}
 
 			terrainDensity = (float)cells.Count / (float)landform.Cells.Count;
@@ -109,9 +94,9 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 			|| terrainDensity > MaximumDensity
 		);
 
-		return new Landform(
+		return Task.FromResult( new Landform(
 			cells.ToHashSet(),
 			_searchableVoronoiFactory.Create( landform, size )
-		);
+		) );
 	}
 }

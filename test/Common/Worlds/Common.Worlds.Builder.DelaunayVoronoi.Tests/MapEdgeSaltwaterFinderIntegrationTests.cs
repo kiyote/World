@@ -8,7 +8,7 @@ using Point = Kiyote.Geometry.Point;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class MapEdgeSaltwaterFinderIntegrationTests : IBuilderMonitor {
+internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
@@ -32,8 +32,6 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests : IBuilderMonitor {
 		services.AddRandomization();
 		services.AddDelaunayVoronoi();
 		services.AddRasterizer();
-
-		services.TryAddSingleton<IBuilderMonitor>( this );
 
 		_provider = services.BuildServiceProvider();
 
@@ -92,13 +90,5 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests : IBuilderMonitor {
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "saltwater.png" ) );
 		await writer.WriteAsync( buffer );
-	}
-
-	Task IBuilderMonitor.LandformStageAsync( ISize size, int stage, IReadOnlySet<Cell> cells, CancellationToken cancellationToken ) {
-		return Task.CompletedTask;
-	}
-
-	Task IBuilderMonitor.LandformStageMessageAsync( string message, CancellationToken cancellationToken ) {
-		return Task.CompletedTask;
 	}
 }

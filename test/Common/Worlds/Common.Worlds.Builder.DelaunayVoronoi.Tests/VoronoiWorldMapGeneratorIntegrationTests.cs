@@ -67,7 +67,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		long seed = DateTime.UtcNow.Ticks;
-		ISize size = new Point( 1600, 900 );
+		ISize size = new Point( 1920, 1080 );
 		WorldMaps worldMaps = await _worldMapGenerator.CreateAsync(
 			seed,
 			size,
