@@ -81,7 +81,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1920, 1080 ); // 7680, 4320
+		ISize size = new Point( 1920, 1080 ); // 7680, 4320 ); // 
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = _saltwaterFinder.Find( size, landform.Map, landform.Cells );

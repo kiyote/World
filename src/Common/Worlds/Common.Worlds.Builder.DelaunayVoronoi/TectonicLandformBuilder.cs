@@ -10,7 +10,7 @@ internal class TectonicLandformBuilder : ILandformBuilder {
 	/// The size of these rough cells will be proportional to the size of the
 	/// map divided by the number of cells.
 	/// </remarks>
-	public const int RoughCellCount = 6;
+	public const int RoughCellCount = 8;
 
 	public const int MinimumCellSize = 5;
 

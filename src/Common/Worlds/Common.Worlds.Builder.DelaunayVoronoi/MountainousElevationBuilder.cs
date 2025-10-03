@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel;
+using System.Numerics;
 using Kiyote.Geometry.Noises;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
@@ -26,6 +27,8 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 		float maximumIntensity = float.MinValue;
 		Dictionary<Edge, float> collidingEdges = [];
 		Dictionary<Edge, Edge> controls = [];
+		HashSet<Edge> mountainEdges = [];  // Dedupes processed edges
+
 		// Find the cells where plates are colliding and those will be our
 		// mountain ranges
 		foreach( KeyValuePair<Cell, Vector2> plate in tectonicPlates.Velocity ) {
@@ -34,11 +37,16 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 				float dot = Vector2.Dot( plate.Value, tectonicPlates.Velocity[neighbour] );
 				if( dot < 0.0f ) {
 					// These are colliding plates, so find their shared edges
-					float intensity = Math.Abs( dot );//Vector2.Subtract( plate.Value, tectonicPlates.Velocity[neighbour] ).Length();
-					// TODO: Figure out the "Velocity" of the impact and adjust the mountain height at that point
+					float intensity = Math.Abs( dot );
 					foreach( Edge source in plate.Key.Polygon.Edges ) {
 						foreach( Edge target in neighbour.Polygon.Edges ) {
-							if( source.IsEquivalentTo( target ) ) {
+							if( 
+								!mountainEdges.Contains( source )
+								&& !mountainEdges.Contains( target )
+								&& source.IsEquivalentTo( target )
+							) {
+								mountainEdges.Add( source );
+								mountainEdges.Add( target );
 								if( intensity < minimumIntensity ) {
 									minimumIntensity = intensity;
 								}
@@ -71,7 +79,7 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 			float intensity = item.Value;
 			float magnitude = edge.Magnitude();
 
-			if (magnitude > 32) {
+			if( magnitude > 32 ) {
 				NoisyEdge noisyEdge = _noisyEdgeFactory.Create( edge, controls[edge], 0.5f, 4 );
 
 				IReadOnlyList<Cell> cells = map.Search( edge.GetBoundingBox() );
@@ -97,6 +105,29 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 						}
 					}
 				}
+			} else {
+				IReadOnlyList<Cell> cells = map.Search( edge.GetBoundingBox() );
+
+				foreach( Cell cell in cells ) {
+					if( cell.Polygon.HasIntersection( edge )
+						&& inlandDistance.TryGetValue( cell, out float distance )
+					) {
+						float elevation = distance * intensity;
+						if( elevation < minimumElevation ) {
+							minimumElevation = elevation;
+						}
+						if( elevation > maximumElevation ) {
+							maximumElevation = elevation;
+						}
+						result[cell] = elevation;
+
+						visited.Add( cell );
+						foreach( Cell neighbour in map.Neighbours[cell] ) {
+							currentQueue.Enqueue( neighbour );
+						}
+					}
+				}
+
 			}
 		}
 
