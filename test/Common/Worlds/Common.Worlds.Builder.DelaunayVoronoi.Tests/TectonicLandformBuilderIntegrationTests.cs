@@ -44,8 +44,7 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 		_landformBuilder = new TectonicLandformBuilder(
 			_provider.GetRequiredService<IRandom>(),
 			_provider.GetRequiredService<IVoronoiBuilder>(),
-			_provider.GetRequiredService<ISearchableVoronoiFactory>(),
-			null
+			_provider.GetRequiredService<ISearchableVoronoiFactory>()
 		);
 	}
 

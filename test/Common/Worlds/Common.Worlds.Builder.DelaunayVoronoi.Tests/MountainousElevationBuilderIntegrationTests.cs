@@ -10,7 +10,7 @@ using Point = Kiyote.Geometry.Point;
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
 [TestFixture]
-internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMonitor {
+internal sealed class MountainousElevationBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
 	private IBufferFactory _bufferFactory;
@@ -41,8 +41,6 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 		services.AddBuffers();
 		services.AddFloatBuffers();
 		services.AddNoise();
-
-		services.AddSingleton<IBuilderMonitor>( this );
 
 		_provider = services.BuildServiceProvider();
 		_operators = _provider.GetRequiredService<IFloatBufferOperators>();
@@ -128,35 +126,5 @@ internal sealed class MountainousElevationBuilderIntegrationTests : IBuilderMoni
 
 		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "elevation.png" ) );
 		await writer.WriteAsync( buffer );
-	}
-
-	async Task IBuilderMonitor.LandformStageAsync(
-		ISize size,
-		int stage,
-		IReadOnlySet<Cell> cells,
-		CancellationToken cancellationToken
-	) {
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
-		foreach( Cell cell in cells ) {
-			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
-				buffer[x, y] = 0.5f;
-			} );
-		}
-
-		foreach( Cell cell in cells ) {
-			foreach (Edge edge in cell.Polygon.Edges) {
-				_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
-					buffer[x, y] = 0.25f;
-				} );
-			}
-		}
-
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, $"elevation_stage{stage}.png" ) );
-		await writer.WriteAsync( buffer );
-	}
-
-	async Task IBuilderMonitor.LandformStageMessageAsync( string message, CancellationToken cancellationToken ) {
-		Debug.WriteLine( message );
-		await TestContext.Progress.WriteLineAsync( message ).ConfigureAwait( false );
 	}
 }
