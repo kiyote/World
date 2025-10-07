@@ -8,3 +8,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage( "Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "module" )]
 [assembly: SuppressMessage( "Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "<Pending>", Scope = "module" )]
 [assembly: SuppressMessage( "Performance", "CA1812:An internal (assembly-level) type is never instantiated.", Justification = "This class is instantiated via DI.", Scope = "module" )]
+[assembly: SuppressMessage( "Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "module" )]
