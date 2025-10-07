@@ -1,5 +1,5 @@
 ﻿using Kiyote.Buffers;
-using Kiyote.Buffers.Float;
+using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
 using Kiyote.Geometry.Rasterizers;
 using SixLabors.ImageSharp;
@@ -25,7 +25,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		Directory.CreateDirectory( _folder );
 		var services = new ServiceCollection();
 		services.AddCommonWorlds();
-		services.AddFloatBuffers();
+		services.AddBuffers();
+		services.AddNumericBuffers();
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRandomization();
 		services.AddRasterizer();
@@ -64,7 +65,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	[Ignore( "Used to visualize output for inspection." )]
+	//[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		long seed = DateTime.UtcNow.Ticks;
 		ISize size = new Point( 1920, 1080 );

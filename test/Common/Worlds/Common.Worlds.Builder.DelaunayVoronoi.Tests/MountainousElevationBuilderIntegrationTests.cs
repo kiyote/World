@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Kiyote.Buffers;
-using Kiyote.Buffers.Float;
+using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Noises;
@@ -13,7 +13,7 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 internal sealed class MountainousElevationBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
-	private IBufferFactory _bufferFactory;
+	private INumericBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
 	private ISaltwaterFinder _saltwaterFinder;
 	private IFreshwaterFinder _freshwaterBuilder;
@@ -21,7 +21,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	private IInlandDistanceBuilder _inlandDistanceBuilder;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private ICoastFinder _coastFinder;
-	private IFloatBufferOperators _operators;
+	private INumericBufferOperator _operators;
 	private IElevationScaler _scaler;
 	private IBufferOperator _ops;
 	private MountainousElevationBuilder _builder;
@@ -39,11 +39,11 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
 		services.AddBuffers();
-		services.AddFloatBuffers();
+		services.AddNumericBuffers();
 		services.AddNoise();
 
 		_provider = services.BuildServiceProvider();
-		_operators = _provider.GetRequiredService<IFloatBufferOperators>();
+		_operators = _provider.GetRequiredService<INumericBufferOperator>();
 		_ops = _provider.GetRequiredService<IBufferOperator>();
 		_scaler = _provider.GetRequiredService<IElevationScaler>();
 	}
@@ -57,7 +57,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
+		_bufferFactory = _scope.ServiceProvider.GetRequiredService<INumericBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_saltwaterFinder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
@@ -91,7 +91,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		INumericBuffer<float> buffer = _bufferFactory.Create<float>( size.Width, size.Height, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
@@ -116,7 +116,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		*/
 
 		_ops.Perform( buffer, _scaler.Scale, buffer );
-		_operators.Normalize( buffer, 0.0f, 1.0f );
+		_operators.Normalize( buffer );
 
 		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {
