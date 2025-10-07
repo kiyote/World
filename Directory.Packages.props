@@ -20,7 +20,7 @@
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.4" />
     <PackageVersion Include="Kiyote.Geometry" Version="0.20.0" />
     <PackageVersion Include="Kiyote.Buffers" Version="0.3.0" />
-    <PackageVersion Include="Kiyote.Buffers.Float" Version="0.1.0" />
+    <PackageVersion Include="Kiyote.Buffers.Numerics" Version="0.3.0" />
     <PackageVersion Include="Kiyote.Files" Version="0.1.3" />
     <PackageVersion Include="Kiyote.Files.Resource" Version="0.1.3" />
   </ItemGroup>

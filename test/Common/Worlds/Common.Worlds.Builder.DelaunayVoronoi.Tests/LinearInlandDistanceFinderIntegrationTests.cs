@@ -1,5 +1,5 @@
 ﻿using Kiyote.Buffers;
-using Kiyote.Buffers.Float;
+using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -9,11 +9,11 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 internal sealed class LinearInlandDistanceFinderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
-	private IBufferFactory _bufferFactory;
+	private INumericBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
 	private ISaltwaterFinder _saltwaterBuilder;
 	private ICoastFinder _coastBuilder;
-	private IFloatBufferOperators _bufferOperator;
+	private INumericBufferOperator _bufferOperator;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private LinearInlandDistanceBuilder _builder;
 
@@ -29,7 +29,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 		var services = new ServiceCollection();
 		services.AddDelaunayVoronoiWorldBuilder();
 		services.AddRasterizer();
-		services.AddFloatBuffers();
+		services.AddNumericBuffers();
 
 		_provider = services.BuildServiceProvider();
 
@@ -44,8 +44,8 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
-		_bufferOperator = _scope.ServiceProvider.GetService<IFloatBufferOperators>();
+		_bufferFactory = _scope.ServiceProvider.GetRequiredService<INumericBufferFactory>();
+		_bufferOperator = _scope.ServiceProvider.GetService<INumericBufferOperator>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_saltwaterBuilder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
@@ -72,7 +72,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		INumericBuffer<float> buffer = _bufferFactory.Create<float>( size.Width, size.Height, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
@@ -83,7 +83,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 			} );
 		}
 
-		_bufferOperator.Normalize( buffer, 0.0f, 1.0f );
+		_bufferOperator.Normalize( buffer );
 
 		foreach( Edge edge in landform.Map.Edges ) {
 			_rasterizer.Rasterize( edge.A, edge.B, ( int x, int y ) => {

@@ -19,7 +19,7 @@
 		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 		<PackageReference Include="Kiyote.Geometry" />
-		<PackageReference Include="Kiyote.Buffers.Float" />
+		<PackageReference Include="Kiyote.Buffers.Numerics" />
 	</ItemGroup>
 
 	<ItemGroup>
