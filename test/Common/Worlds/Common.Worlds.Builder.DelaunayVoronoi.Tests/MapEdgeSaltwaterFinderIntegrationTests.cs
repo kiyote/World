@@ -67,7 +67,7 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterFinder ).Find( size, landform.Map, landform.Cells );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
 
 
 		foreach( Cell cell in landform.Cells ) {

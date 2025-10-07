@@ -91,7 +91,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
