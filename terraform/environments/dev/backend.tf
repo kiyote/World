@@ -12,7 +12,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "kiyote.terraformstate"
-    dynamodb_table = "kiyote.terraformstate"
+    use_lockfile = true
     key    = "dev/world"
     region = "ca-central-1"
     assume_role = {
