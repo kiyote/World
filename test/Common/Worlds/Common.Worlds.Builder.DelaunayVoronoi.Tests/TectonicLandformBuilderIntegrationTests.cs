@@ -65,7 +65,7 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {

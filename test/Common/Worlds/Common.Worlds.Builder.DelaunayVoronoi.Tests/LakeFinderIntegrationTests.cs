@@ -68,7 +68,7 @@ internal sealed class LakeFinderIntegrationTests {
 		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, landform.Map, landform.Cells, saltwater );
 		IReadOnlyList<IReadOnlySet<Cell>> lakes = _builder.Finder( size, landform.Map, landform.Cells, saltwater, freshwater );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
