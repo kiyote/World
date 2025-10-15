@@ -1,13 +1,12 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-public interface IElevationBuilder {
+public interface IInlandDistanceFinder {
 
 	Task<IReadOnlyDictionary<Cell, float>> CreateAsync(
 		ISize size,
-		TectonicPlates tectonicPlates,
 		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform,
-		IReadOnlyDictionary<Cell, float> inlandDistance,
+		IReadOnlySet<Cell> coast,
 		CancellationToken cancellationToken
 	);
 }

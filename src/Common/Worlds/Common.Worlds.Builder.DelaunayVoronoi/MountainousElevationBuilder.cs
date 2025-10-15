@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Numerics;
+﻿using System.Numerics;
 using Kiyote.Geometry.Noises;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
@@ -14,12 +13,13 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 		_noisyEdgeFactory = noisyEdgeFactory;
 	}
 
-	IReadOnlyDictionary<Cell, float> IElevationBuilder.Create(
+	Task<IReadOnlyDictionary<Cell, float>> IElevationBuilder.CreateAsync(
 		ISize size,
 		TectonicPlates tectonicPlates,
 		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform,
-		IReadOnlyDictionary<Cell, float> inlandDistance
+		IReadOnlyDictionary<Cell, float> inlandDistance,
+		CancellationToken cancellationToken
 	) {
 		Dictionary<Cell, float> result = [];
 
@@ -32,6 +32,9 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 		// Find the cells where plates are colliding and those will be our
 		// mountain ranges
 		foreach( KeyValuePair<Cell, Vector2> plate in tectonicPlates.Velocity ) {
+
+			cancellationToken.ThrowIfCancellationRequested();
+
 			IReadOnlyList<Cell> neighbours = tectonicPlates.Plates.Neighbours[plate.Key];
 			foreach( Cell neighbour in neighbours ) {
 				float dot = Vector2.Dot( plate.Value, tectonicPlates.Velocity[neighbour] );
@@ -85,6 +88,9 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 				IReadOnlyList<Cell> cells = map.Search( edge.GetBoundingBox() );
 
 				foreach( Cell cell in cells ) {
+
+					cancellationToken.ThrowIfCancellationRequested();
+
 					foreach( Edge noiseEdge in noisyEdge.Noise ) {
 						if( cell.Polygon.HasIntersection( noiseEdge )
 							&& inlandDistance.TryGetValue( cell, out float distance )
@@ -109,6 +115,9 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 				IReadOnlyList<Cell> cells = map.Search( edge.GetBoundingBox() );
 
 				foreach( Cell cell in cells ) {
+
+					cancellationToken.ThrowIfCancellationRequested();
+
 					if( cell.Polygon.HasIntersection( edge )
 						&& inlandDistance.TryGetValue( cell, out float distance )
 					) {
@@ -150,8 +159,11 @@ internal class MountainousElevationBuilder : IElevationBuilder {
 			}
 			currentQueue = newQueue;
 			newQueue = [];
+
+			cancellationToken.ThrowIfCancellationRequested();
+
 		} while( currentQueue.Count > 0 );
 
-		return result;
+		return Task.FromResult<IReadOnlyDictionary<Cell, float>>( result);
 	}
 }

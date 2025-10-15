@@ -15,7 +15,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 	private ICoastFinder _coastBuilder;
 	private INumericBufferOperator _bufferOperator;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
-	private LinearInlandDistanceBuilder _builder;
+	private LinearInlandDistanceFinder _builder;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -52,7 +52,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 		_coastBuilder = _scope.ServiceProvider.GetRequiredService<ICoastFinder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
 
-		_builder = new LinearInlandDistanceBuilder();
+		_builder = new LinearInlandDistanceFinder();
 	}
 
 	[TearDown]
@@ -68,7 +68,7 @@ internal sealed class LinearInlandDistanceFinderIntegrationTests {
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = _saltwaterBuilder.Find( size, landform.Map, landform.Cells );
 		IReadOnlySet<Cell> coast = _coastBuilder.Find( size, landform.Map, landform.Cells, saltwater );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IInlandDistanceBuilder ).Create( size, landform.Map, landform.Cells, coast );
+		IReadOnlyDictionary<Cell, float> elevation = await ( _builder as IInlandDistanceFinder ).CreateAsync( size, landform.Map, landform.Cells, coast, TestContext.CurrentContext.CancellationToken );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 

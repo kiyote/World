@@ -1,11 +1,12 @@
 ﻿namespace Common.Worlds.Builder.DelaunayVoronoi;
 
-internal sealed class LinearInlandDistanceBuilder : IInlandDistanceBuilder {
-	IReadOnlyDictionary<Cell, float> IInlandDistanceBuilder.Create(
+internal sealed class LinearInlandDistanceFinder : IInlandDistanceFinder {
+	Task<IReadOnlyDictionary<Cell, float>> IInlandDistanceFinder.CreateAsync(
 		ISize size,
 		ISearchableVoronoi map,
 		IReadOnlySet<Cell> landform,
-		IReadOnlySet<Cell> coast
+		IReadOnlySet<Cell> coast,
+		CancellationToken cancellationToken
 	) {
 		Dictionary<Cell, float> result = [];
 		HashSet<Cell> visited = [];
@@ -14,6 +15,9 @@ internal sealed class LinearInlandDistanceBuilder : IInlandDistanceBuilder {
 
 		// Find all of the land adjacent to the coastline and set it to 1
 		foreach( Cell coastCell in coast ) {
+
+			cancellationToken.ThrowIfCancellationRequested();
+
 			IReadOnlyList<Cell> neighbours = map.Neighbours[coastCell];
 			foreach( Cell neighbourCell in neighbours ) {
 				if( !result.ContainsKey( neighbourCell )
@@ -35,6 +39,9 @@ internal sealed class LinearInlandDistanceBuilder : IInlandDistanceBuilder {
 		do {
 			currentElevation += 1.0F;
 			while( currentQueue.Count > 0 ) {
+
+				cancellationToken.ThrowIfCancellationRequested();
+
 				Cell cell = currentQueue.Dequeue();
 				foreach( Cell neighbour in map.Neighbours[cell] ) {
 					if( landform.Contains( neighbour )
@@ -54,6 +61,6 @@ internal sealed class LinearInlandDistanceBuilder : IInlandDistanceBuilder {
 			newQueue = [];
 		} while( currentQueue.Count > 0 );
 
-		return result;
+		return Task.FromResult<IReadOnlyDictionary<Cell, float>>( result );
 	}
 }

@@ -5,9 +5,10 @@ public enum TileTerrain: int {
 
 	Mountain = 1,
 	Hill = 2,
-	Plain = 3,
-	Lake = 4,
-	Coast = 5,
-	Ocean = 6,
+	Highland = 3,
+	Plain = 4,
+	Lake = 5,
+	Coast = 6,
+	Ocean = 7,
 }
 

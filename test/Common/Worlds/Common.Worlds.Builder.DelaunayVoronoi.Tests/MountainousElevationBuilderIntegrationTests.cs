@@ -18,7 +18,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	private ISaltwaterFinder _saltwaterFinder;
 	private IFreshwaterFinder _freshwaterBuilder;
 	private ILakeFinder _lakeFinder;
-	private IInlandDistanceBuilder _inlandDistanceBuilder;
+	private IInlandDistanceFinder _inlandDistanceBuilder;
 	private ITectonicPlateBuilder _tectonicPlateBuilder;
 	private ICoastFinder _coastFinder;
 	private INumericBufferOperator _operators;
@@ -64,7 +64,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 		_freshwaterBuilder = _scope.ServiceProvider.GetRequiredService<IFreshwaterFinder>();
 		_lakeFinder = _scope.ServiceProvider.GetRequiredService<ILakeFinder>();
 		_tectonicPlateBuilder = _scope.ServiceProvider.GetRequiredService<ITectonicPlateBuilder>();
-		_inlandDistanceBuilder = _scope.ServiceProvider.GetRequiredService<IInlandDistanceBuilder>();
+		_inlandDistanceBuilder = _scope.ServiceProvider.GetRequiredService<IInlandDistanceFinder>();
 		_coastFinder = _scope.ServiceProvider.GetRequiredService<ICoastFinder>();
 		INoisyEdgeFactory noisyEdgeFactory = _scope.ServiceProvider.GetRequiredService<INoisyEdgeFactory>();
 
@@ -79,15 +79,15 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	[Test]
 	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
-		ISize size = new Point( 1920, 1080 ); // 7680, 4320 ); // 
+		ISize size = new Point( 1920, 1080 ); // 7680, 4320 );
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = _saltwaterFinder.Find( size, landform.Map, landform.Cells );
 		IReadOnlySet<Cell> freshwater = _freshwaterBuilder.Create( size, landform.Map, landform.Cells, saltwater );
 		IReadOnlyList<IReadOnlySet<Cell>> lakes = _lakeFinder.Finder( size, landform.Map, landform.Cells, saltwater, freshwater );
 		IReadOnlySet<Cell> coast = _coastFinder.Find( size, landform.Map, landform.Cells, saltwater );
-		IReadOnlyDictionary<Cell, float> inlandDistance = _inlandDistanceBuilder.Create( size, landform.Map, landform.Cells, coast );
-		IReadOnlyDictionary<Cell, float> elevation = ( _builder as IElevationBuilder ).Create( size, tectonicPlates, landform.Map, landform.Cells, inlandDistance );
+		IReadOnlyDictionary<Cell, float> inlandDistance = await _inlandDistanceBuilder.CreateAsync( size, landform.Map, landform.Cells, coast, TestContext.CurrentContext.CancellationToken );
+		IReadOnlyDictionary<Cell, float> elevation = await ( _builder as IElevationBuilder ).CreateAsync( size, tectonicPlates, landform.Map, landform.Cells, inlandDistance, TestContext.CurrentContext.CancellationToken );
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
