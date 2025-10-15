@@ -18,8 +18,10 @@ public static class ExtensionMethods {
 		services.TryAddSingleton<IFreshwaterFinder, NotSaltwaterFreshwaterFinder>();
 		services.TryAddSingleton<ILakeFinder, LandlockedLakeFinder>();
 		services.TryAddSingleton<ICoastFinder, LandAdjacentCoastFinder>();
+
 		services.TryAddSingleton<ITectonicPlateBuilder, TectonicPlateBuilder>();
-		services.TryAddSingleton<IInlandDistanceBuilder, LinearInlandDistanceBuilder>();
+		services.TryAddSingleton<IInlandDistanceFinder, LinearInlandDistanceFinder>();
+		services.TryAddSingleton<IElevationBuilder, MountainousElevationBuilder>();
 		services.TryAddSingleton<IElevationScaler, ExponentialElevationScaler>();
 
 		return services;

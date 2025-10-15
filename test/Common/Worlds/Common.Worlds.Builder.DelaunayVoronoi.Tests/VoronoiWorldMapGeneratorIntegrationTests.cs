@@ -1,6 +1,7 @@
 ﻿using Kiyote.Buffers;
 using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
+using Kiyote.Geometry.Noises;
 using Kiyote.Geometry.Rasterizers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -31,6 +32,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		services.AddRandomization();
 		services.AddRasterizer();
 		services.AddDelaunayVoronoi();
+		services.AddNoise();
 
 		_provider = services.BuildServiceProvider();
 
@@ -55,7 +57,10 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			_provider.GetRequiredService<IFreshwaterFinder>(),
 			_provider.GetRequiredService<ILakeFinder>(),
 			_provider.GetRequiredService<ICoastFinder>(),
-			_provider.GetRequiredService<ITectonicPlateBuilder>()
+			_provider.GetRequiredService<ITectonicPlateBuilder>(),
+			_provider.GetRequiredService<IInlandDistanceFinder>(),
+			_provider.GetRequiredService<IElevationBuilder>(),
+			_provider.GetRequiredService<IElevationScaler>()
 		);
 	}
 
@@ -81,6 +86,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		Dictionary<TileTerrain, Rgba32> terrainColours = new Dictionary<TileTerrain, Rgba32> {
 			{ TileTerrain.Mountain, new Rgba32( 0xF7, 0xF7, 0xF7 ) },
 			{ TileTerrain.Hill, new Rgba32( 0xDC, 0xDD, 0xBE ) },
+			{ TileTerrain.Highland, new Rgba32( 0xCB, 0xD3, 0xA9 ) },
 			{ TileTerrain.Lake, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
 			{ TileTerrain.Plain, new Rgba32( 0xB7, 0xC1, 0x8C ) },
 			{ TileTerrain.Coast, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
