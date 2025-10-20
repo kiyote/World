@@ -4,5 +4,6 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Kiyote.Geometry" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 	</ItemGroup>
 </Project>
