@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<PackageReference Include="InjectableAWS" />
+		<PackageReference Include="Kiyote.AWS" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\src\Common\Core\Common.Core.Abstractions\Common.Core.Abstractions.csproj" />

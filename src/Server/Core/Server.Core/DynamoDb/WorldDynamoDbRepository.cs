@@ -1,5 +1,5 @@
-﻿using InjectableAWS;
-using InjectableAWS.Repository;
+﻿using Kiyote.AWS;
+using Kiyote.AWS.DynamoDb;
 
 namespace Server.Core.DynamoDb;
 
