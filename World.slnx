@@ -1,0 +1,152 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="forceclean.bat" />
+    <File Path="forceclean.ps1" />
+    <File Path="LICENSE" />
+    <File Path="nuget.config" />
+    <File Path="removebranches.sh" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/CODEOWNERS" />
+    <File Path=".github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/ci.yml" />
+    <File Path=".github/workflows/codeql.yml" />
+    <File Path=".github/workflows/deploy.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/asset/">
+    <File Path="asset/hex_blank.png" />
+    <File Path="asset/tile_coast.png" />
+    <File Path="asset/tile_forest.png" />
+    <File Path="asset/tile_grass.png" />
+    <File Path="asset/tile_hill.png" />
+    <File Path="asset/tile_mountain.png" />
+    <File Path="asset/tile_ocean.png" />
+  </Folder>
+  <Folder Name="/Solution Items/terraform/" />
+  <Folder Name="/Solution Items/terraform/common/">
+    <File Path="terraform/common/files-manager.tf" />
+    <File Path="terraform/common/shared.tf" />
+    <File Path="terraform/common/_inputs.tf" />
+  </Folder>
+  <Folder Name="/Solution Items/terraform/environments/" />
+  <Folder Name="/Solution Items/terraform/environments/dev/">
+    <File Path="terraform/environments/dev/.terraform.lock.hcl" />
+    <File Path="terraform/environments/dev/backend.tf" />
+    <File Path="terraform/environments/dev/infrastructure.tf" />
+    <File Path="terraform/environments/dev/versions.tf" />
+  </Folder>
+  <Folder Name="/Solution Items/terraform/environments/prod/">
+    <File Path="terraform/environments/prod/.terraform.lock.hcl" />
+    <File Path="terraform/environments/prod/backend.tf" />
+    <File Path="terraform/environments/prod/infrastructure.tf" />
+    <File Path="terraform/environments/prod/versions.tf" />
+  </Folder>
+  <Folder Name="/Solution Items/terraform/modules/" />
+  <Folder Name="/Solution Items/terraform/modules/files-manager/">
+    <File Path="terraform/modules/files-manager/bucket_files.tf" />
+    <File Path="terraform/modules/files-manager/_inputs.tf" />
+    <File Path="terraform/modules/files-manager/_outputs.tf" />
+  </Folder>
+  <Folder Name="/Solution Items/terraform/modules/shared/">
+    <File Path="terraform/modules/shared/shared_dynamodb_table.tf" />
+    <File Path="terraform/modules/shared/_inputs.tf" />
+    <File Path="terraform/modules/shared/_outputs.tf" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Common/" />
+  <Folder Name="/src/Common/Actors/">
+    <Project Path="src/Common/Actors/Common.Actors.Abstractions/Common.Actors.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Actors/Manager/">
+    <Project Path="src/Common/Actors/Common.Actors.Manager/Common.Actors.Manager.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Core/">
+    <Project Path="src/Common/Core/Common.Core.Abstractions/Common.Core.Abstractions.csproj" />
+    <Project Path="src/Common/Core/Common.Core/Common.Core.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Players/">
+    <Project Path="src/Common/Players/Common.Players.Abstractions/Common.Players.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Players/Manager/">
+    <Project Path="src/Common/Players/Common.Players.Manager/Common.Players.Manager.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Worlds/">
+    <Project Path="src/Common/Worlds/Common.Worlds.Abstractions/Common.Worlds.Abstractions.csproj" />
+    <Project Path="src/Common/Worlds/Common.Worlds/Common.Worlds.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Worlds/Builder/" />
+  <Folder Name="/src/Common/Worlds/Builder/DelaunayVoronoi/">
+    <Project Path="src/Common/Worlds/Common.Worlds.Builder.DelaunayVoronoi/Common.Worlds.Builder.DelaunayVoronoi.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/Worlds/Manager/">
+    <Project Path="src/Common/Worlds/Common.Worlds.Manager/Common.Worlds.Manager.csproj" />
+  </Folder>
+  <Folder Name="/src/Server/" />
+  <Folder Name="/src/Server/Actors/" />
+  <Folder Name="/src/Server/Actors/Manager/" />
+  <Folder Name="/src/Server/Actors/Manager/Repositories/" />
+  <Folder Name="/src/Server/Core/">
+    <Project Path="src/Server/Core/Server.Core/Server.Core.csproj" />
+  </Folder>
+  <Folder Name="/src/Server/Players/" />
+  <Folder Name="/src/Server/Players/Manager/" />
+  <Folder Name="/src/Server/Players/Manager/Repositories/" />
+  <Folder Name="/src/Server/Worlds/" />
+  <Folder Name="/src/Server/Worlds/Builder/" />
+  <Folder Name="/src/Server/Worlds/Builder/Lambda/">
+    <Project Path="src/Server/Worlds/Server.Worlds.Builder.Lambda/Server.Worlds.Builder.Lambda.csproj" />
+  </Folder>
+  <Folder Name="/src/Server/Worlds/Manager/" />
+  <Folder Name="/src/Server/Worlds/Manager/Repositories/" />
+  <Folder Name="/test/">
+    <File Path="test/.runsettings" />
+    <Project Path="test/TestHelpers/TestHelpers.csproj" />
+  </Folder>
+  <Folder Name="/test/Common/" />
+  <Folder Name="/test/Common/Actors/" />
+  <Folder Name="/test/Common/Actors/Manager/">
+    <Project Path="test/Common/Actors/Common.Actors.Manager.Tests/Common.Actors.Manager.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/Common/Players/" />
+  <Folder Name="/test/Common/Players/Manager/">
+    <Project Path="test/Common/Players/Common.Players.Manager.Tests/Common.Players.Manager.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/Common/Worlds/">
+    <Project Path="test/Common/Worlds/Common.Worlds.Tests/Common.Worlds.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/Common/Worlds/Builder/" />
+  <Folder Name="/test/Common/Worlds/Builder/DelaunayVoronoi/">
+    <Project Path="test/Common/Worlds/Common.Worlds.Builder.DelaunayVoronoi.Analyses/Common.Worlds.Builder.DelaunayVoronoi.Analyses.csproj" />
+    <Project Path="test/Common/Worlds/Common.Worlds.Builder.DelaunayVoronoi.Benchmarks/Common.Worlds.Builder.DelaunayVoronoi.Benchmarks.csproj" />
+    <Project Path="test/Common/Worlds/Common.Worlds.Builder.DelaunayVoronoi.Tests/Common.Worlds.Builder.DelaunayVoronoi.Tests.csproj">
+      <Build Solution="*|x64" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/test/Common/Worlds/Manager/">
+    <Project Path="test/Common/Worlds/Common.Worlds.Manager.Tests/Common.Worlds.Manager.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/Server/" />
+  <Folder Name="/test/Server/Actors/" />
+  <Folder Name="/test/Server/Actors/Manager/" />
+  <Folder Name="/test/Server/Actors/Manager/Repositories/" />
+  <Folder Name="/test/Server/Players/" />
+  <Folder Name="/test/Server/Players/Manager/" />
+  <Folder Name="/test/Server/Players/Manager/Repositories/" />
+  <Folder Name="/test/Server/Worlds/" />
+  <Folder Name="/test/Server/Worlds/Builder/" />
+  <Folder Name="/test/Server/Worlds/Builder/Lambda/">
+    <Project Path="test/Server/Worlds/Server.Worlds.Builder.Lambda.Tests/Server.Worlds.Builder.Lambda.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/Server/Worlds/Manager/" />
+  <Folder Name="/test/Server/Worlds/Manager/Repositories/" />
+</Solution>

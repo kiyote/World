@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="SixLabors.ImageSharp" />
-		<PackageReference Include="SixLabors.ImageSharp.Drawing" />
 		<PackageReference Include="Kiyote.Buffers" />
+		<PackageReference Include="Kiyote.Imaging" />
 	</ItemGroup>
 
 </Project>

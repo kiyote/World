@@ -1,4 +1,4 @@
-﻿using Kiyote.Buffers;
+using Kiyote.Buffers;
 using Kiyote.Geometry.Rasterizers;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi;
@@ -101,7 +101,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		// whatever)  This underlies whatever feature may be present.  For example
 		// there could be forest present on a Plain.  The terrain is still Plains,
 		// but there is a feature of a Forest present in that terrain.
-		IBuffer<TileTerrain> terrain = _bufferFactory.Create( size, TileTerrain.Ocean );
+		IBuffer<TileTerrain> terrain = _bufferFactory.Create( size.Width, size.Height, TileTerrain.Ocean );
 
 		foreach( KeyValuePair<Cell, float> kvp in scaledElevation ) {
 			Cell cell = kvp.Key;
@@ -127,7 +127,7 @@ internal sealed class VoronoiWorldMapGenerator : IWorldMapGenerator {
 		RenderTerrain( terrain, freshwater, TileTerrain.Lake );
 
 		// TODO - Something with this.
-		IBuffer<TileFeature> feature = _bufferFactory.Create( size, TileFeature.None );
+		IBuffer<TileFeature> feature = _bufferFactory.Create( size.Width, size.Height, TileFeature.None );
 
 		return new WorldMaps(
 			terrain,
