@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Kiyote.Buffers;
 using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
@@ -13,7 +13,8 @@ namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 internal sealed class MountainousElevationBuilderIntegrationTests {
 
 	private ILandformBuilder _landformBuilder;
-	private INumericBufferFactory _bufferFactory;
+	private INumericBufferFactory _numericBufferFactory;
+	private IBufferFactory _bufferFactory;
 	private IRasterizer _rasterizer;
 	private ISaltwaterFinder _saltwaterFinder;
 	private IFreshwaterFinder _freshwaterBuilder;
@@ -57,7 +58,8 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 	public void SetUp() {
 		_scope = _provider.CreateScope();
 
-		_bufferFactory = _scope.ServiceProvider.GetRequiredService<INumericBufferFactory>();
+		_numericBufferFactory = _scope.ServiceProvider.GetRequiredService<INumericBufferFactory>();
+		_bufferFactory = _scope.ServiceProvider.GetRequiredService<IBufferFactory>();
 		_rasterizer = _scope.ServiceProvider.GetRequiredService<IRasterizer>();
 		_landformBuilder = _scope.ServiceProvider.GetRequiredService<ILandformBuilder>();
 		_saltwaterFinder = _scope.ServiceProvider.GetRequiredService<ISaltwaterFinder>();
@@ -91,7 +93,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 
 		float maximum = elevation.Max( kvp => kvp.Value );
 
-		INumericBuffer<float> buffer = _bufferFactory.Create<float>( size.Width, size.Height, 0.0f );
+		INumericBuffer<float> buffer = _numericBufferFactory.Create<float>( size.Width, size.Height, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			if( !elevation.TryGetValue( cell, out float intensity ) ) {
@@ -124,7 +126,7 @@ internal sealed class MountainousElevationBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "elevation.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( _bufferFactory, Path.Combine( _folder, "elevation.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

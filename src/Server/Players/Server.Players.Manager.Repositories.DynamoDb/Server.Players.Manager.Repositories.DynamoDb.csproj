@@ -1,9 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\src\Server\Core\Server.Core\Server.Core.csproj" />
-		<ProjectReference Include="..\..\..\..\src\Common\Players\Common.Players.Abstractions\Common.Players.Abstractions.csproj" />
-	</ItemGroup>
-</Project>

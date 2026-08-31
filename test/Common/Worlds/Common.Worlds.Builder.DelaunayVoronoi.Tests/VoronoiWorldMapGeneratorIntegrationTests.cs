@@ -1,11 +1,10 @@
-﻿using Kiyote.Buffers;
+using Kiyote.Buffers;
 using Kiyote.Buffers.Numerics;
 using Kiyote.Geometry;
 using Kiyote.Geometry.Noises;
 using Kiyote.Geometry.Rasterizers;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using Point = Kiyote.Geometry.Point;
+using Kiyote.Imaging;
+using Kiyote.Imaging.Png;
 
 namespace Common.Worlds.Builder.DelaunayVoronoi.Tests;
 
@@ -14,6 +13,8 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 
 	private INeighbourLocator _neighbourLocator;
 	private IWorldMapGenerator _worldMapGenerator;
+	private IBufferFactory _bufferFactory;
+	private IImageWriter _imageWriter;
 
 	private IServiceProvider _provider;
 	private IServiceScope _scope;
@@ -33,6 +34,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		services.AddRasterizer();
 		services.AddDelaunayVoronoi();
 		services.AddNoise();
+		services.AddPngImaging();
 
 		_provider = services.BuildServiceProvider();
 
@@ -48,9 +50,11 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 		_scope = _provider.CreateScope();
 
 		_neighbourLocator = _provider.GetRequiredService<INeighbourLocator>();
+		_bufferFactory = _provider.GetRequiredService<IBufferFactory>();
+		_imageWriter = _provider.GetRequiredService<IImageWriter>();
 
 		_worldMapGenerator = new VoronoiWorldMapGenerator(
-			_provider.GetRequiredService<IBufferFactory>(),
+			_bufferFactory,
 			_provider.GetRequiredService<IRasterizer>(),
 			_provider.GetRequiredService<ILandformBuilder>(),
 			_provider.GetRequiredService<ISaltwaterFinder>(),
@@ -70,7 +74,7 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 	}
 
 	[Test]
-	//[Ignore( "Used to visualize output for inspection." )]
+	[Ignore( "Used to visualize output for inspection." )]
 	public async Task Visualize() {
 		long seed = DateTime.UtcNow.Ticks;
 		ISize size = new Point( 1920, 1080 );
@@ -81,30 +85,30 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			TestContext.CurrentContext.CancellationToken
 		);
 
-		using Image<Rgba32> image = new Image<Rgba32>( size.Width, size.Height );
+		IBuffer<uint> image = _bufferFactory.Create<uint>(size.Width, size.Height, 0 );
 
-		Dictionary<TileTerrain, Rgba32> terrainColours = new Dictionary<TileTerrain, Rgba32> {
-			{ TileTerrain.Mountain, new Rgba32( 0xF7, 0xF7, 0xF7 ) },
-			{ TileTerrain.Hill, new Rgba32( 0xDC, 0xDD, 0xBE ) },
-			{ TileTerrain.Highland, new Rgba32( 0xCB, 0xD3, 0xA9 ) },
-			{ TileTerrain.Lake, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
-			{ TileTerrain.Plain, new Rgba32( 0xB7, 0xC1, 0x8C ) },
-			{ TileTerrain.Coast, new Rgba32( 0x6E, 0xBA, 0xE7 ) },
-			{ TileTerrain.Ocean, new Rgba32( 0x1C, 0x86, 0xEE ) }
+		Dictionary<TileTerrain, uint> terrainColours = new Dictionary<TileTerrain, uint> {
+			{ TileTerrain.Mountain, 0xF7F7F7FF },
+			{ TileTerrain.Hill, 0xDCDDBEFF },
+			{ TileTerrain.Highland, 0xCBD3A9FF },
+			{ TileTerrain.Lake, 0x6EBae7FF },
+			{ TileTerrain.Plain, 0xB7C18CFF },
+			{ TileTerrain.Coast, 0x6EBae7FF },
+			{ TileTerrain.Ocean, 0x1C86EEFF }
 		};
 
-		Dictionary<TileFeature, Rgba32> featureColours = new Dictionary<TileFeature, Rgba32> {
-			{ TileFeature.Tundra, new Rgba32( 0xE0, 0xE0, 0xE0 ) },
-			{ TileFeature.RockyDesert, new Rgba32( 0xC6, 0xCC, 0xAD ) },
-			{ TileFeature.SandyDesert, new Rgba32( 0xFC, 0xE7, 0x92 ) },
-			{ TileFeature.BorealForest, new Rgba32( 0x6C, 0xB2, 0x76 ) },
-			{ TileFeature.TemperateForest, new Rgba32( 0x39, 0xB5, 0x4A ) },
-			{ TileFeature.TropicalForest, new Rgba32( 0x0E, 0xAF, 0x20 ) }
+		Dictionary<TileFeature, uint> featureColours = new Dictionary<TileFeature, uint> {
+			{ TileFeature.Tundra, 0xE0E0E0FF },
+			{ TileFeature.RockyDesert, 0xC6CCADFF },
+			{ TileFeature.SandyDesert, 0xFCE792FF },
+			{ TileFeature.BorealForest, 0x6CB276FF },
+			{ TileFeature.TemperateForest, 0x39B54AFF },
+			{ TileFeature.TropicalForest, 0x0EAF20FF }
 		};
 
 		for( int r = 0; r < size.Height; r++ ) {
 			for( int c = 0; c < size.Width; c++ ) {
-				Rgba32 colour = terrainColours[worldMaps.Terrain[c, r]];
+				uint colour = terrainColours[worldMaps.Terrain[c, r]];
 				if( worldMaps.Feature[c, r] != TileFeature.None ) {
 					featureColours.TryGetValue( worldMaps.Feature[c, r], out colour );
 					//colour = featureColours[worldMaps.Feature[c, r]];
@@ -113,6 +117,6 @@ internal sealed class VoronoiWorldMapGeneratorIntegrationTests {
 			}
 		}
 
-		await image.SaveAsync( Path.Combine( _folder, "worldmap.png" ) );
+		_imageWriter.WriteImage( Path.Combine( _folder, "worldmap.png" ), image );
 	}
 }

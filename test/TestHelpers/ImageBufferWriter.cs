@@ -1,47 +1,47 @@
-﻿using Kiyote.Buffers;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using System.IO.Abstractions;
+using Kiyote.Buffers;
+using Kiyote.Imaging;
+using Kiyote.Imaging.Png;
 
 namespace TestHelpers;
 
 public sealed class ImageBufferWriter : IBufferWriter<float>, IBufferWriter<bool> {
 
+	private readonly IBufferFactory _bufferFactory;
 	private readonly string _filename;
 
 	public ImageBufferWriter(
+		IBufferFactory bufferFactory,
 		string filename
 	) {
+		_bufferFactory = bufferFactory;
 		_filename = filename;
 	}
 
-	async Task IBufferWriter<float>.WriteAsync(
+	Task IBufferWriter<float>.WriteAsync(
 		IBuffer<float> buffer
 	) {
-		using Image<L8> image = new Image<L8>( buffer.Size.Width, buffer.Size.Height );
+		IImageWriter image = new PngWriter( new FileSystem() );
 
-		for( int r = 0; r < buffer.Size.Height; r++ ) {
-			for (int c = 0; c < buffer.Size.Width; c++ ) {
+		IBuffer<byte> output = _bufferFactory.Create<byte>(buffer.Columns, buffer.Rows, 0);
+
+		for( int r = 0; r < buffer.Rows; r++ ) {
+			for (int c = 0; c < buffer.Columns; c++ ) {
 				float value = buffer[c, r];
-				image[c, r] = new L8((byte)(255 * value));
+				output[c, r] = (byte)(255 * value);
 			}
 		}
 
-		await image.SaveAsPngAsync( _filename ).ConfigureAwait( false );
+		image.WriteImage(_filename, output);
+		return Task.CompletedTask;
 	}
 
-	async Task IBufferWriter<bool>.WriteAsync(
+	Task IBufferWriter<bool>.WriteAsync(
 		IBuffer<bool> buffer
 	) {
-		using Image<L8> image = new Image<L8>( buffer.Size.Width, buffer.Size.Height );
+		IImageWriter image = new PngWriter( new FileSystem() );
 
-		L8 white = new L8( 255 );
-		L8 black = new L8( 0 );
-		for( int r = 0; r < buffer.Size.Height; r++ ) {
-			for( int c = 0; c < buffer.Size.Width; c++ ) {
-				image[c, r] = buffer[c, r] ? white : black;
-			}
-		}
-
-		await image.SaveAsPngAsync( _filename ).ConfigureAwait( false );
+		image.WriteImage(_filename, buffer);
+		return Task.CompletedTask;
 	}
 }

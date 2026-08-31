@@ -1,4 +1,4 @@
-﻿using Kiyote.Buffers;
+using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Randomization;
@@ -65,7 +65,7 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 		TectonicPlates tectonicPlates = _tectonicPlateBuilder.Create( size );
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size.Width, size.Height, 0.0f );
 
 		foreach( Cell cell in landform.Cells ) {
 			_rasterizer.Rasterize( cell.Polygon.Points, ( int x, int y ) => {
@@ -79,7 +79,7 @@ public sealed class TectonicLandformBuilderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "tectonic_landform.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( _bufferFactory, Path.Combine( _folder, "tectonic_landform.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }

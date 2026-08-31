@@ -1,4 +1,4 @@
-﻿using Kiyote.Buffers;
+using Kiyote.Buffers;
 using Kiyote.Geometry;
 using Kiyote.Geometry.DelaunayVoronoi;
 using Kiyote.Geometry.Rasterizers;
@@ -67,7 +67,7 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 		Landform landform = await _landformBuilder.CreateAsync( size, tectonicPlates, TestContext.CurrentContext.CancellationToken );
 		IReadOnlySet<Cell> saltwater = ( _builder as ISaltwaterFinder ).Find( size, landform.Map, landform.Cells );
 
-		IBuffer<float> buffer = _bufferFactory.Create<float>( size, 0.0f );
+		IBuffer<float> buffer = _bufferFactory.Create<float>( size.Width, size.Height, 0.0f );
 
 
 		foreach( Cell cell in landform.Cells ) {
@@ -88,7 +88,7 @@ internal sealed class MapEdgeSaltwaterFinderIntegrationTests {
 			} );
 		}
 
-		IBufferWriter<float> writer = new ImageBufferWriter( Path.Combine( _folder, "saltwater.png" ) );
+		IBufferWriter<float> writer = new ImageBufferWriter( _bufferFactory, Path.Combine( _folder, "saltwater.png" ) );
 		await writer.WriteAsync( buffer );
 	}
 }
