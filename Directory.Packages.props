@@ -19,7 +19,7 @@
     <PackageVersion Include="Kiyote.AWS" Version="0.7.3" />
     <PackageVersion Include="Kiyote.Geometry" Version="0.24.1" />
     <PackageVersion Include="Kiyote.Buffers" Version="0.12.0" />
-    <PackageVersion Include="Kiyote.Buffers.Numerics" Version="0.8.0" />
+    <PackageVersion Include="Kiyote.Buffers.Numerics" Version="0.12.0" />
     <PackageVersion Include="Kiyote.Files" Version="0.4.0" />
     <PackageVersion Include="Kiyote.Files.Resource" Version="0.4.0" />
   </ItemGroup>
